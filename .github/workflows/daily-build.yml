@@ -113,7 +113,8 @@ jobs:
               return False
 
           # ========== 生成 Win10 DAT ==========
-          PINYIN_FIXED_LEN = 8  # 固定8字节（4个UTF-16字符）
+          # 格式来自 imewlconverter Win10MsPinyin.cs
+          # Entry: magic(0x00100010) + hanzi_offset + rank + 0x06 + unknown(0) + unknown(0xE679CD20) + pinyin + split + word + term
 
           def build_win10_dat(words_with_pinyin, output_path):
               """生成微软拼音 Win10 用户词库 (.dat)"""
@@ -123,19 +124,15 @@ jobs:
               
               # 计算偏移和大小
               phrase_offsets = []
-              phrase_sizes = []
               current_offset = 0
               for word, pinyin_str, rank in words_with_pinyin:
-                  pinyin_utf16 = pinyin_str.encode('utf-16-le')[:PINYIN_FIXED_LEN]
-                  word_utf16 = word.encode('utf-16-le')
-                  pinyin_len = len(pinyin_utf16)
-                  word_len = len(word_utf16)
-                  # hanzi_offset = 固定部分(18) + pinyin_len
-                  hanzi_offset = 18 + pinyin_len
-                  # 词条大小 = 4 + 2 + 1 + 1 + 8 + pinyin_len + 2 + word_len + 2
-                  entry_size = 4 + 2 + 1 + 1 + 8 + pinyin_len + 2 + word_len + 2
+                  pinyin_char_len = len(pinyin_str)  # 字符数，不是字节数
+                  word_char_len = len(word)
+                  # hanzi_offset = 8 + 8 + pinyin_bytes + 2 = 18 + pinyin_char_len * 2
+                  hanzi_offset = 18 + pinyin_char_len * 2
+                  # 词条大小 = 4+2+1+1+4+4 + pinyin_bytes + 2 + word_bytes + 2
+                  entry_size = 4 + 2 + 1 + 1 + 4 + 4 + pinyin_char_len * 2 + 2 + word_char_len * 2 + 2
                   phrase_offsets.append(current_offset)
-                  phrase_sizes.append(entry_size)
                   current_offset += entry_size
               
               phrase_start = phrase_offset_start + phrase_count * 4
@@ -145,39 +142,38 @@ jobs:
               header = bytearray(HEADER_SIZE)
               header[0:8] = b'mschxudp'
               struct.pack_into('<I', header, 8, 0x00600002)
-              struct.pack_into('<I', header, 12, 1)  # version
+              struct.pack_into('<I', header, 12, 1)
               struct.pack_into('<I', header, 16, phrase_offset_start)
               struct.pack_into('<I', header, 20, phrase_start)
               struct.pack_into('<I', header, 24, phrase_end)
               struct.pack_into('<I', header, 28, phrase_count)
-              struct.pack_into('<Q', header, 32, 0)  # timestamp
+              struct.pack_into('<Q', header, 32, 0)
               
               # 构建 offset 表
-              offset_table = bytearray()
-              for off in phrase_offsets:
-                  offset_table += struct.pack('<I', off)
+              offset_table = b''.join(struct.pack('<I', off) for off in phrase_offsets)
               
               # 构建词条
-              phrases = bytearray()
+              phrases = b''
               for word, pinyin_str, rank in words_with_pinyin:
-                  pinyin_utf16 = pinyin_str.encode('utf-16-le')[:PINYIN_FIXED_LEN]
+                  pinyin_char_len = len(pinyin_str)
+                  word_char_len = len(word)
+                  pinyin_utf16 = pinyin_str.encode('utf-16-le')
                   word_utf16 = word.encode('utf-16-le')
-                  pinyin_len = len(pinyin_utf16)
-                  word_len = len(word_utf16)
-                  hanzi_offset = 18 + pinyin_len
+                  hanzi_offset = 18 + pinyin_char_len * 2
                   
-                  entry = bytearray()
+                  entry = b''
                   entry += struct.pack('<I', 0x00100010)  # magic
                   entry += struct.pack('<H', hanzi_offset)
-                  entry += bytes([rank & 0xFF, 0x06])  # rank + x06
-                  entry += struct.pack('<Q', 0)  # unknown8
-                  entry += pinyin_utf16  # pinyin (固定8字节)
-                  entry += struct.pack('<H', 0)  # split
-                  entry += word_utf16  # word
-                  entry += struct.pack('<H', 0)  # terminator
-                  phrases += bytes(entry)
+                  entry += bytes([rank & 0xFF, 0x06])
+                  entry += struct.pack('<I', 0x00000000)   # unknown
+                  entry += struct.pack('<I', 0xE679CD20)   # unknown (关键！)
+                  entry += pinyin_utf16                    # pinyin (可变长)
+                  entry += struct.pack('<H', 0)            # split
+                  entry += word_utf16                      # word
+                  entry += struct.pack('<H', 0)            # terminator
+                  phrases += entry
               
-              data = bytes(header) + bytes(offset_table) + bytes(phrases)
+              data = bytes(header) + offset_table + phrases
               with open(output_path, 'wb') as f:
                   f.write(data)
               print(f'已生成 {output_path}: {len(words_with_pinyin):,} 词条, {len(data)/1024/1024:.1f} MB')
@@ -204,24 +200,18 @@ jobs:
           merged = merge(all_entries)
           print(f'\n去重后: {len(merged):,} 条')
 
-          # 输出文件：词\t拼音\t词频
-          for min_freq, suffix in [(1,'full'), (10,'freq10'), (50,'freq50'), (100,'freq100'), (500,'freq500')]:
-              out = f'msp_{suffix}.txt'
-              count = 0
-              with open(out, 'w', encoding='utf-8') as f:
-                  for word, (pinyin, freq) in merged:
-                      if freq >= min_freq:
-                          f.write(f'{word}\t{pinyin}\t{freq}\n')
-                          count += 1
-              print(f'已生成 {out}: {count:,} 条')
-
-          # 生成优化版 Win10 DAT（2-6字符，freq>=200，有拼音，无生僻字）
+          # 生成所有版本 Win10 DAT（2-6字符，有拼音，无生僻字）
           print('\n=== 生成 Win10 DAT ===')
-          optimized = [(w, normalize_pinyin(p), min(f//200, 255)) 
-                       for w, (p, f) in merged 
-                       if len(w) >= 2 and len(w) <= 6 and f >= 200 and p and not has_rare_char(w)]
-          print(f'优化版词条数: {len(optimized):,}')
-          build_win10_dat(optimized, 'msp_win10.dat')
+          total_dat_words = 0
+          for min_freq, suffix in [(1,'full'), (10,'freq10'), (50,'freq50'), (100,'freq100'), (500,'freq500')]:
+              dat_words = [(w, normalize_pinyin(p), min(f//200, 255)) 
+                          for w, (p, f) in merged 
+                          if len(w) >= 2 and len(w) <= 6 and f >= min_freq and p and not has_rare_char(w)]
+              total_dat_words += len(dat_words)
+              out = f'msp_{suffix}.dat'
+              build_win10_dat(dat_words, out)
+              print(f'{out}: {len(dat_words):,} 词条')
+          print(f'DAT 总词条: {total_dat_words:,}')
 
           # 生成 changelog
           today = __import__('datetime').date.today().isoformat()
@@ -231,7 +221,7 @@ jobs:
               f.write(f'- 去重后总词条: {len(merged):,}\n')
               f.write(f'- 词频≥100: {sum(1 for _,(_,f) in merged if f>=100):,}\n')
               f.write(f'- 词频≥500: {sum(1 for _,(_,f) in merged if f>=500):,}\n')
-              f.write(f'- Win10 DAT 词条: {len(optimized):,}\n')
+              f.write(f'- DAT 总词条: {total_dat_words:,}\n')
               f.write(f'\n## 来源版本\n')
               for fn in files:
                   path = os.path.join('cache', fn)
@@ -249,7 +239,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git add msp_*.txt msp_*.dat CHANGELOG.md cache/
+          git add msp_*.dat CHANGELOG.md cache/
           if git diff --cached --quiet; then
             echo "没有更新，跳过提交"
           else
@@ -262,18 +252,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          TODAY=$(date +%Y-%m-%d)
+          TAG="v1.2-$TODAY"
+          
           # 读取 CHANGELOG.md 作为 release body
           BODY=$(cat CHANGELOG.md)
           
-          # 更新 v1.1 release body 和 assets
-          gh release upload "v1.1" msp_*.txt msp_win10.dat \
+          # 创建新 release（每天一个新版本）
+          gh release create "$TAG" msp_*.dat \
             --repo ${{ github.repository }} \
-            --clobber
-          
-          # 更新 release body
-          gh release edit "v1.1" \
-            --repo ${{ github.repository }} \
-            --title "微软拼音词库 v1.1 ($(date +%Y-%m-%d))" \
+            --title "微软拼音词库 $TAG" \
             --notes "$BODY"
           
-          echo "v1.1 release 已更新"
+          echo "已创建 release: $TAG"
