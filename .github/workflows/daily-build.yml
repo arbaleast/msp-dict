@@ -262,8 +262,18 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # 更新 v1.1 release assets
+          # 读取 CHANGELOG.md 作为 release body
+          BODY=$(cat CHANGELOG.md)
+          
+          # 更新 v1.1 release body 和 assets
           gh release upload "v1.1" msp_*.txt msp_win10.dat \
             --repo ${{ github.repository }} \
             --clobber
-          echo "v1.1 assets 已更新"
+          
+          # 更新 release body
+          gh release edit "v1.1" \
+            --repo ${{ github.repository }} \
+            --title "微软拼音词库 v1.1 ($(date +%Y-%m-%d))" \
+            --notes "$BODY"
+          
+          echo "v1.1 release 已更新"
