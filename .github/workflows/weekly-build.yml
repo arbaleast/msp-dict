@@ -1,0 +1,194 @@
+name: Weekly Build
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'  # 每周一 03:00 UTC = 11:00 CST
+  workflow_dispatch:  # 也可手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Download rime-ice
+        run: |
+          mkdir -p cache
+          echo "=== Downloading rime-ice ==="
+          curl -sL "https://raw.githubusercontent.com/iDvel/rime-ice/main/cn_dicts/base.dict.yaml" -o cache/rime-ice_base.txt
+          curl -sL "https://raw.githubusercontent.com/iDvel/rime-ice/main/cn_dicts/ext.dict.yaml" -o cache/rime-ice_ext.txt
+          curl -sL "https://raw.githubusercontent.com/iDvel/rime-ice/main/cn_dicts/tencent.dict.yaml" -o cache/rime-ice_tencent.txt
+          curl -sL "https://raw.githubusercontent.com/iDvel/rime-ice/main/cn_dicts/8105.dict.yaml" -o cache/rime-ice_8105.txt
+          curl -sL "https://raw.githubusercontent.com/iDvel/rime-ice/main/cn_dicts/others.dict.yaml" -o cache/rime-ice_others.txt
+          echo "rime-ice done"
+
+      - name: Download rime-frost
+        run: |
+          echo "=== Downloading rime-frost ==="
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts/base.dict.yaml" -o cache/rime-frost_base.txt
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts/ext.dict.yaml" -o cache/rime-frost_ext.txt
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts/tencent.dict.yaml" -o cache/rime-frost_tencent.txt
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts/8105.dict.yaml" -o cache/rime-frost_8105.txt
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts/others.dict.yaml" -o cache/rime-frost_others.txt
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/food.dict.yaml" -o cache/rime-frost_food.txt
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/idiom.dict.yaml" -o cache/rime-frost_idiom.txt
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/history.dict.yaml" -o cache/rime-frost_history.txt
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/medication.dict.yaml" -o cache/rime-frost_medication.txt
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/computer.dict.yaml" -o cache/rime-frost_computer.txt
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/sport.dict.yaml" -o cache/rime-frost_sport.txt
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/geography.dict.yaml" -o cache/rime-frost_geography.txt
+          echo "rime-frost done"
+
+      - name: Fetch hot words from crawler
+        run: |
+          echo "=== Fetching hot words ==="
+          python3 -m crawler.cli fetch --all -o cache/hot_words.txt
+          echo "Hot words fetched: $(wc -l < cache/hot_words.txt)"
+
+      - name: Merge and convert
+        run: |
+          cat << 'PYEOF' > merge.py
+          import os
+          import datetime
+
+          def parse_rime(content):
+              entries = []
+              for line in content.splitlines():
+                  line = line.strip()
+                  if not line:
+                      continue
+                  if line.startswith('#') or line.startswith('---') \
+                     or line.startswith('name:') or line.startswith('version:') or line.startswith('sort:'):
+                      continue
+                  parts = line.split('\t')
+                  if len(parts) >= 2:
+                      word = parts[0].strip()
+                      try:
+                          freq = int(parts[-1].strip())
+                      except ValueError:
+                          continue
+                      if word and freq >= 0:
+                          entries.append((word, freq))
+              return entries
+
+          def merge(entries_list):
+              word_freq = {}
+              for entries in entries_list:
+                  for word, freq in entries:
+                      if word in word_freq:
+                          word_freq[word] = max(word_freq[word], freq)
+                      else:
+                          word_freq[word] = freq
+              return sorted(word_freq.items(), key=lambda x: x[1], reverse=True)
+
+          def parse_hot_words(filepath):
+              """解析爬虫获取的热词（无词频，设为1）"""
+              entries = []
+              if os.path.exists(filepath):
+                  with open(filepath, encoding='utf-8') as f:
+                      for line in f:
+                          word = line.strip()
+                          if word:
+                              entries.append((word, 1))
+              return entries
+
+          files = [
+              'rime-ice_base.txt', 'rime-ice_ext.txt', 'rime-ice_tencent.txt',
+              'rime-ice_8105.txt', 'rime-ice_others.txt',
+              'rime-frost_base.txt', 'rime-frost_ext.txt', 'rime-frost_tencent.txt',
+              'rime-frost_8105.txt', 'rime-frost_others.txt',
+              'rime-frost_food.txt', 'rime-frost_idiom.txt', 'rime-frost_history.txt',
+              'rime-frost_medication.txt', 'rime-frost_computer.txt',
+              'rime-frost_sport.txt', 'rime-frost_geography.txt',
+          ]
+
+          all_entries = []
+          for fn in files:
+              path = os.path.join('cache', fn)
+              if os.path.exists(path):
+                  entries = parse_rime(open(path, encoding='utf-8').read())
+                  all_entries.append(entries)
+                  print(f'{fn}: {len(entries):,}')
+
+          # 添加热词
+          hot_entries = parse_hot_words('cache/hot_words.txt')
+          if hot_entries:
+              all_entries.append(hot_entries)
+              print(f'hot_words.txt: {len(hot_entries):,}')
+
+          merged = merge(all_entries)
+          print(f'\n去重后: {len(merged):,} 条')
+
+          for min_freq, suffix in [(1,'full'), (10,'freq10'), (50,'freq50'), (100,'freq100'), (500,'freq500')]:
+              out = f'msp_{suffix}.txt'
+              count = 0
+              with open(out, 'w', encoding='utf-8') as f:
+                  for word, freq in merged:
+                      if freq >= min_freq:
+                          f.write(f'{word}\t{freq}\n')
+                          count += 1
+              print(f'已生成 {out}: {count:,} 条')
+
+          # 生成 changelog
+          today = datetime.date.today().isoformat()
+          with open('CHANGELOG.md', 'w') as f:
+              f.write(f'# 更新日期: {today}\n\n')
+              f.write(f'## 词库统计\n')
+              f.write(f'- 去重后总词条: {len(merged):,}\n')
+              f.write(f'- 词频≥100: {sum(1 for _,fr in merged if fr>=100):,}\n')
+              f.write(f'- 词频≥500: {sum(1 for _,fr in merged if fr>=500):,}\n')
+              f.write(f'- 来源版本\n')
+              for fn in files:
+                  path = os.path.join('cache', fn)
+                  if os.path.exists(path):
+                      count = len(parse_rime(open(path, encoding='utf-8').read()))
+                      f.write(f'  - {fn}: {count:,} 条\n')
+              if hot_entries:
+                  f.write(f'  - hot_words.txt: {len(hot_entries):,} 条\n')
+          print('CHANGELOG.md 已生成')
+          PYEOF
+          python3 merge.py
+
+      - name: Commit and push
+        run: |
+          TODAY=$(date +%Y-%m-%d)
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git add msp_*.txt CHANGELOG.md
+          if git diff --cached --quiet; then
+            echo "没有更新，跳过提交"
+          else
+            git commit -m "Weekly build: $TODAY"
+            git push
+            echo "已推送更新"
+          fi
+
+      - name: Create or update release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TODAY=$(date +%Y%m%d)
+          # 检查 release 是否存在
+          if gh release view "v1.0" --repo ${{ github.repository }} 2>/dev/null; then
+            echo "更新现有 v1.0 release"
+            gh release upload "v1.0" msp_*.txt --clobber
+          else
+            echo "创建新 release v1.0"
+            gh release create "v1.0" msp_*.txt \
+              --title "微软拼音词库 v1.0" \
+              --notes "基于 rime-ice + rime-frost + 热词爬虫的每周构建"
+          fi
+          echo "Release 已更新"
