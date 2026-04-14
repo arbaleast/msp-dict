@@ -204,24 +204,18 @@ jobs:
           merged = merge(all_entries)
           print(f'\n去重后: {len(merged):,} 条')
 
-          # 输出文件：词\t拼音\t词频
-          for min_freq, suffix in [(1,'full'), (10,'freq10'), (50,'freq50'), (100,'freq100'), (500,'freq500')]:
-              out = f'msp_{suffix}.txt'
-              count = 0
-              with open(out, 'w', encoding='utf-8') as f:
-                  for word, (pinyin, freq) in merged:
-                      if freq >= min_freq:
-                          f.write(f'{word}\t{pinyin}\t{freq}\n')
-                          count += 1
-              print(f'已生成 {out}: {count:,} 条')
-
-          # 生成优化版 Win10 DAT（2-6字符，freq>=200，有拼音，无生僻字）
+          # 生成所有版本 Win10 DAT（2-6字符，有拼音，无生僻字）
           print('\n=== 生成 Win10 DAT ===')
-          optimized = [(w, normalize_pinyin(p), min(f//200, 255)) 
-                       for w, (p, f) in merged 
-                       if len(w) >= 2 and len(w) <= 6 and f >= 200 and p and not has_rare_char(w)]
-          print(f'优化版词条数: {len(optimized):,}')
-          build_win10_dat(optimized, 'msp_win10.dat')
+          total_dat_words = 0
+          for min_freq, suffix in [(1,'full'), (10,'freq10'), (50,'freq50'), (100,'freq100'), (500,'freq500')]:
+              dat_words = [(w, normalize_pinyin(p), min(f//200, 255)) 
+                          for w, (p, f) in merged 
+                          if len(w) >= 2 and len(w) <= 6 and f >= min_freq and p and not has_rare_char(w)]
+              total_dat_words += len(dat_words)
+              out = f'msp_{suffix}.dat'
+              build_win10_dat(dat_words, out)
+              print(f'{out}: {len(dat_words):,} 词条')
+          print(f'DAT 总词条: {total_dat_words:,}')
 
           # 生成 changelog
           today = __import__('datetime').date.today().isoformat()
@@ -231,7 +225,7 @@ jobs:
               f.write(f'- 去重后总词条: {len(merged):,}\n')
               f.write(f'- 词频≥100: {sum(1 for _,(_,f) in merged if f>=100):,}\n')
               f.write(f'- 词频≥500: {sum(1 for _,(_,f) in merged if f>=500):,}\n')
-              f.write(f'- Win10 DAT 词条: {len(optimized):,}\n')
+              f.write(f'- DAT 总词条: {total_dat_words:,}\n')
               f.write(f'\n## 来源版本\n')
               for fn in files:
                   path = os.path.join('cache', fn)
@@ -249,7 +243,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git add msp_*.txt msp_*.dat CHANGELOG.md cache/
+          git add msp_*.dat CHANGELOG.md cache/
           if git diff --cached --quiet; then
             echo "没有更新，跳过提交"
           else
@@ -262,18 +256,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          TODAY=$(date +%Y-%m-%d)
+          TAG="v1.2-$TODAY"
+          
           # 读取 CHANGELOG.md 作为 release body
           BODY=$(cat CHANGELOG.md)
           
-          # 更新 v1.1 release body 和 assets
-          gh release upload "v1.1" msp_*.txt msp_win10.dat \
+          # 创建新 release（每天一个新版本）
+          gh release create "$TAG" msp_*.dat \
             --repo ${{ github.repository }} \
-            --clobber
-          
-          # 更新 release body
-          gh release edit "v1.1" \
-            --repo ${{ github.repository }} \
-            --title "微软拼音词库 v1.1 ($(date +%Y-%m-%d))" \
+            --title "微软拼音词库 $TAG" \
             --notes "$BODY"
           
-          echo "v1.1 release 已更新"
+          echo "已创建 release: $TAG"
