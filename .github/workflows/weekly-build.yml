@@ -154,27 +154,48 @@ jobs:
               header = bytearray(HEADER_SIZE)
               header[0:16] = HEADER_MAGIC
               data = bytearray()
+              skipped = 0
               for word, freq in words:
                   text_bytes = word.encode('utf-16-le')
                   text_len = len(word)
+                  # 跳过超长词条（辅助平面字符占4字节）
+                  if len(text_bytes) // 2 > 22:
+                      skipped += 1
+                      continue
                   entry = bytearray(ENTRY_SIZE)
                   struct.pack_into('<I', entry, 0, 0)
                   struct.pack_into('<I', entry, 4, text_len)
                   entry[8:16] = b'\x00' * 8
-                  entry[16:16 + text_len * 2] = text_bytes
+                  entry[16:16 + len(text_bytes)] = text_bytes
                   data += bytes(entry)
               padding = DATA_START - HEADER_SIZE
               result = bytes(header) + b'\x00' * padding + bytes(data)
               with open(out_path, 'wb') as f:
                   f.write(result)
-              print(f'已生成 {out_path}')
+              print(f'已生成 {out_path} (跳过 {skipped} 条超长词)')
           
           # 为每个版本生成 DAT
-          for min_freq, suffix in [(1,'full'), (10,'freq10'), (50,'freq50'), (100,'freq100'), (500,'freq500')]:
+          for min_freq, suffix in [(10,'freq10'), (50,'freq50'), (100,'freq100'), (500,'freq500')]:
               txt_file = f'msp_{suffix}.txt'
               dat_file = f'msp_{suffix}.dat'
               words = [(w, f) for w, f in merged if f >= min_freq]
               build_dat(words, dat_file)
+          
+          # 生成优化版 DAT (freq>=200, 2-6字符, 无生僻字)
+          print('\n=== 生成优化版 ===')
+          def has_rare_char(word):
+              for c in word:
+                  if ord(c) < 128:
+                      continue
+                  code = ord(c)
+                  if 0x20000 <= code <= 0x2FA1F or 0xF900 <= code <= 0xFAFF:
+                      return True
+              return False
+          
+          optimized = [(w, f) for w, f in merged
+                        if len(w) >= 2 and len(w) <= 6 and f >= 200 and not has_rare_char(w)]
+          print(f'优化版词条数: {len(optimized):,}')
+          build_dat(optimized, 'msp_optimized.dat')
 
           # 生成 changelog
           today = datetime.date.today().isoformat()
