@@ -152,20 +152,12 @@ jobs:
             echo "已推送更新"
           fi
 
-      - name: Create or update release
+      - name: Update release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TODAY=$(date +%Y-%m-%d)
-          gh release create "v${TODAY}" \
-            --title "微软拼音增强词库 ${TODAY}" \
-            --notes "自动构建: ${TODAY}。词库更新请查看 CHANGELOG.md。" \
-            --repo ${{ github.repository }} \
-            --draft \
-            2>&1 || true
-
-          # 上传 assets 到 latest release
+          # 更新 v1.0 release assets（tag 存在则失败，忽略继续）
           gh release upload "v1.0" msp_*.txt \
             --repo ${{ github.repository }} \
-            --clobber \
-            2>&1 || echo "release upload done"
+            --clobber
+          echo "v1.0 assets 已更新"
