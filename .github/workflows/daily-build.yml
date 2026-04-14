@@ -23,32 +23,32 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Download rime-ice
+      - name: Download rime-ice (via jsDelivr CDN)
         run: |
           mkdir -p cache
           echo "=== Downloading rime-ice ==="
-          curl -sL "https://raw.githubusercontent.com/iDvel/rime-ice/main/cn_dicts/base.dict.yaml" -o cache/rime-ice_base.txt
-          curl -sL "https://raw.githubusercontent.com/iDvel/rime-ice/main/cn_dicts/ext.dict.yaml" -o cache/rime-ice_ext.txt
-          curl -sL "https://raw.githubusercontent.com/iDvel/rime-ice/main/cn_dicts/tencent.dict.yaml" -o cache/rime-ice_tencent.txt
-          curl -sL "https://raw.githubusercontent.com/iDvel/rime-ice/main/cn_dicts/8105.dict.yaml" -o cache/rime-ice_8105.txt
-          curl -sL "https://raw.githubusercontent.com/iDvel/rime-ice/main/cn_dicts/others.dict.yaml" -o cache/rime-ice_others.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/iDvel/rime-ice@main/cn_dicts/base.dict.yaml" -o cache/rime-ice_base.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/iDvel/rime-ice@main/cn_dicts/ext.dict.yaml" -o cache/rime-ice_ext.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/iDvel/rime-ice@main/cn_dicts/tencent.dict.yaml" -o cache/rime-ice_tencent.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/iDvel/rime-ice@main/cn_dicts/8105.dict.yaml" -o cache/rime-ice_8105.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/iDvel/rime-ice@main/cn_dicts/others.dict.yaml" -o cache/rime-ice_others.txt
           echo "rime-ice done"
 
-      - name: Download rime-frost
+      - name: Download rime-frost (via jsDelivr CDN)
         run: |
           echo "=== Downloading rime-frost ==="
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts/base.dict.yaml" -o cache/rime-frost_base.txt
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts/ext.dict.yaml" -o cache/rime-frost_ext.txt
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts/tencent.dict.yaml" -o cache/rime-frost_tencent.txt
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts/8105.dict.yaml" -o cache/rime-frost_8105.txt
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts/others.dict.yaml" -o cache/rime-frost_others.txt
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/food.dict.yaml" -o cache/rime-frost_food.txt
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/idiom.dict.yaml" -o cache/rime-frost_idiom.txt
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/history.dict.yaml" -o cache/rime-frost_history.txt
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/medication.dict.yaml" -o cache/rime-frost_medication.txt
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/computer.dict.yaml" -o cache/rime-frost_computer.txt
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/sport.dict.yaml" -o cache/rime-frost_sport.txt
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/geography.dict.yaml" -o cache/rime-frost_geography.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/base.dict.yaml" -o cache/rime-frost_base.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/ext.dict.yaml" -o cache/rime-frost_ext.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/tencent.dict.yaml" -o cache/rime-frost_tencent.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/8105.dict.yaml" -o cache/rime-frost_8105.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/others.dict.yaml" -o cache/rime-frost_others.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/food.dict.yaml" -o cache/rime-frost_food.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/idiom.dict.yaml" -o cache/rime-frost_idiom.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/history.dict.yaml" -o cache/rime-frost_history.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/medication.dict.yaml" -o cache/rime-frost_medication.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/computer.dict.yaml" -o cache/rime-frost_computer.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/sport.dict.yaml" -o cache/rime-frost_sport.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/geography.dict.yaml" -o cache/rime-frost_geography.txt
           echo "rime-frost done"
 
       - name: Merge and convert
