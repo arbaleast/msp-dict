@@ -257,10 +257,20 @@ jobs:
           # 读取 CHANGELOG.md 作为 release body
           BODY=$(cat CHANGELOG.md)
           
-          # 创建新 release（每天一个新版本）
-          gh release create "$TAG" msp_*.dat \
-            --repo ${{ github.repository }} \
-            --title "微软拼音词库 $TAG" \
-            --notes "$BODY"
-          
-          echo "已创建 release: $TAG"
+          # 创建或更新 release
+          if gh release view "$TAG" --repo ${{ github.repository }} > /dev/null 2>&1; then
+            # 已存在：更新 notes 并上传新文件
+            gh release edit "$TAG" \
+              --repo ${{ github.repository }} \
+              --title "微软拼音词库 $TAG" \
+              --notes "$BODY"
+            gh release upload "$TAG" msp_*.dat --repo ${{ github.repository }} --clobber
+            echo "已更新 release: $TAG"
+          else
+            # 不存在：创建新 release
+            gh release create "$TAG" msp_*.dat \
+              --repo ${{ github.repository }} \
+              --title "微软拼音词库 $TAG" \
+              --notes "$BODY"
+            echo "已创建 release: $TAG"
+          fi
