@@ -139,6 +139,8 @@ jobs:
           TODAY=$(date +%Y-%m-%d)
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # 改用 HTTPS + token 认证（默认 remote 是 SSH，token 无权推送）
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git add msp_*.txt CHANGELOG.md
           if git diff --cached --quiet; then
             echo "没有更新，跳过提交"
