@@ -166,7 +166,9 @@ jobs:
                   struct.pack_into('<I', entry, 0, 0)
                   struct.pack_into('<I', entry, 4, text_len)
                   entry[8:16] = b'\x00' * 8
+                  # 文本 + null terminator
                   entry[16:16 + len(text_bytes)] = text_bytes
+                  entry[16 + len(text_bytes):16 + len(text_bytes) + 2] = b'\x00\x00'
                   data += bytes(entry)
               padding = DATA_START - HEADER_SIZE
               result = bytes(header) + b'\x00' * padding + bytes(data)

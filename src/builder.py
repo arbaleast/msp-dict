@@ -63,7 +63,12 @@ class DATBuilder:
             struct.pack_into('<I', entry, 0, 0)  # 固定值
             struct.pack_into('<I', entry, 4, text_len)  # 文本长度（字符数）
             entry[8:16] = pinyin_code  # 拼音编码 (8字节)
-            entry[16:16 + len(text_bytes)] = text_bytes  # UTF-16LE 文本
+            
+            # 文本 (从偏移 16 开始，UTF-16LE 编码，以 0x0000 结尾)
+            text_offset = 16
+            entry[text_offset:text_offset + len(text_bytes)] = text_bytes
+            # null terminator
+            entry[text_offset + len(text_bytes):text_offset + len(text_bytes) + 2] = b'\x00\x00'
             
             data += bytes(entry)
             
