@@ -73,35 +73,47 @@ jobs:
                      or line.startswith('name:') or line.startswith('version:') or line.startswith('sort:'):
                       continue
                   parts = line.split('\t')
-                  if len(parts) >= 2:
+                  if len(parts) >= 3:
                       word = parts[0].strip()
+                      pinyin = parts[1].strip()  # 保留拼音
                       try:
                           freq = int(parts[-1].strip())
                       except ValueError:
                           continue
                       if word and freq >= 0:
-                          entries.append((word, freq))
+                          entries.append((word, pinyin, freq))
+                  elif len(parts) == 2:
+                      # 可能是 词\t词频 格式（没有拼音）
+                      word = parts[0].strip()
+                      try:
+                          freq = int(parts[1].strip())
+                      except ValueError:
+                          continue
+                      if word and freq >= 0:
+                          entries.append((word, '', freq))
               return entries
 
           def merge(entries_list):
-              word_freq = {}
+              word_data = {}  # word -> (pinyin, max_freq)
               for entries in entries_list:
-                  for word, freq in entries:
-                      if word in word_freq:
-                          word_freq[word] = max(word_freq[word], freq)
+                  for word, pinyin, freq in entries:
+                      if word in word_data:
+                          old_pinyin, old_freq = word_data[word]
+                          word_data[word] = (old_pinyin if old_pinyin else pinyin, max(old_freq, freq))
                       else:
-                          word_freq[word] = freq
-              return sorted(word_freq.items(), key=lambda x: x[1], reverse=True)
+                          word_data[word] = (pinyin, freq)
+              # 按词频排序，返回 [(word, pinyin, freq), ...]
+              return sorted(word_data.items(), key=lambda x: x[1][1], reverse=True)
 
           def parse_hot_words(filepath):
-              """解析爬虫获取的热词（无词频，设为1）"""
+              """解析爬虫获取的热词（无拼音，词频设为1）"""
               entries = []
               if os.path.exists(filepath):
                   with open(filepath, encoding='utf-8') as f:
                       for line in f:
                           word = line.strip()
                           if word:
-                              entries.append((word, 1))
+                              entries.append((word, '', 1))
               return entries
 
           files = [
@@ -135,9 +147,12 @@ jobs:
               out = f'msp_{suffix}.txt'
               count = 0
               with open(out, 'w', encoding='utf-8') as f:
-                  for word, freq in merged:
+                  for word_data in merged:
+                      word = word_data[0]
+                      pinyin, freq = word_data[1]
                       if freq >= min_freq:
-                          f.write(f'{word}\t{freq}\n')
+                          # 保存为 词\t拼音\t词频 格式
+                          f.write(f'{word}\t{pinyin}\t{freq}\n')
                           count += 1
               print(f'已生成 {out}: {count:,} 条')
 
@@ -194,10 +209,11 @@ jobs:
                       return True
               return False
           
-          optimized = [(w, f) for w, f in merged
-                        if len(w) >= 2 and len(w) <= 6 and f >= 200 and not has_rare_char(w)]
+          optimized = [(w, p, f) for w, p, f in 
+                        ((word, data[0], data[1]) for word, data in merged)
+                        if len(w) >= 2 and len(w) <= 6 and data[1] >= 200 and not has_rare_char(w)]
           print(f'优化版词条数: {len(optimized):,}')
-          build_dat(optimized, 'msp_optimized.dat')
+          build_dat(optimized, 'msp_optimized.dat', with_pinyin=True)
 
           # 生成 changelog
           today = datetime.date.today().isoformat()
