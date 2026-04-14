@@ -79,8 +79,8 @@ class Win10MSPinyinBuilder:
         # 构建 offset 表
         offset_table = b''.join(struct.pack('<I', off) for off in phrase_offsets)
         
-        # 构建词条
-        phrases = b''
+        # 构建词条（用 list 最后 join，避免 phrases += entry 的 O(n²) 问题）
+        phrase_parts = []
         for word, pinyin_str, rank in self.words:
             pinyin_char_len = len(pinyin_str)
             word_char_len = len(word)
@@ -88,19 +88,18 @@ class Win10MSPinyinBuilder:
             word_utf16 = word.encode('utf-16-le')
             hanzi_offset = 18 + pinyin_char_len * 2
             
-            entry = b''
-            entry += struct.pack('<I', 0x00100010)  # magic
+            entry  = struct.pack('<I', 0x00100010)  # magic
             entry += struct.pack('<H', hanzi_offset)
-            entry += bytes([rank & 0xFF, 0x06])     # rank + x06
-            entry += struct.pack('<I', 0x00000000)   # unknown
-            entry += struct.pack('<I', 0xE679CD20)   # unknown (关键！)
-            entry += pinyin_utf16                    # pinyin (可变长)
-            entry += struct.pack('<H', 0)            # split
-            entry += word_utf16                      # word
-            entry += struct.pack('<H', 0)            # terminator
-            phrases += entry
+            entry += bytes([rank & 0xFF, 0x06])
+            entry += struct.pack('<I', 0x00000000)
+            entry += struct.pack('<I', 0xE679CD20)
+            entry += pinyin_utf16
+            entry += struct.pack('<H', 0)
+            entry += word_utf16
+            entry += struct.pack('<H', 0)
+            phrase_parts.append(entry)
         
-        return bytes(header) + offset_table + phrases
+        return bytes(header) + offset_table + b''.join(phrase_parts)
     
     def save(self, filepath: str):
         """保存到文件"""

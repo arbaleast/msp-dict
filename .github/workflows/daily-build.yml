@@ -152,8 +152,8 @@ jobs:
               # 构建 offset 表
               offset_table = b''.join(struct.pack('<I', off) for off in phrase_offsets)
               
-              # 构建词条
-              phrases = b''
+              # 构建词条（用 list 最后 join，避免 phrases += entry 的 O(n²) 问题）
+              phrase_parts = []
               for word, pinyin_str, rank in words_with_pinyin:
                   pinyin_char_len = len(pinyin_str)
                   word_char_len = len(word)
@@ -161,8 +161,7 @@ jobs:
                   word_utf16 = word.encode('utf-16-le')
                   hanzi_offset = 18 + pinyin_char_len * 2
                   
-                  entry = b''
-                  entry += struct.pack('<I', 0x00100010)  # magic
+                  entry  = struct.pack('<I', 0x00100010)  # magic
                   entry += struct.pack('<H', hanzi_offset)
                   entry += bytes([rank & 0xFF, 0x06])
                   entry += struct.pack('<I', 0x00000000)   # unknown
@@ -171,9 +170,9 @@ jobs:
                   entry += struct.pack('<H', 0)            # split
                   entry += word_utf16                      # word
                   entry += struct.pack('<H', 0)            # terminator
-                  phrases += entry
+                  phrase_parts.append(entry)
               
-              data = bytes(header) + offset_table + phrases
+              data = bytes(header) + offset_table + b''.join(phrase_parts)
               with open(output_path, 'wb') as f:
                   f.write(data)
               print(f'已生成 {output_path}: {len(words_with_pinyin):,} 词条, {len(data)/1024/1024:.1f} MB')

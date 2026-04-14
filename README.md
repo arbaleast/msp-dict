@@ -2,8 +2,7 @@
 
 <!-- Badges -->
 [![Daily Build](https://github.com/arbaleast/msp-dict/actions/workflows/daily-build.yml/badge.svg)](https://github.com/arbaleast/msp-dict/actions)
-[![Release](https://img.shields.io/github/v/release/arbaleast/msp-dict?color=blue)](https://github.com/arbaleast/msp-dict/releases)
-[![词条数](https://img.shields.io/badge/词条-324%2C328-blue)](https://github.com/arbaleast/msp-dict/releases/tag/v1.1)
+[![Release](https://img.shields.io/github/v/release/arbaleast/msp-dict?color=blue)](https://github.com/arbaleast/msp-dict/releases/latest)
 
 基于 [Rime](https://github.com/rime) 词库转换的微软拼音用户词典，每日自动更新。
 
@@ -18,10 +17,8 @@
 
 | 文件 | 词条数 | 说明 | 大小 |
 |------|--------|------|------|
-| [msp_win10.dat](https://github.com/arbaleast/msp-dict/releases/download/v1.1/msp_win10.dat) | 324,328 | **Win10 DAT 直接导入** | 11.8 MB |
-| [msp_full.txt](https://github.com/arbaleast/msp-dict/releases/download/v1.1/msp_full.txt) | 2,199,076 | 完整版 (词频≥1) | 75 MB |
-| [msp_freq100.txt](https://github.com/arbaleast/msp-dict/releases/download/v1.1/msp_freq100.txt) | 1,693,123 | 优质版 (词频≥100) | 60 MB |
-| [msp_freq500.txt](https://github.com/arbaleast/msp-dict/releases/download/v1.1/msp_freq500.txt) | 287,381 | 高频版 (词频≥500) | 10 MB |
+| [msp_win10.dat](https://github.com/arbaleast/msp-dict/releases/latest) | 279,506 | **Win10 DAT 直接导入**（推荐） | 10 MB |
+| [msp_full.dat](https://github.com/arbaleast/msp-dict/releases/latest) | 1,761,099 | 完整版 | 67 MB |
 
 > **推荐使用 `msp_win10.dat`**，可直接导入 Windows 10/11 微软拼音。
 
@@ -71,20 +68,21 @@ mschxudp 二进制格式
 
 ## 自动化
 
-每日 03:30 UTC (北京时间 11:30) 自动运行：
+每天 03:30 UTC (北京时间 11:30) 自动运行，构建新版本词库：
 
 ```yaml
-workflow_dispatch:  # 也可手动触发
 schedule:
   - cron: '30 3 * * *'
 ```
 
-构建流程：
+每次运行自动：
 1. 下载 rime-ice + rime-frost 最新词库
 2. 合并去重，保留最高词频
-3. 过滤生僻字，保留 2-6 字符词条
-4. 生成 Win10 DAT 格式
-5. 更新 Release v1.1
+3. 生成 5 个版本的 DAT 文件
+4. 创建新 release（格式：`v1.2-YYYY-MM-DD`）
+
+> [!TIP]
+> 点击 Assets 展开下载所有版本：`msp_full.dat` / `msp_freq10.dat` / `msp_freq50.dat` / `msp_freq100.dat` / `msp_freq500.dat`
 
 ## 项目结构
 
