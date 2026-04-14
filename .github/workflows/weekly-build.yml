@@ -141,6 +141,41 @@ jobs:
                           count += 1
               print(f'已生成 {out}: {count:,} 条')
 
+          # 生成 DAT 文件
+          print('\n=== 生成 DAT 文件 ===')
+          import struct
+          
+          ENTRY_SIZE = 60
+          HEADER_SIZE = 0x400
+          DATA_START = 0x13fc
+          HEADER_MAGIC = bytes.fromhex('55aa88800200600055aa55aa00200000')
+          
+          def build_dat(words, out_path):
+              header = bytearray(HEADER_SIZE)
+              header[0:16] = HEADER_MAGIC
+              data = bytearray()
+              for word, freq in words:
+                  text_bytes = word.encode('utf-16-le')
+                  text_len = len(word)
+                  entry = bytearray(ENTRY_SIZE)
+                  struct.pack_into('<I', entry, 0, 0)
+                  struct.pack_into('<I', entry, 4, text_len)
+                  entry[8:16] = b'\x00' * 8
+                  entry[16:16 + text_len * 2] = text_bytes
+                  data += bytes(entry)
+              padding = DATA_START - HEADER_SIZE
+              result = bytes(header) + b'\x00' * padding + bytes(data)
+              with open(out_path, 'wb') as f:
+                  f.write(result)
+              print(f'已生成 {out_path}')
+          
+          # 为每个版本生成 DAT
+          for min_freq, suffix in [(1,'full'), (10,'freq10'), (50,'freq50'), (100,'freq100'), (500,'freq500')]:
+              txt_file = f'msp_{suffix}.txt'
+              dat_file = f'msp_{suffix}.dat'
+              words = [(w, f) for w, f in merged if f >= min_freq]
+              build_dat(words, dat_file)
+
           # 生成 changelog
           today = datetime.date.today().isoformat()
           with open('CHANGELOG.md', 'w') as f:
@@ -167,7 +202,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git add msp_*.txt CHANGELOG.md
+          git add msp_*.txt msp_*.dat CHANGELOG.md
           if git diff --cached --quiet; then
             echo "没有更新，跳过提交"
           else
@@ -181,14 +216,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TODAY=$(date +%Y%m%d)
-          # 检查 release 是否存在
+          # 删除旧的 release
           if gh release view "v1.0" --repo ${{ github.repository }} 2>/dev/null; then
-            echo "更新现有 v1.0 release"
-            gh release upload "v1.0" msp_*.txt --clobber
-          else
-            echo "创建新 release v1.0"
-            gh release create "v1.0" msp_*.txt \
-              --title "微软拼音词库 v1.0" \
-              --notes "基于 rime-ice + rime-frost + 热词爬虫的每周构建"
+            gh release delete "v1.0" --repo ${{ github.repository }} -y 2>/dev/null || true
           fi
+          # 创建新 release（包含 DAT 文件）
+          gh release create "v1.0" msp_*.dat \
+            --title "微软拼音词库 v1.0" \
+            --notes "基于 rime-ice + rime-frost + 热词爬虫的每周构建\n\n直接下载 .dat 文件导入微软拼音使用。"
           echo "Release 已更新"
