@@ -1,10 +1,10 @@
 # 更新日期: 2026-04-14
 
 ## 词库统计
-- 去重后总词条: 2,199,076
+- 去重后总词条: 2,185,880
 - 词频≥100: 1,693,123
 - 词频≥500: 287,381
-- Win10 DAT 词条: 324,328
+- DAT 总词条: 3,457,796
 
 ## 来源版本
 - rime-ice_base.txt: 542,322 条
@@ -14,7 +14,7 @@
 - rime-ice_others.txt: 1 条
 - rime-frost_base.txt: 364,759 条
 - rime-frost_ext.txt: 235,519 条
-- rime-frost_tencent.txt: 893,668 条
+- rime-frost_tencent.txt: 0 条
 - rime-frost_8105.txt: 8,528 条
 - rime-frost_others.txt: 568 条
 - rime-frost_food.txt: 144,441 条
