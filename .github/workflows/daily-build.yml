@@ -49,6 +49,24 @@ jobs:
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/computer.dict.yaml" -o cache/rime-frost_computer.txt
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/sport.dict.yaml" -o cache/rime-frost_sport.txt
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/geography.dict.yaml" -o cache/rime-frost_geography.txt
+          # 搜狗细胞词库（rime-frost 已转换好）
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/exthot.dict.yaml" -o cache/rime-frost_exthot.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/game.dict.yaml" -o cache/rime-frost_game.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/music.dict.yaml" -o cache/rime-frost_music.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/media.dict.yaml" -o cache/rime-frost_media.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/animal.dict.yaml" -o cache/rime-frost_animal.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/chess.dict.yaml" -o cache/rime-frost_chess.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/chess2.dict.yaml" -o cache/rime-frost_chess2.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/composite.dict.yaml" -o cache/rime-frost_composite.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/industry_product.dict.yaml" -o cache/rime-frost_industry_product.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/inputmethod.dict.yaml" -o cache/rime-frost_inputmethod.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/literature.dict.yaml" -o cache/rime-frost_literature.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/name.dict.yaml" -o cache/rime-frost_name.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/name2.dict.yaml" -o cache/rime-frost_name2.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/place.dict.yaml" -o cache/rime-frost_place.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/shulihua.dict.yaml" -o cache/rime-frost_shulihua.txt
+          # 朙月拼音（jsDelivr 对此文件返回 403，改用 raw.githubusercontent.com）
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/luna_pinyin.dict.yaml" -o cache/rime-frost_luna_pinyin.txt
           echo "rime-frost done"
 
       - name: Merge and convert
@@ -182,9 +200,18 @@ jobs:
               'rime-ice_8105.txt', 'rime-ice_others.txt',
               'rime-frost_base.txt', 'rime-frost_ext.txt', 'rime-frost_tencent.txt',
               'rime-frost_8105.txt', 'rime-frost_others.txt',
+              # 搜狗细胞词库（21个）
               'rime-frost_food.txt', 'rime-frost_idiom.txt', 'rime-frost_history.txt',
               'rime-frost_medication.txt', 'rime-frost_computer.txt',
               'rime-frost_sport.txt', 'rime-frost_geography.txt',
+              'rime-frost_exthot.txt', 'rime-frost_game.txt', 'rime-frost_music.txt',
+              'rime-frost_media.txt', 'rime-frost_animal.txt', 'rime-frost_chess.txt',
+              'rime-frost_chess2.txt', 'rime-frost_composite.txt',
+              'rime-frost_industry_product.txt', 'rime-frost_inputmethod.txt',
+              'rime-frost_literature.txt', 'rime-frost_name.txt', 'rime-frost_name2.txt',
+              'rime-frost_place.txt', 'rime-frost_shulihua.txt',
+              # 朙月拼音
+              'rime-frost_luna_pinyin.txt',
           ]
 
           all_entries = []
