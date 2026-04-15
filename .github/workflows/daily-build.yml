@@ -39,8 +39,8 @@ jobs:
           echo "=== Downloading rime-frost ==="
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/base.dict.yaml" -o cache/rime-frost_base.txt
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/ext.dict.yaml" -o cache/rime-frost_ext.txt
-          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/tencent.dict.yaml" -o cache/rime-frost_tencent.txt || \
-          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts/tencent.dict.yaml" -o cache/rime-frost_tencent.txt
+          # rime-frost tencent.dict.yaml 约29MB，超过GitHub 25MB限制且未配置LFS，跳过
+          # rime-ice tencent 已包含约98万腾讯词条
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/8105.dict.yaml" -o cache/rime-frost_8105.txt
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/others.dict.yaml" -o cache/rime-frost_others.txt
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/food.dict.yaml" -o cache/rime-frost_food.txt
@@ -208,7 +208,8 @@ jobs:
           files = [
               'rime-ice_base.txt', 'rime-ice_ext.txt', 'rime-ice_tencent.txt',
               'rime-ice_8105.txt', 'rime-ice_others.txt',
-              'rime-frost_base.txt', 'rime-frost_ext.txt', 'rime-frost_tencent.txt',
+              'rime-frost_base.txt', 'rime-frost_ext.txt',
+              # rime-frost tencent 跳过（29MB > 25MB GitHub限制，且rime-ice tencent已覆盖）
               'rime-frost_8105.txt', 'rime-frost_others.txt',
               # 搜狗细胞词库（21个）
               'rime-frost_food.txt', 'rime-frost_idiom.txt', 'rime-frost_history.txt',
