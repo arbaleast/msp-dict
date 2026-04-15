@@ -149,23 +149,25 @@ jobs:
               HEADER_SIZE = 0x40
               phrase_offset_start = HEADER_SIZE
               phrase_count = len(words_with_pinyin)
-              
+
+              # Entry fixed header: magic(4) + hanzi_off(2) + rank(1) + marker(1) + unknown1(4) + unknown2(4) = 16 bytes
+              # Entry size = 16 + pinyin_utf16_bytes + split(2) + word_utf16_bytes + term(2)
+              #            = 20 + pinyin_utf16_bytes + word_utf16_bytes
+              # hanzi_offset = 16(fixed) + pinyin_utf16_bytes + 2(split) = 18 + pinyin_utf16_bytes
+
               # 计算偏移和大小
               phrase_offsets = []
               current_offset = 0
               for word, pinyin_str, rank in words_with_pinyin:
-                  pinyin_char_len = len(pinyin_str)  # 字符数，不是字节数
-                  word_char_len = len(word)
-                  # hanzi_offset = 8 + 8 + pinyin_bytes + 2 = 18 + pinyin_char_len * 2
-                  hanzi_offset = 18 + pinyin_char_len * 2
-                  # 词条大小 = 4+2+1+1+4+4 + pinyin_bytes + 2 + word_bytes + 2
-                  entry_size = 4 + 2 + 1 + 1 + 4 + 4 + pinyin_char_len * 2 + 2 + word_char_len * 2 + 2
+                  pinyin_utf16_len = len(pinyin_str) * 2
+                  word_utf16_len = len(word) * 2
+                  entry_size = 20 + pinyin_utf16_len + word_utf16_len
                   phrase_offsets.append(current_offset)
                   current_offset += entry_size
-              
+
               phrase_start = phrase_offset_start + phrase_count * 4
               phrase_end = phrase_start + current_offset
-              
+
               # 构建 header
               header = bytearray(HEADER_SIZE)
               header[0:8] = b'mschxudp'
@@ -176,30 +178,29 @@ jobs:
               struct.pack_into('<I', header, 24, phrase_end)
               struct.pack_into('<I', header, 28, phrase_count)
               struct.pack_into('<Q', header, 32, 0)
-              
+
               # 构建 offset 表
               offset_table = b''.join(struct.pack('<I', off) for off in phrase_offsets)
-              
-              # 构建词条（用 list 最后 join，避免 phrases += entry 的 O(n²) 问题）
+
+              # 构建词条
               phrase_parts = []
               for word, pinyin_str, rank in words_with_pinyin:
-                  pinyin_char_len = len(pinyin_str)
-                  word_char_len = len(word)
-                  pinyin_utf16 = pinyin_str.encode('utf-16-le')
+                  pinyin_utf16 = pinyin_str.upper().encode('utf-16-le')
                   word_utf16 = word.encode('utf-16-le')
-                  hanzi_offset = 18 + pinyin_char_len * 2
-                  
-                  entry  = struct.pack('<I', 0x00100010)  # magic
+                  # hanzi_offset = 18 + pinyin_utf16_len
+                  hanzi_offset = 18 + len(pinyin_utf16)
+
+                  entry  = struct.pack('<I', 0x00100010)
                   entry += struct.pack('<H', hanzi_offset)
                   entry += bytes([rank & 0xFF, 0x06])
-                  entry += struct.pack('<I', 0x00000000)   # unknown
-                  entry += struct.pack('<I', 0xE679CD20)   # unknown (关键！)
-                  entry += pinyin_utf16                    # pinyin (可变长)
-                  entry += struct.pack('<H', 0)            # split
-                  entry += word_utf16                      # word
-                  entry += struct.pack('<H', 0)            # terminator
+                  entry += struct.pack('<I', 0x00000000)   # unknown1 (4 bytes)
+                  entry += struct.pack('<I', 0xE679CD20)
+                  entry += pinyin_utf16
+                  entry += struct.pack('<H', 0)             # split
+                  entry += word_utf16
+                  entry += struct.pack('<H', 0)             # terminator
                   phrase_parts.append(entry)
-              
+
               data = bytes(header) + offset_table + b''.join(phrase_parts)
               with open(output_path, 'wb') as f:
                   f.write(data)
