@@ -39,7 +39,8 @@ jobs:
           echo "=== Downloading rime-frost ==="
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/base.dict.yaml" -o cache/rime-frost_base.txt
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/ext.dict.yaml" -o cache/rime-frost_ext.txt
-          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/tencent.dict.yaml" -o cache/rime-frost_tencent.txt
+          curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/tencent.dict.yaml" -o cache/rime-frost_tencent.txt || \
+          curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts/tencent.dict.yaml" -o cache/rime-frost_tencent.txt
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/8105.dict.yaml" -o cache/rime-frost_8105.txt
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/others.dict.yaml" -o cache/rime-frost_others.txt
           curl -sL "https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/food.dict.yaml" -o cache/rime-frost_food.txt
@@ -94,14 +95,23 @@ jobs:
                       if word and freq >= 0:
                           entries.append((word, pinyin, freq))
                   elif len(parts) == 2:
-                      # 可能是 词\t词频 格式（没有拼音）
+                      # 可能是 luna_pinyin 的 词\t拼音 格式（无词频）
                       word = parts[0].strip()
-                      try:
-                          freq = int(parts[1].strip())
-                      except ValueError:
-                          continue
-                      if word and freq >= 0:
-                          entries.append((word, '', freq))
+                      pinyin_candidate = parts[1].strip()
+                      # 判断第二列是拼音还是词频：拼音不含数字，词频是纯数字
+                      if pinyin_candidate and not any(c.isdigit() for c in pinyin_candidate):
+                          # 拼音格式（luna_pinyin: 〇\ting, ㄓ\tzhi 等）
+                          # 只保留CJK字符作为词（过滤掉注音符号如ㄓㄔ）
+                          if word and ord(word[0]) >= 0x4E00:  # CJK统一汉字
+                              entries.append((word, pinyin_candidate, 1))
+                      else:
+                          # 词\t词频 格式
+                          try:
+                              freq = int(pinyin_candidate)
+                          except ValueError:
+                              continue
+                          if word and freq >= 0:
+                              entries.append((word, '', freq))
               return entries
 
           def merge(entries_list):
