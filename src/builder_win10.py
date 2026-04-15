@@ -1,30 +1,37 @@
 """
 微软拼音 Win10 用户词库格式 (mschxudp)
 
-格式来自 imewlconverter Win10MsPinyin.cs:
-
-Header (0x40 bytes):
+Header (64 bytes):
   0x00: proto 'mschxudp' (8 bytes)
   0x08: unknown 0x00600002 (4 bytes)
   0x0C: version 1 (4 bytes)
   0x10: phrase_offset_start = 0x40 (4 bytes)
   0x14: phrase_start = 0x40 + phrase_count * 4 (4 bytes)
-  0x18: phrase_end (4 bytes, filled after build)
+  0x18: phrase_end (4 bytes)
   0x1C: phrase_count (4 bytes)
   0x20: timestamp (8 bytes)
-  0x28: reserved 0 (24 bytes)
+  0x28: zeros (24 bytes)
 
-Phrase entry:
-  magic (4 bytes, 0x00100010)
-  hanzi_offset (2 bytes) = 18 + pinyin_char_len * 2
-  rank (1 byte)
-  0x06 (1 byte)
-  unknown (4 bytes, 0x00000000)
-  unknown (4 bytes, 0xE679CD20)
-  pinyin (pinyin_char_len * 2 bytes UTF-16LE)
-  split (2 bytes, 0x0000)
-  word (word_char_len * 2 bytes UTF-16LE)
-  terminator (2 bytes, 0x0000)
+Entry (16-byte fixed header + variable):
+  0x00: magic (4 bytes, 0x00100010)
+  0x04: hanzi_offset (2 bytes) = 18 + pinyin_utf16_byte_len
+  0x06: rank (1 byte)
+  0x07: marker (1 byte, 0x06)
+  0x08: unknown (4 bytes, 0x00000000)
+  0x0C: unknown (4 bytes, 0xE679CD20)
+  0x10: pinyin (pinyin_char_len * 2 bytes UTF-16LE)
+  +2: split (2 bytes, 0x0000)
+  +word_utf16_byte_len: word (word_char_len * 2 bytes UTF-16LE)
+  +2: terminator (2 bytes, 0x0000)
+
+hanzi_offset: 从 entry 起始到 word 字段首字节的字节偏移
+= 16(fixed) + pinyin_utf16_byte_len + 2(split)
+= 18 + pinyin_utf16_byte_len
+
+Read 时:
+  py_bytes_len = hanzi_offset - 18
+  pinyin_start = entry_start + 16
+  word_start = pinyin_start + py_bytes_len + 2(split)
 """
 
 import struct
@@ -45,60 +52,58 @@ class Win10MSPinyinBuilder:
     def build(self) -> bytes:
         """构建二进制数据"""
         phrase_count = len(self.words)
-        
+
         # 计算每个词条的大小和累积偏移
+        # Entry = magic(4) + hanzi_off(2) + rank(1) + marker(1) + unknown1(4) + unknown2(4)
+        #       + pinyin_utf16 + split(2) + word_utf16 + term(2)
+        # Fixed header = 16 bytes
+        # Entry size = 16 + pinyin_utf16_len + 2 + word_utf16_len + 2
+        #             = 20 + pinyin_utf16_len + word_utf16_len
         phrase_offsets = []
         current_offset = 0
         for word, pinyin_str, rank in self.words:
-            pinyin_char_len = len(pinyin_str)  # 字符数，不是字节数
-            word_char_len = len(word)
-            
-            # hanzi_offset = 8(magic+hanoff) + 8(unknown) + pinyin_bytes + 2(split)
-            # = 18 + pinyin_char_len * 2
-            hanzi_offset = 18 + pinyin_char_len * 2
-            
-            # 词条大小 = 4(magic) + 2(hanoff) + 1(rank) + 1(x06) + 4(unknown) + 4(unknown2) + pinyin_bytes + 2(split) + word_bytes + 2(term)
-            entry_size = 4 + 2 + 1 + 1 + 4 + 4 + pinyin_char_len * 2 + 2 + word_char_len * 2 + 2
+            pinyin_utf16_len = len(pinyin_str) * 2
+            word_utf16_len = len(word) * 2
+            entry_size = 20 + pinyin_utf16_len + word_utf16_len
             phrase_offsets.append(current_offset)
             current_offset += entry_size
-        
+
         phrase_start = self.PHRASE_OFFSET_START + phrase_count * 4
         phrase_end = phrase_start + current_offset
-        
+
         # 构建 header
         header = bytearray(self.HEADER_SIZE)
         header[0:8] = b'mschxudp'
         struct.pack_into('<I', header, 8, 0x00600002)
-        struct.pack_into('<I', header, 12, 1)  # version
-        struct.pack_into('<I', header, 16, self.PHRASE_OFFSET_START)  # phrase_offset_start
-        struct.pack_into('<I', header, 20, phrase_start)   # phrase_start
-        struct.pack_into('<I', header, 24, phrase_end)      # phrase_end
-        struct.pack_into('<I', header, 28, phrase_count)     # phrase_count
-        struct.pack_into('<Q', header, 32, 0)  # timestamp
-        
+        struct.pack_into('<I', header, 12, 1)
+        struct.pack_into('<I', header, 16, self.PHRASE_OFFSET_START)
+        struct.pack_into('<I', header, 20, phrase_start)
+        struct.pack_into('<I', header, 24, phrase_end)
+        struct.pack_into('<I', header, 28, phrase_count)
+        struct.pack_into('<Q', header, 32, 0)
+
         # 构建 offset 表
         offset_table = b''.join(struct.pack('<I', off) for off in phrase_offsets)
-        
-        # 构建词条（用 list 最后 join，避免 phrases += entry 的 O(n²) 问题）
+
+        # 构建词条
         phrase_parts = []
         for word, pinyin_str, rank in self.words:
-            pinyin_char_len = len(pinyin_str)
-            word_char_len = len(word)
-            pinyin_utf16 = pinyin_str.encode('utf-16-le')
+            pinyin_utf16 = pinyin_str.upper().encode('utf-16-le')
             word_utf16 = word.encode('utf-16-le')
-            hanzi_offset = 18 + pinyin_char_len * 2
-            
-            entry  = struct.pack('<I', 0x00100010)  # magic
-            entry += struct.pack('<H', hanzi_offset)
-            entry += bytes([rank & 0xFF, 0x06])
-            entry += struct.pack('<I', 0x00000000)
-            entry += struct.pack('<I', 0xE679CD20)
-            entry += pinyin_utf16
-            entry += struct.pack('<H', 0)
-            entry += word_utf16
-            entry += struct.pack('<H', 0)
+            # hanzi_offset = 16(fixed) + pinyin_utf16_len + 2(split) = 18 + pinyin_utf16_len
+            hanzi_offset = 18 + len(pinyin_utf16)
+
+            entry  = struct.pack('<I', 0x00100010)     # magic
+            entry += struct.pack('<H', hanzi_offset)    # hanzi_offset
+            entry += bytes([rank & 0xFF, 0x06])         # rank, marker
+            entry += struct.pack('<I', 0x00000000)       # unknown1 (4 bytes)
+            entry += struct.pack('<I', 0xE679CD20)       # unknown2
+            entry += pinyin_utf16                        # pinyin UTF-16LE
+            entry += struct.pack('<H', 0)                # split
+            entry += word_utf16                          # word UTF-16LE
+            entry += struct.pack('<H', 0)                # terminator
             phrase_parts.append(entry)
-        
+
         return bytes(header) + offset_table + b''.join(phrase_parts)
     
     def save(self, filepath: str):
