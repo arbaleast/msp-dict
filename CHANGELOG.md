@@ -14,7 +14,6 @@
 - rime-ice_others.txt: 610 条
 - rime-frost_base.txt: 364,761 条
 - rime-frost_ext.txt: 235,519 条
-- rime-frost_tencent.txt: 0 条
 - rime-frost_8105.txt: 8,528 条
 - rime-frost_others.txt: 568 条
 - rime-frost_food.txt: 144,441 条
