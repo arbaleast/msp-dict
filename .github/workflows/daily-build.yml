@@ -127,8 +127,8 @@ jobs:
               return sorted(word_data.items(), key=lambda x: x[1][1], reverse=True)
 
           def normalize_pinyin(p):
-              """规范化拼音：移除空格，转小写，截断到4字符（Win10限制）"""
-              return p.replace(' ', '').lower()[:4]
+              """规范化拼音：移除空格，转小写，保留完整拼音"""
+              return p.replace(' ', '').lower()
 
           def has_rare_char(word):
               """检查是否含生僻字（CJK扩展区）"""
