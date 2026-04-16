@@ -185,7 +185,7 @@ jobs:
               # 构建词条
               phrase_parts = []
               for word, pinyin_str, rank in words_with_pinyin:
-                  pinyin_utf16 = pinyin_str.upper().encode('utf-16-le')
+                  pinyin_utf16 = pinyin_str.lower().encode('utf-16-le')
                   word_utf16 = word.encode('utf-16-le')
                   # hanzi_offset = 18 + pinyin_utf16_len
                   hanzi_offset = 18 + len(pinyin_utf16)
