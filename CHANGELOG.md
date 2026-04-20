@@ -1,7 +1,7 @@
-# 更新日期: 2026-04-19
+# 更新日期: 2026-04-20
 
 ## 词库统计
-- 去重后总词条: 2,446,572
+- 去重后总词条: 2,446,571
 - 词频≥100: 1,693,878
 - 词频≥500: 288,139
 - DAT 总词条: 3,707,936
@@ -17,7 +17,7 @@
 - rime-frost_8105.txt: 8,528 条
 - rime-frost_others.txt: 568 条
 - rime-frost_food.txt: 144,441 条
-- rime-frost_idiom.txt: 48,714 条
+- rime-frost_idiom.txt: 48,713 条
 - rime-frost_history.txt: 19,945 条
 - rime-frost_medication.txt: 129,408 条
 - rime-frost_computer.txt: 9 条
@@ -33,7 +33,7 @@
 - rime-frost_composite.txt: 45,707 条
 - rime-frost_industry_product.txt: 2,980 条
 - rime-frost_inputmethod.txt: 109 条
-- rime-frost_literature.txt: 35,445 条
+- rime-frost_literature.txt: 35,444 条
 - rime-frost_name.txt: 244 条
 - rime-frost_name2.txt: 18,359 条
 - rime-frost_place.txt: 2,959 条
