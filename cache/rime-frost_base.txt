@@ -331429,7 +331429,7 @@ sort: by_weight
 有为者	you wei zhe	3
 尤为重要	you wei zhong yao	1635
 又问	you wen	910
-尤文	you wen	1924
+尤文	you wen	192
 油温	you wen	464
 有问必答	you wen bi da	337
 有闻必录	you wen bi lu	2
