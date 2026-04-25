@@ -1,10 +1,10 @@
-# 更新日期: 2026-04-24
+# 更新日期: 2026-04-25
 
 ## 词库统计
-- 去重后总词条: 2,446,571
-- 词频≥100: 1,693,878
-- 词频≥500: 288,138
-- DAT 总词条: 3,707,935
+- 去重后总词条: 2,450,307
+- 词频≥100: 1,693,356
+- 词频≥500: 287,568
+- DAT 总词条: 5,701,605
 
 ## 来源版本
 - rime-ice_base.txt: 542,322 条
@@ -12,7 +12,7 @@
 - rime-ice_tencent.txt: 981,738 条
 - rime-ice_8105.txt: 8,606 条
 - rime-ice_others.txt: 610 条
-- rime-frost_base.txt: 364,761 条
+- rime-frost_base.txt: 364,760 条
 - rime-frost_ext.txt: 235,519 条
 - rime-frost_8105.txt: 8,528 条
 - rime-frost_others.txt: 568 条
@@ -30,12 +30,12 @@
 - rime-frost_animal.txt: 575 条
 - rime-frost_chess.txt: 154 条
 - rime-frost_chess2.txt: 3,222 条
-- rime-frost_composite.txt: 45,707 条
+- rime-frost_composite.txt: 572,766 条
 - rime-frost_industry_product.txt: 2,980 条
 - rime-frost_inputmethod.txt: 109 条
 - rime-frost_literature.txt: 35,444 条
 - rime-frost_name.txt: 244 条
-- rime-frost_name2.txt: 18,359 条
+- rime-frost_name2.txt: 18,360 条
 - rime-frost_place.txt: 2,959 条
 - rime-frost_shulihua.txt: 36,744 条
 - rime-frost_luna_pinyin.txt: 61,653 条
