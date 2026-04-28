@@ -150726,3 +150726,14 @@ use_preset_vocabulary: false
 薪王	xin wang	135
 全战	quan zhan	269
 幻剑	huan jian	5
+黑魂	hei hun	611
+锈湖	xiu hu	476
+灵梦	ling meng	445
+星盟	xing meng	439
+塔萨达	ta sa da	105
+云无月	yun wu yue	86
+车枪球	che qiang qiu	85
+六武众	liu wu zhong	73
+法斑静火	fa ban jing huo	74
+无套裤汉	wu tao ku han	44
+王之哈莫	wang zhi ha mo	39

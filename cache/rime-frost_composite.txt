@@ -596811,3 +596811,51 @@ sort: by_weight
 黑色白	hei se bai	1
 默默关注	mo mo guan zhu	57
 鼓励自由	gu li zi you	1
+越久越值钱	yue jiu yue zhi qian	10
+越久越累	yue jiu yue lei	10
+越久越坚	yue jiu yue jian	10
+越久越坚硬	yue jiu yue jian ying	10
+越久越坚固	yue jiu yue jian gu	10
+越久越有力量	yue jiu yue you li liang	10
+越久越男人	yue jiu yue nan ren	10
+越久越有价值	yue jiu yue you jia zhi	10
+越久越能	yue jiu yue neng	10
+越久越会	yue jiu yue hui	10
+越久你越会	yue jiu ni yue hui	10
+越久越喜欢	yue jiu yue xi huan	10
+开发新范式	kai fa xin fan shi	10
+华东师范大学出版社	hua dong shi fan da xue chu ban she	78
+全国人民代表大会常务委员会	quan guo ren min dai biao da hui chang wu wei yuan hui	73
+社会科学文献出版社	she hui ke xue wen xian chu ban she	65
+外语教学与研究出版社	wai yu jiao xue yu yan jiu chu ban she	64
+中华人民共和国宪法	zhong hua ren min gong he guo xian fa	56
+中华人民共和国教育部	zhong hua ren min gong he guo jiao yu bu	52
+中国互联网络信息中心	zhong guo hu lian wang luo xin xi zhong xin	48
+中国证券监督管理委员会	zhong guo zheng quan jian du guan li wei yuan hui	46
+广东省高级人民法院	guang dong sheng gao ji ren min fa yuan	46
+美国宾夕法尼亚大学	mei guo bin xi fa ni ya da xue	42
+有百利而无一害	you bai li er wu yi hai	37
+北京市高级人民法院	bei jing shi gao ji ren min fa yuan	36
+多万美元	duo wan mei yuan	93
+四十多个	si shi duo ge	86
+四五十个	si wu shi ge	83
+三四十个	san si shi ge	83
+好几百个	hao ji bai ge	62
+三百多个	san bai duo ge	62
+五六十个	wu liu shi ge	57
+万多一点	wan duo yi dian	56
+好几十个	hao ji shi ge	56
+第三第四	di san di si	54
+国家有关	guo jia you guan	49
+一个二维	yi ge er wei	49
+一个二十多岁	yi ge er shi duo sui	45
+一万多个	yi wan duo ge	44
+羊毛出在	yang mao chu zai	43
+万多美元	wan duo mei yuan	41
+七八十个	qi ba shi ge	39
+二百多个	er bai duo ge	37
+一个十几岁	yi ge shi ji sui	36
+羊毛出在猪身上	yang mao chu zai zhu shen shang	10
+羊毛出在狗身上	yang mao chu zai gou shen shang	10
+羊毛出在哪儿	yang mao chu zai na er	10
+羊毛出在猪	yang mao chu zai zhu	10

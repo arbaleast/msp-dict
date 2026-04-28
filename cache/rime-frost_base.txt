@@ -237980,12 +237980,12 @@ sort: by_weight
 # 事势	shi shi	0
 # 噬食	shi shi	0
 # 失恃	shi shi	0
-# 失时	shi shi	0
+失时	shi shi	14
 # 师事	shi shi	0
 # 施事	shi shi	0
 # 施施	shi shi	0
 # 时世	shi shi	0
-# 时事	shi shi	0
+时事	shi shi	823
 # 时式	shi shi	0
 试试啊	shi shi a	27
 试试吧	shi shi ba	447
@@ -375826,3 +375826,138 @@ sort: by_weight
 均订	junding	50
 万订	wan ding	19
 千订	qian ding	4
+欧冠	ou guan	3729
+上财	shang cai	2541
+精听	jing ting	1816
+华政	hua zheng	1618
+强答	qiang da	1306
+万青	wan qing	1227
+秦时	qin shi	1164
+酒体	jiu ti	1118
+听感	ting gan	963
+猫癣	mao xuan	962
+无球	wu qiu	952
+比划	bi hua	889
+庆应	qing ying	867
+两校	liang xiao	834
+顶会	ding hui	720
+发债	fa zhai	692
+本义	ben yi	652
+北化	bei hua	632
+澳网	ao wang	617
+正联	zheng lian	615
+酒款	jiu kuan	602
+托业	tuo ye	594
+奔富	ben fu	594
+陵南	ling nan	584
+柜体	gui ti	583
+无反	wu fan	582
+网叔	wang shu	579
+中底	zhong di	576
+北服	bei fu	560
+深中	shen zhong	556
+熟成	shu cheng	551
+中症	zhong zheng	539
+物哀	wu ai	539
+镇楼	zhen lou	538
+万门	wan men	529
+印钱	yin qian	525
+机经	ji jing	523
+飞控	fei kong	518
+圈层	quan ceng	518
+简并	jian bing	514
+片方	pian fang	510
+考案	kao an	506
+声子	sheng zi	505
+待过	dai guo	503
+其子	qi zi	503
+一答	yi da	499
+新债	xin zhai	490
+要会	yao hui	485
+词作	ci zuo	481
+牛剑	niu jian	480
+年生	nian sheng	477
+轻喷	qing pen	474
+季汉	ji han	456
+霉粉	mei fen	452
+拍面	pai mian	449
+上时	shang shi	446
+颗星	ke xing	444
+图是	tu shi	440
+前先	qian xian	438
+阿语	a yu	438
+天驱	tian qu	437
+歌里	ge li	437
+南邮	nan you	437
+条线	tiao xian	436
+个遍	ge bian	435
+焦外	jiao wai	434
+吸积	xi ji	433
+富于	fu yu	433
+普适	pu shi	431
+内格夫	nei ge fu	283
+新本格	xin ben ge	167
+康塔塔	kang ta ta	150
+诺多族	nuo duo zu	138
+罗曼语	luo man yu	125
+巴扬神	ba yang shen	117
+桑基图	sang ji tu	115
+托卡塔	tuo ka ta	104
+第一等	di yi deng	104
+净划面	jing hua mian	99
+法玛斯	fa ma si	98
+逸安卫	yi an wei	97
+享耀家	xiang yao jia	96
+福佳白	fu jia bai	95
+毛绒绒	mao rong rong	91
+陈枝记	chen zhi ji	89
+望海涵	wang hai han	87
+唯卓仕	wei zhuo shi	85
+电流元	dian liu yuan	84
+真真是	zhen zhen shi	248
+类节目	lei jie mu	139
+类物质	lei wu zhi	104
+越久越	yue jiu yue	92
+成其为	cheng qi wei	89
+一个碗	yi ge wan	87
+万多名	wan duo ming	85
+圆极化	yuan ji hua	83
+越小越	yue xiao yue	82
+高高地	gao gao de	80
+答一答	da yi da	79
+好些个	hao xie ge	79
+新托业	xin tuo ye	78
+港科广	gang ke guang	77
+不做声	bu zuo sheng	77
+标准钟	biao zhun zhong	77
+束缚态	shu fu tai	76
+亿马克	yi ma ke	76
+配器法	pei qi fa	75
+警考通	jing kao tong	75
+简短地	jian duan di	73
+下工夫	xia gong fu	73
+扁扁的	bian bian de	72
+穿着者	chuan zhuo zhe	70
+面辅料	mian fu liao	70
+长长地	chang chang de	69
+心之壁	xin zhi bi	69
+科普特人	ke pu te ren	92
+引力质量	yin li zhi liang	70
+费马原理	fei ma yuan li	50
+风必摧之	feng bi cui zhi	50
+塞尔维亚族	sai er wei ya zu	49
+在线教程	zai xian jiao cheng	48
+正正好好	zheng zheng hao hao	48
+力学系统	li xue xi tong	47
+财经频道	cai jing pin dao	45
+归纳如下	gui na ru xia	44
+广义速度	guang yi su du	42
+洪堡大学	hong bao da xue	41
+韩国大宇	han guo da yu	41
+规范变换	gui fan bian huan	39
+耶加雪啡	ye jia xue fei	39
+塞曼效应	sai man xiao ying	38
+五事七计	wu shi qi ji	37
+忠贞不二	zhong zhen bu er	35
+数理经济	shu li jing ji	35
+正则系综	zheng ze xi zong	35
