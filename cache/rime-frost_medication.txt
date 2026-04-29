@@ -129,7 +129,7 @@ use_preset_vocabulary: false
 八楞麻	ba leng ma	0
 八楞木	ba leng mu	0
 八厘麻	ba li ma	0
-巴黎学派	ba li xue pai	1
+巴黎学派	ba li xue pai	0
 巴洛综合征	ba luo zong he zheng	0
 巴茅根	ba mao gen	0
 拔毛狂	ba mao kuang	0
@@ -163,7 +163,7 @@ use_preset_vocabulary: false
 八正散	ba zheng san	3
 靶组织反应	ba zu zhi fan ying	0
 白八角莲	bai ba jiao lian	0
-白板说	bai ban shuo	15
+白板说	bai ban shuo	16
 白贝	bai bei	35
 白贝齿	bai bei chi	0
 白背青荚叶	bai bei qing jia ye	0
@@ -324,7 +324,7 @@ use_preset_vocabulary: false
 白枪杆	bai qiang gan	0
 白枪杆根	bai qiang gan gen	0
 白茄根	bai qie gen	0
-白求	bai qiu	0
+白求	bai qiu	1
 白屈菜根	bai qu cai gen	0
 百日草	bai ri cao	6
 白乳菇	bai ru gu	0
@@ -552,7 +552,7 @@ use_preset_vocabulary: false
 斑状硬斑病	ban zhuang ying ban bing	0
 半椎体	ban zhui ti	1
 棒棒草	bang bang cao	0
-棒棒木	bang bang mu	0
+棒棒木	bang bang mu	1
 蚌粉	bang fen	1
 榜嘎	bang ga	0
 蚌花	bang hua	0
@@ -672,7 +672,7 @@ use_preset_vocabulary: false
 孢子发生	bao zi fa sheng	0
 孢子丝菌病	bao zi si jun bing	0
 孢子同型	bao zi tong xing	0
-孢子形成	bao zi xing cheng	4
+孢子形成	bao zi xing cheng	3
 豹子眼睛果	bao zi yan jing guo	0
 孢子异型	bao zi yi xing	0
 孢子中壁	bao zi zhong bi	0
@@ -690,7 +690,7 @@ use_preset_vocabulary: false
 背根	bei gen	1
 背花疮	bei hua chuang	0
 备解素	bei jie su	0
-背景效应	bei jing xiao ying	0
+背景效应	bei jing xiao ying	1
 贝克肌营养不良	bei ke ji ying yang bu liang	0
 贝壳甲综合征	bei ke jia zong he zheng	0
 贝克三体征	bei ke san ti zheng	0
@@ -719,7 +719,7 @@ use_preset_vocabulary: false
 本草品汇精要	ben cao pin hui jing yao	3
 贲门成形术	ben men cheng xing shu	1
 贲门肌切开术	ben men ji qie kai shu	0
-本能论	ben neng lun	5
+本能论	ben neng lun	4
 本尼迪克特公式	ben ni di ke te gong shi	0
 本神穴	ben shen xue	0
 本特利调温氧合器	ben te li tiao wen yang he qi	0
@@ -831,7 +831,7 @@ use_preset_vocabulary: false
 比赛心理定向	bi sai xin li ding xiang	0
 比赛型运动员	bi sai xing yun dong yuan	0
 比赛自我意象	bi sai zi wo yi xiang	0
-比色	bi se	20
+比色	bi se	21
 比色板	bi se ban	22
 鼻塞病	bi se bing	0
 比色测定	bi se ce ding	0
@@ -937,7 +937,7 @@ use_preset_vocabulary: false
 变形小屋	bian xing xiao wu	0
 变性型涎腺肿大	bian xing xing xian xian zhong da	0
 变形序列征	bian xing xu lie zheng	0
-变形运动	bian xing yun dong	0
+变形运动	bian xing yun dong	2
 扁蓄	bian xu	0
 萹蓄大黄滑石研	bian xu da huang hua shi yan	0
 鞭叶耳蕨	bian ye er jue	0
@@ -1532,7 +1532,7 @@ use_preset_vocabulary: false
 肠道喂养	chang dao wei yang	2
 肠道细菌内毒素移位	chang dao xi jun nei du su yi wei	0
 肠道细菌移位	chang dao xi jun yi wei	0
-肠道营养	chang dao ying yang	2
+肠道营养	chang dao ying yang	1
 长顶盖	chang ding gai	0
 长度错觉	chang du cuo jue	0
 场独立性	chang du li xing	2
@@ -1618,7 +1618,7 @@ use_preset_vocabulary: false
 炒白扁豆	chao bai bian dou	0
 炒白牵牛子	chao bai qian niu zi	0
 炒白芍	chao bai shao	4
-超薄切片	chao bao qie pian	1
+超薄切片	chao bao qie pian	0
 超薄切片机	chao bao qie pian ji	0
 超倍体	chao bei ti	0
 超倍性	chao bei xing	0
@@ -2497,7 +2497,7 @@ use_preset_vocabulary: false
 大汗腺囊瘤	da han xian nang liu	0
 大汗腺囊腺瘤	da han xian nang xian liu	0
 大赫	da he	0
-大核	da he	191
+大核	da he	193
 大赫穴	da he xue	0
 大黑蒿	da hei hao	0
 大黑头草	da hei tou cao	0
@@ -2531,7 +2531,7 @@ use_preset_vocabulary: false
 大黄庶虫丸	da huang shu chong wan	0
 大黄炭	da huang tan	1
 大昏头鸡	da hun tou ji	0
-大活	da huo	100
+大活	da huo	99
 打火草	da huo cao	1
 大火草根	da huo cao gen	0
 大活络丹	da huo luo dan	0
@@ -2723,7 +2723,7 @@ use_preset_vocabulary: false
 大羽铁角蕨	da yu tie jiao jue	0
 大羽藓	da yu xian	0
 达原饮	da yuan yin	2
-大芸	da yun	1
+大芸	da yun	3
 大枣阿胶加酒服	da zao e jiao jia jiu fu	0
 大枣合之治虚痞	da zao he zhi zhi xu pi	0
 大枣生姜为丸服	da zao sheng jiang wei wan fu	0
@@ -2762,7 +2762,7 @@ use_preset_vocabulary: false
 代替律	dai ti lv	1
 戴维森分流术	dai wei sen fen liu shu	0
 带下医	dai xia yi	0
-代谢反应	dai xie fan ying	14
+代谢反应	dai xie fan ying	13
 代型	dai xing	0
 戴星草	dai xing cao	0
 袋形缝术	dai xing feng shu	0
@@ -2963,7 +2963,7 @@ use_preset_vocabulary: false
 导赤生地与木通	dao chi sheng di yu mu tong	0
 导出分数	dao chu fen shu	0
 倒触伞	dao chu san	0
-道德两难	dao de liang nan	8
+道德两难	dao de liang nan	7
 道德需要	dao de xu yao	0
 倒吊笔叶	dao diao bi ye	0
 倒吊蜡烛	dao diao la zhu	0
@@ -3016,7 +3016,7 @@ use_preset_vocabulary: false
 倒锥钻	dao zhui zuan	0
 的抗原	de kang yuan	0
 德朗热综合征	de lang re zong he zheng	0
-得气	de qi	24
+得气	de qi	23
 德乔治序列征	de qiao zhi xu lie zheng	0
 德瓦尔鼓泡式氧合器	de wa er gu pao shi yang he qi	0
 德育心理学	de yu xin li xue	0
@@ -3471,7 +3471,7 @@ use_preset_vocabulary: false
 动物首领和随从关系	dong wu shou ling he sui cong guan xi	0
 动物性关系	dong wu xing guan xi	0
 动物早期经验	dong wu zao qi jing yan	0
-动物智能	dong wu zhi neng	2
+动物智能	dong wu zhi neng	1
 洞泄	dong xie	1
 洞斜面	dong xie mian	0
 动则为痛	dong ze wei tong	0
@@ -3483,14 +3483,14 @@ use_preset_vocabulary: false
 动作感觉	dong zuo gan jue	0
 动作经济原则	dong zuo jing ji yuan ze	0
 动作练习曲线	dong zuo lian xi qu xian	0
-动作灵活性	dong zuo ling huo xing	7
+动作灵活性	dong zuo ling huo xing	6
 动作思维	dong zuo si wei	0
 动作稳定性	dong zuo wen ding xing	0
 动作研究	dong zuo yan jiu	0
 动作与时间研究	dong zuo yu shi jian yan jiu	0
 豆瓣还阳	dou ban huan yang	0
 豆瓣绿	dou ban lv	3
-豆瓣七	dou ban qi	0
+豆瓣七	dou ban qi	1
 豆瓣香	dou ban xiang	0
 豆包菌	dou bao jun	0
 豆豉草	dou chi cao	0
@@ -3623,7 +3623,7 @@ use_preset_vocabulary: false
 煅龙牡	duan long mu	0
 短毛熊巴掌	duan mao xiong ba zhang	0
 短气而咳	duan qi er ke	0
-短期培养	duan qi pei yang	8
+短期培养	duan qi pei yang	6
 短期未知决诊九候曾无仿佛	duan qi wei zhi jue zhen jiu hou ceng wu fang fu	0
 短气自汗	duan qi zi han	0
 煅青礞石	duan qing meng shi	0
@@ -3969,7 +3969,7 @@ use_preset_vocabulary: false
 耳水苋	er shui xian	0
 二态性	er tai xing	8
 儿童草	er tong cao	0
-儿童精神病	er tong jing shen bing	4
+儿童精神病	er tong jing shen bing	2
 儿童口腔正畸学	er tong kou qiang zheng ji xue	0
 儿童丘疹性肢端皮炎	er tong qiu zhen xing zhi duan pi yan	0
 儿童湿疹	er tong shi zhen	1
@@ -4291,7 +4291,7 @@ use_preset_vocabulary: false
 肺司肃降	fei si su jiang	0
 肺司通调	fei si tong tiao	0
 肺司宣化	fei si xuan hua	0
-非特异性	fei te yi xing	121
+非特异性	fei te yi xing	122
 非特异性睾丸炎	fei te yi xing gao wan yan	0
 非特异性尿道炎	fei te yi xing niao dao yan	4
 非特异性膀胱炎	fei te yi xing pang guang yan	1
@@ -4321,7 +4321,7 @@ use_preset_vocabulary: false
 飞行错觉	fei xing cuo jue	0
 非胸腺依赖区	fei xiong xian yi lai qu	2
 非胸腺依赖性抗原	fei xiong xian yi lai xing kang yuan	0
-肺虚	fei xu	27
+肺虚	fei xu	26
 肺虚不固证	fei xu bu gu zheng	0
 肺虚感寒证	fei xu gan han zheng	0
 肺虚邪滞证	fei xu xie zhi zheng	0
@@ -4402,7 +4402,7 @@ use_preset_vocabulary: false
 粉藜	fen li	0
 分离层	fen li ceng	0
 分离剂	fen li ji	0
-分离焦虑	fen li jiao lv	43
+分离焦虑	fen li jiao lv	42
 分离麻醉	fen li ma zui	1
 分离运动	fen li yun dong	0
 分离综合征	fen li zong he zheng	0
@@ -4687,7 +4687,7 @@ use_preset_vocabulary: false
 麸炒僵蚕	fu chao jiang can	0
 麸炒枳实	fu chao zhi shi	0
 麸椿皮	fu chun pi	0
-服从权威	fu cong quan wei	29
+服从权威	fu cong quan wei	28
 腹卒中	fu cu zhong	0
 夫大医之体	fu da yi zhi ti	1
 福代斯病	fu dai si bing	0
@@ -4937,7 +4937,7 @@ use_preset_vocabulary: false
 辅助细胞	fu zhu xi bao	8
 辅助心脏移植	fu zhu xin zang yi zhi	0
 辅助性肝移植	fu zhu xing gan yi zhi	0
-辅助循环	fu zhu xun huan	4
+辅助循环	fu zhu xun huan	3
 附着龈	fu zhuo yin	0
 附着增加	fu zhuo zeng jia	0
 附子汤	fu zi tang	7
@@ -4946,7 +4946,7 @@ use_preset_vocabulary: false
 概化理论	gai hua li lun	0
 钙化性软骨营养不良	gai hua xing ruan gu ying yang bu liang	0
 盖嵴式桥体	gai ji shi qiao ti	0
-概括说	gai kuo shuo	12
+概括说	gai kuo shuo	11
 芥蓝	gai lan	118
 改良菱形皮瓣	gai liang ling xing pi ban	0
 改良式箭头卡环	gai liang shi jian tou ka huan	0
@@ -5039,7 +5039,7 @@ use_preset_vocabulary: false
 甘桔芦根凉解法	gan ju lu gen liang jie fa	0
 肝厥	gan jue	1
 感觉道	gan jue dao	0
-感觉登记	gan jue deng ji	0
+感觉登记	gan jue deng ji	1
 干蕨鸡	gan jue ji	0
 感觉器官相互作用	gan jue qi guan xiang hu zuo yong	0
 感觉适应	gan jue shi ying	0
@@ -5087,7 +5087,7 @@ use_preset_vocabulary: false
 肝气郁滞证	gan qi yu zhi zheng	2
 疳气证	gan qi zheng	0
 甘青铁线莲	gan qing tie xian lian	0
-感染伤口	gan ran shang kou	14
+感染伤口	gan ran shang kou	13
 干扰理论	gan rao li lun	0
 肝热病	gan re bing	3
 肝热上扰证	gan re shang rao zheng	0
@@ -5407,7 +5407,7 @@ use_preset_vocabulary: false
 铬酸烧伤	ge suan shao shang	0
 哥特式弓描记器	ge te shi gong miao ji qi	0
 个体发生	ge ti fa sheng	0
-个体心理学	ge ti xin li xue	21
+个体心理学	ge ti xin li xue	20
 个体心理治疗	ge ti xin li zhi liao	7
 个体需要	ge ti xu yao	0
 咯吐不出	ge tu bu chu	0
@@ -5471,7 +5471,7 @@ use_preset_vocabulary: false
 梗花雀梅藤	geng hua que mei teng	0
 更加知柏成八味	geng jia zhi bai cheng ba wei	0
 更年期精神病	geng nian qi jing shen bing	0
-更年期抑郁症	geng nian qi yi yu zheng	1
+更年期抑郁症	geng nian qi yi yu zheng	0
 梗死形成	geng si xing cheng	0
 梗通草	geng tong cao	0
 更衣丸	geng yi wan	0
@@ -5510,7 +5510,7 @@ use_preset_vocabulary: false
 功能固着	gong neng gu zhe	5
 功能恢复	gong neng hui fu	0
 功能距离	gong neng ju li	0
-功能紊乱综合征	gong neng wen luan zong he zheng	3
+功能紊乱综合征	gong neng wen luan zong he zheng	0
 功能性磁共振成象	gong neng xing ci gong zhen cheng xiang	0
 功能性电刺激	gong neng xing dian ci ji	1
 功能性矫治器	gong neng xing jiao zhi qi	1
@@ -5541,7 +5541,7 @@ use_preset_vocabulary: false
 供血动脉夹闭术	gong xue dong mai jia bi shu	0
 供血皮瓣	gong xue pi ban	0
 工业社会心理学	gong ye she hui xin li xue	0
-工业心理学	gong ye xin li xue	13
+工业心理学	gong ye xin li xue	11
 工业性皮炎	gong ye xing pi yan	0
 工艺疗法	gong yi liao fa	0
 公英叶风毛菊	gong ying ye feng mao ju	0
@@ -5561,7 +5561,7 @@ use_preset_vocabulary: false
 工作满意	gong zuo man yi	0
 工作曲线	gong zuo qu xian	0
 工作热量	gong zuo re liang	0
-工作生活质量	gong zuo sheng huo zhi liang	0
+工作生活质量	gong zuo sheng huo zhi liang	2
 工作姿势	gong zuo zi shi	0
 狗齿	gou chi	2
 钩虫皮炎	gou chong pi yan	0
@@ -5584,7 +5584,7 @@ use_preset_vocabulary: false
 枸橘叶	gou ju ye	0
 钩栗	gou li	0
 购买意识	gou mai yi shi	0
-购买意图	gou mai yi tu	10
+购买意图	gou mai yi tu	9
 狗毛	gou mao	54
 狗毛草	gou mao cao	0
 狗母鱼	gou mu yu	2
@@ -5810,7 +5810,7 @@ use_preset_vocabulary: false
 关节内陷	guan jie nei xian	1
 关节融合术	guan jie rong he shu	0
 关节软骨钙沉着症	guan jie ruan gu gai chen zhuo zheng	0
-关节烧伤	guan jie shao shang	1
+关节烧伤	guan jie shao shang	0
 关节松弛	guan jie song chi	2
 关节窝	guan jie wo	8
 关节造影	guan jie zao ying	0
@@ -5848,7 +5848,7 @@ use_preset_vocabulary: false
 观众效应	guan zhong xiao ying	0
 观众心理	guan zhong xin li	0
 贯众叶溪边蕨	guan zhong ye xi bian jue	0
-灌注不足	guan zhu bu zu	7
+灌注不足	guan zhu bu zu	6
 灌注充分	guan zhu chong fen	0
 灌注肺	guan zhu fei	0
 灌注后综合征	guan zhu hou zong he zheng	0
@@ -6211,7 +6211,7 @@ use_preset_vocabulary: false
 合病	he bing	12
 鹤草酚	he cao fen	0
 鹤草芽	he cao ya	0
-合成分数	he cheng fen shu	0
+合成分数	he cheng fen shu	1
 合成抗原	he cheng kang yuan	0
 合成树脂皮炎	he cheng shu zhi pi yan	0
 合成橡胶印模材料	he cheng xiang jiao yin mu cai liao	0
@@ -6319,7 +6319,7 @@ use_preset_vocabulary: false
 合子期	he zi qi	0
 诃子肉	he zi rou	1
 核组装	he zu zhuang	0
-黑菜	hei cai	0
+黑菜	hei cai	1
 黑丑	hei chou	9
 黑大豆	hei da dou	1
 黑疸	hei dan	0
@@ -6345,7 +6345,7 @@ use_preset_vocabulary: false
 黑逍遥散	hei xiao yao san	0
 黑脂麻	hei zhi ma	0
 黑踵病	hei zhong bing	0
-痕迹理论	hen ji li lun	0
+痕迹理论	hen ji li lun	1
 恒宝别直参	heng bao bie zhi can	0
 恒定刺激法	heng ding ci ji fa	0
 恒定区	heng ding qu	0
@@ -6431,7 +6431,7 @@ use_preset_vocabulary: false
 红绛舌	hong jiang she	0
 红接骨草	hong jie gu cao	0
 红茎黄芩	hong jing huang qin	0
-红筷子	hong kuai zi	21
+红筷子	hong kuai zi	18
 红筷子冠毛	hong kuai zi guan mao	0
 红榔木	hong lang mu	0
 红簕钩	hong le gou	0
@@ -6576,7 +6576,7 @@ use_preset_vocabulary: false
 互补位	hu bu wei	0
 狐肠	hu chang	0
 互斥相	hu chi xiang	0
-虎刺	hu ci	2
+虎刺	hu ci	3
 狐胆	hu dan	0
 蝴蝶暗消	hu die an xiao	4
 蝴蝶果	hu die guo	0
@@ -6780,7 +6780,7 @@ use_preset_vocabulary: false
 化学性吸入损伤	hua xue xing xi ru sun shang	0
 化学性阉割	hua xue xing yan ge	0
 化学引诱物	hua xue yin you wu	0
-化药	hua yao	77
+化药	hua yao	79
 花药培养	hua yao pei yang	0
 花叶矮沱沱	hua ye ai tuo tuo	0
 滑叶跌打	hua ye die da	0
@@ -7592,7 +7592,7 @@ use_preset_vocabulary: false
 记忆表象	ji yi biao xiang	1
 记忆错觉	ji yi cuo jue	7
 记忆分子理论	ji yi fen zi li lun	0
-记忆痕迹	ji yi hen ji	23
+记忆痕迹	ji yi hen ji	20
 记忆类型	ji yi lei xing	0
 记忆容量有限论	ji yi rong liang you xian lun	0
 记忆搜索	ji yi sou suo	0
@@ -7635,7 +7635,7 @@ use_preset_vocabulary: false
 急躁易怒	ji zao yi nu	14
 鸡掌七	ji zhang qi	0
 棘针	ji zhen	0
-急诊处理	ji zhen chu li	10
+急诊处理	ji zhen chu li	8
 急诊肝移植	ji zhen gan yi zhi	0
 急诊空运中心	ji zhen kong yun zhong xin	0
 急诊医疗体系	ji zhen yi liao ti xi	0
@@ -7828,7 +7828,7 @@ use_preset_vocabulary: false
 甲状腺全切除术	jia zhuang xian quan qie chu shu	0
 甲纵沟	jia zong gou	0
 甲纵裂	jia zong lie	0
-家族性	jia zu xing	0
+家族性	jia zu xing	92
 家族性肠息肉病	jia zu xing chang xi rou bing	0
 家族性出血性肾炎	jia zu xing chu xue xing shen yan	0
 家族性复合高脂血症	jia zu xing fu he gao zhi xue zheng	0
@@ -7893,7 +7893,7 @@ use_preset_vocabulary: false
 间接复合伤	jian jie fu he shang	0
 间接盖髓术	jian jie gai sui shu	1
 间接固位体	jian jie gu wei ti	0
-间接理解	jian jie li jie	0
+间接理解	jian jie li jie	2
 间接模板假说	jian jie mu ban jia shuo	0
 间接皮瓣	jian jie pi ban	0
 间接切口	jian jie qie kou	0
@@ -8519,7 +8519,7 @@ use_preset_vocabulary: false
 颈耳窦道	jing er dou dao	0
 颈耳瘘管	jing er lou guan	0
 颈耳囊肿	jing er nang zhong	0
-经方	jing fang	587
+经方	jing fang	586
 惊风病	jing feng bing	0
 惊风草	jing feng cao	0
 惊风四症八侯	jing feng si zheng ba hou	0
@@ -8542,7 +8542,7 @@ use_preset_vocabulary: false
 经会阴活检	jing hui yin huo jian	0
 经会阴前列腺切除术	jing hui yin qian lie xian qie chu shu	0
 惊悸病	jing ji bing	0
-经济心理学	jing ji xin li xue	0
+经济心理学	jing ji xin li xue	10
 茎尖培养	jing jian pei yang	0
 颈交感神经	jing jiao gan shen jing	1
 荆芥根	jing jie gen	0
@@ -8917,7 +8917,7 @@ use_preset_vocabulary: false
 巨细胞透明血管病	ju xi bao tou ming xue guan bing	0
 巨细胞性动脉炎	ju xi bao xing dong mai yan	0
 巨细胞性牙龈瘤	ju xi bao xing ya yin liu	0
-局限化	ju xian hua	6
+局限化	ju xian hua	5
 局限性肠炎	ju xian xing chang yan	1
 局限性淋巴管瘤	ju xian xing lin ba guan liu	0
 局限性皮肤结核	ju xian xing pi fu jie he	0
@@ -8973,7 +8973,7 @@ use_preset_vocabulary: false
 蕨麻	jue ma	7
 蕨麻草	jue ma cao	0
 厥逆	jue ni	4
-角色规范	jue se gui fan	1
+角色规范	jue se gui fan	0
 角色紧张	jue se jin zhang	0
 角色理论	jue se li lun	0
 角色偏差	jue se pian cha	0
@@ -9069,14 +9069,14 @@ use_preset_vocabulary: false
 抗独特型学说	kang du te xing xue shuo	0
 康多莱昂手术	kang duo lai ang shou shu	0
 康复程序	kang fu cheng xu	0
-康复方案	kang fu fang an	75
+康复方案	kang fu fang an	63
 康复评估	kang fu ping gu	7
 康妇消炎栓	kang fu xiao yan shuan	0
-康复心理学	kang fu xin li xue	6
-康复咨询	kang fu zi xun	3
+康复心理学	kang fu xin li xue	3
+康复咨询	kang fu zi xun	2
 糠谷老	kang gu lao	0
 抗基弯曲	kang ji wan qu	0
-抗焦虑药物	kang jiao lv yao wu	14
+抗焦虑药物	kang jiao lv yao wu	13
 抗菌术	kang jun shu	0
 抗抗体	kang kang ti	2
 康拉迪病	kang la di bing	0
@@ -9283,7 +9283,7 @@ use_preset_vocabulary: false
 口齿病龋齿病	kou chi bing qu chi bing	0
 口疮病	kou chuang bing	0
 口唇期	kou chun qi	15
-扣带回	kou dai hui	39
+扣带回	kou dai hui	40
 扣带回切开术	kou dai hui qie kai shu	0
 口淡无味	kou dan wu wei	2
 口对鼻呼气	kou dui bi hu qi	0
@@ -9297,7 +9297,7 @@ use_preset_vocabulary: false
 口角唇炎	kou jiao chun yan	0
 口角线	kou jiao xian	0
 口噤	kou jin	2
-口镜	kou jing	9
+口镜	kou jing	11
 口角成形术	kou jue cheng xing shu	0
 口角开大术	kou jue kai da shu	0
 口渴不欲多饮	kou ke bu yu duo yin	0
@@ -9604,7 +9604,7 @@ use_preset_vocabulary: false
 狼喉靥	lang hou ye	0
 狼杷草	lang pa cao	0
 狼萁草	lang qi cao	0
-狼肉	lang rou	10
+狼肉	lang rou	9
 郎伞木	lang san mu	0
 朗氏细胞	lang shi xi bao	0
 狼尾巴花	lang wei ba hua	0
@@ -9858,7 +9858,7 @@ use_preset_vocabulary: false
 粒细胞沉积	li xi bao chen ji	0
 理想弓	li xiang gong	0
 理想牙排列	li xiang ya pai lie	0
-理想自我	li xiang zi wo	43
+理想自我	li xiang zi wo	42
 离心式细胞清洗器	li xin shi xi bao qing xi qi	0
 离心性环状红斑	li xin xing huan zhuang hong ban	0
 理性心理学	li xing xin li xue	0
@@ -9888,7 +9888,7 @@ use_preset_vocabulary: false
 荔枝壳	li zhi ke	1
 荔枝藤	li zhi teng	0
 荔枝叶	li zhi ye	1
-理中	li zhong	25
+理中	li zhong	21
 理中安蛔汤	li zhong an hui tang	0
 理中化痰汤	li zhong hua tan tang	0
 离中趋势	li zhong qu shi	0
@@ -10323,7 +10323,7 @@ use_preset_vocabulary: false
 楼梯草	lou ti cao	0
 楼梯草根	lou ti cao gen	0
 蒌油	lou you	0
-路边草	lu bian cao	4
+路边草	lu bian cao	3
 路边姜	lu bian jiang	0
 鲁宾酒杯	lu bin jiu bei	0
 鹿草	lu cao	0
@@ -10452,7 +10452,7 @@ use_preset_vocabulary: false
 鹿胎	lu tai	1
 鹿蹄肉	lu ti rou	0
 鹿头肉	lu tou rou	0
-颅外	lu wai	15
+颅外	lu wai	16
 鹿尾	lu wei	9
 颅息	lu xi	0
 颅息穴	lu xi xue	0
@@ -10667,7 +10667,7 @@ use_preset_vocabulary: false
 麻母	ma mu	0
 马尿泡	ma niao pao	0
 麻牛膝	ma niu xi	0
-马皮	ma pi	45
+马皮	ma pi	43
 麻皮	ma pi	9
 马鬐膏	ma qi gao	0
 马前子	ma qian zi	0
@@ -10839,7 +10839,7 @@ use_preset_vocabulary: false
 慢性肾衰	man xing shen shuai	13
 慢性萎缩性肢端皮炎	man xing wei suo xing zhi duan pi yan	0
 慢性纤维性甲状腺炎	man xing xian wei xing jia zhuang xian yan	0
-慢性炎	man xing yan	8
+慢性炎	man xing yan	7
 慢性游走性红斑	man xing you zou xing hong ban	0
 慢性增生性牙髓炎	man xing zeng sheng xing ya sui yan	0
 蔓状动脉瘤	man zhuang dong mai liu	0
@@ -11150,7 +11150,7 @@ use_preset_vocabulary: false
 糜烂型	mi lan xing	5
 糜烂性白斑	mi lan xing bai ban	0
 糜烂性龟头炎	mi lan xing gui tou yan	0
-米露	mi lu	8
+米露	mi lu	7
 米伦反应	mi lun fan ying	0
 密马	mi ma	8
 蜜马兜铃	mi ma dou ling	0
@@ -11371,7 +11371,7 @@ use_preset_vocabulary: false
 陌生人焦虑	mo sheng ren jiao lv	2
 膜外阻滞	mo wai zu zhi	0
 膜性肾小球肾炎	mo xing shen xiao qiu shen yan	3
-模型外科	mo xing wai ke	4
+模型外科	mo xing wai ke	3
 模型修整机	mo xing xiu zheng ji	0
 模型振荡器	mo xing zhen dang qi	0
 膜血管瘤病	mo xue guan liu bing	0
@@ -11476,7 +11476,7 @@ use_preset_vocabulary: false
 目眩鼻塞	mu xuan bi se	1
 目痒病	mu yang bing	0
 木腰子	mu yao zi	0
-木贼	mu zei	9
+木贼	mu zei	6
 木贼花	mu zei hua	0
 木贼木贼草	mu zei mu zei cao	0
 拇指对掌	mu zhi dui zhang	3
@@ -11512,7 +11512,7 @@ use_preset_vocabulary: false
 奶浆柴胡	nai jiang chai hu	0
 奶浆果	nai jiang guo	0
 奶浆木	nai jiang mu	0
-耐力运动	nai li yun dong	58
+耐力运动	nai li yun dong	51
 奶麻病	nai ma bing	0
 乃勤求古训博采众方	nai qin qiu gu xun bo cai zhong fang	0
 耐酸水解性纤维	nai suan shui jie xing xian wei	0
@@ -11662,7 +11662,7 @@ use_preset_vocabulary: false
 内翻性毛囊角化病	nei fan xing mao nang jiao hua bing	0
 内分泌腺移植	nei fen mi xian yi zhi	0
 内分泌性萎缩	nei fen mi xing wei suo	0
-内风	nei feng	17
+内风	nei feng	12
 内固定	nei gu ding	0
 内寒	nei han	11
 内镜逆行胰胆管造影	nei jing ni xing yi dan guan zao ying	0
@@ -11695,7 +11695,7 @@ use_preset_vocabulary: false
 内消	nei xiao	1
 内斜嵴	nei xie ji	0
 内泻热结	nei xie re jie	0
-内心冲突	nei xin chong tu	131
+内心冲突	nei xin chong tu	130
 内因性凝血	nei yin xing ning xue	0
 内迎香	nei ying xiang	0
 内痈	nei yong	0
@@ -11724,7 +11724,7 @@ use_preset_vocabulary: false
 逆传	ni chuan	4
 逆传心包	ni chuan xin bao	1
 逆传心包证	ni chuan xin bao zheng	0
-尼格罗黑	ni ge luo hei	0
+尼格罗黑	ni ge luo hei	1
 拟合优度检验	ni he you du jian yan	14
 泥胡菜	ni hu cai	0
 拟基因型	ni ji yin xing	0
@@ -11879,7 +11879,7 @@ use_preset_vocabulary: false
 尿流改道术	niao liu gai dao shu	0
 尿流率测定	niao liu lv ce ding	0
 尿路病变	niao lu bing bian	0
-尿路上皮	niao lu shang pi	2
+尿路上皮	niao lu shang pi	1
 尿路上皮肿瘤	niao lu shang pi zhong liu	1
 尿路造影	niao lu zao ying	0
 尿末滴沥	niao mo di li	0
@@ -12065,7 +12065,7 @@ use_preset_vocabulary: false
 胬肉攀睛病	nu rou pan jing bing	0
 奴柘刺	nu zhe ci	0
 暖肝煎	nuan gan jian	3
-疟疾	nue ji	507
+疟疾	nue ji	502
 疟色素	nue se su	0
 糯稻根	nuo dao gen	0
 诺迪康胶囊	nuo di kang jiao nang	0
@@ -12084,7 +12084,7 @@ use_preset_vocabulary: false
 女性尿道囊肿	nv xing niao dao nang zhong	0
 女性尿道下裂	nv xing niao dao xia lie	0
 女性尿道纤维息肉	nv xing niao dao xian wei xi rou	0
-女性尿失禁	nv xing niao shi jin	1
+女性尿失禁	nv xing niao shi jin	0
 衄血	nv xue	5
 女贞叶	nv zhen ye	0
 偶氮染色法	ou dan ran se fa	0
@@ -12882,7 +12882,7 @@ use_preset_vocabulary: false
 气虚瘀滞证	qi xu yu zhi zheng	0
 气血痹阻证	qi xue bi zu zheng	0
 脐血病	qi xue bing	0
-气血不足	qi xue bu zu	367
+气血不足	qi xue bu zu	365
 气血不足收摄失司证	qi xue bu zu shou she shi si zheng	0
 气血不足证	qi xue bu zu zheng	1
 气血和者则脉缓	qi xue he zhe ze mai huan	0
@@ -12939,7 +12939,7 @@ use_preset_vocabulary: false
 气营两燔证	qi ying liang fan zheng	0
 脐痈病	qi yong bing	0
 其有患疮痍下痢	qi you huan chuang yi xia li	0
-汽油烧伤	qi you shao shang	2
+汽油烧伤	qi you shao shang	1
 气郁	qi yu	34
 气郁化火证	qi yu hua huo zheng	0
 气郁化热证	qi yu hua re zheng	0
@@ -13002,12 +13002,12 @@ use_preset_vocabulary: false
 潜伏梅毒	qian fu mei du	0
 潜伏学习	qian fu xue xi	1
 前概率	qian gai lv	0
-前弓	qian gong	0
+前弓	qian gong	7
 前弓区	qian gong qu	0
 前谷	qian gu	1
 前谷穴	qian gu xue	0
 前颌	qian he	1
-前核	qian he	0
+前核	qian he	4
 前胡桂朴草姜随	qian hu gui pu cao jiang sui	0
 前交通动脉动脉瘤	qian jiao tong dong mai dong mai liu	0
 千金苇茎汤	qian jin wei jing tang	0
@@ -13034,7 +13034,7 @@ use_preset_vocabulary: false
 前列腺痛症	qian lie xian tong zheng	0
 前列腺腺癌	qian lie xian xian ai	0
 前列腺腺瘤	qian lie xian xian liu	0
-前列腺液溢	qian lie xian ye yi	1
+前列腺液溢	qian lie xian ye yi	0
 前列腺移行细胞癌	qian lie xian yi hang xi bao ai	0
 前列腺子宫内膜样癌	qian lie xian zi gong nei mo yang ai	0
 千年健	qian nian jian	2
@@ -13350,7 +13350,7 @@ use_preset_vocabulary: false
 秋海棠果	qiu hai tang guo	0
 秋海棠花	qiu hai tang hua	0
 秋海棠茎叶	qiu hai tang jing ye	0
-球后	qiu hou	239
+球后	qiu hou	200
 蚯疽草	qiu ju cao	0
 秋葵	qiu kui	151
 球兰	qiu lan	16
@@ -13374,7 +13374,7 @@ use_preset_vocabulary: false
 球拍状甲	qiu pai zhuang jia	0
 球旁细胞瘤	qiu pang xi bao liu	0
 秋葡萄茎	qiu pu tao jing	0
-秋石	qiu shi	14
+秋石	qiu shi	15
 秋水仙酰胺	qiu shui xian xian an	0
 球形乳房	qiu xing ru fang	0
 球形细胞增多症	qiu xing xi bao zeng duo zheng	0
@@ -13433,7 +13433,7 @@ use_preset_vocabulary: false
 去神经	qu shen jing	0
 去肾性高血压	qu shen xing gao xue ya	0
 去生更远	qu sheng geng yuan	1
-祛湿	qu shi	365
+祛湿	qu shi	361
 龋失补	qu shi bu	0
 龋失补牙	qu shi bu ya	0
 龋失补牙面	qu shi bu ya mian	0
@@ -13501,7 +13501,7 @@ use_preset_vocabulary: false
 颧髎穴	quan liao xue	0
 全麻分子学说	quan ma fen zi xue shuo	0
 全麻原理	quan ma yuan li	0
-全面康复	quan mian kang fu	4
+全面康复	quan mian kang fu	5
 全能细胞	quan neng xi bao	4
 荃皮	quan pi	0
 全腔静脉	quan qiang jing mai	0
@@ -13519,7 +13519,7 @@ use_preset_vocabulary: false
 颧突度	quan tu du	0
 全腿长	quan tui chang	0
 权威人格	quan wei ren ge	3
-权威型父母	quan wei xing fu mu	2
+权威型父母	quan wei xing fu mu	1
 全小肠移植	quan xiao chang yi zhi	0
 全蝎全虫	quan xie quan chong	0
 圈形卡环	quan xing ka huan	0
@@ -13880,7 +13880,7 @@ use_preset_vocabulary: false
 人体线条	ren ti xian tiao	8
 人体形式美	ren ti xing shi mei	0
 人体整体美	ren ti zheng ti mei	0
-认同危机	ren tong wei ji	16
+认同危机	ren tong wei ji	7
 人头七	ren tou qi	0
 人为皮炎	ren wei pi yan	0
 人为失误分析	ren wei shi wu fen xi	0
@@ -14337,7 +14337,7 @@ use_preset_vocabulary: false
 色表系	se biao xi	0
 涩草	se cao	0
 色赤杨	se chi yang	0
-色蛋白	se dan bai	0
+色蛋白	se dan bai	1
 色汗症	se han zheng	0
 涩梨	se li	0
 涩梨叶	se li ye	0
@@ -14389,7 +14389,7 @@ use_preset_vocabulary: false
 鲨鱼胆	sha yu dan	0
 鲨鱼肝	sha yu gan	0
 鲨鱼骨	sha yu gu	0
-鲨鱼皮	sha yu pi	63
+鲨鱼皮	sha yu pi	61
 鲨鱼胎	sha yu tai	0
 鲨鱼心	sha yu xin	0
 鲨鱼油	sha yu you	2
@@ -14846,10 +14846,10 @@ use_preset_vocabulary: false
 舌红苔黄腻	she hong tai huang ni	2
 舌后坠	she hou zhui	5
 社会比较理论	she hui bi jiao li lun	0
-社会定型	she hui ding xing	0
+社会定型	she hui ding xing	1
 社会动机	she hui dong ji	6
 社会感染	she hui gan ran	0
-社会隔离	she hui ge li	21
+社会隔离	she hui ge li	20
 社会交换理论	she hui jiao huan li lun	5
 社会昆虫	she hui kun chong	5
 社会期望	she hui qi wang	0
@@ -14957,7 +14957,7 @@ use_preset_vocabulary: false
 神道穴	shen dao xue	2
 肾蒂断裂	shen di duan lie	0
 肾蒂淋巴管剥脱术	shen di lin ba guan bo tuo shu	0
-深低温	shen di wen	8
+深低温	shen di wen	7
 深低温保藏	shen di wen bao cang	0
 深低温冷冻组织贮存	shen di wen leng dong zu zhi zhu cun	0
 肾淀粉样变性	shen dian fen yang bian xing	0
@@ -15011,7 +15011,7 @@ use_preset_vocabulary: false
 神经根型颈椎病	shen jing gen xing jing zhui bing	5
 神经管缺陷	shen jing guan que xian	15
 神经肌肉刺激	shen jing ji rou ci ji	1
-神经激素	shen jing ji su	8
+神经激素	shen jing ji su	7
 神经交叉吻合术	shen jing jiao cha wen he shu	0
 神经节苷脂贮积病	shen jing jie gan zhi zhu ji bing	0
 神经节苷脂贮积症	shen jing jie gan zhi zhu ji zheng	1
@@ -15405,7 +15405,7 @@ use_preset_vocabulary: false
 石笔海胆	shi bi hai dan	0
 石壁莲	shi bi lian	0
 石鮅鱼	shi bi yu	0
-实变	shi bian	68
+实变	shi bian	69
 虱病	shi bing	0
 十补丸	shi bu wan	0
 食不消化	shi bu xiao hua	0
@@ -15589,7 +15589,7 @@ use_preset_vocabulary: false
 石莽草	shi mang cao	0
 石门穴	shi men xue	0
 石蜜	shi mi	12
-石米	shi mi	25
+石米	shi mi	22
 史密斯分流术	shi mi si fen liu shu	0
 失眠多梦	shi mian duo meng	90
 石面枇杷	shi mian pi pa	0
@@ -15874,7 +15874,7 @@ use_preset_vocabulary: false
 收缩环	shou suo huan	0
 收缩泡	shou suo pao	0
 寿胎丸	shou tai wan	0
-受体蛋白	shou ti dan bai	22
+受体蛋白	shou ti dan bai	21
 受体学说	shou ti xue shuo	3
 手五里	shou wu li	0
 手五里穴	shou wu li xue	0
@@ -16044,7 +16044,7 @@ use_preset_vocabulary: false
 朮芍防风共成剂	shu shao fang feng gong cheng ji	0
 树舌	shu she	0
 鼠舌草	shu she cao	0
-鼠肾	shu shen	0
+鼠肾	shu shen	9
 暑湿交阻证	shu shi jiao zu zheng	0
 暑湿困伤心脾证	shu shi kun shang xin pi zheng	0
 暑湿困阻中焦证	shu shi kun zu zhong jiao zheng	0
@@ -16122,7 +16122,7 @@ use_preset_vocabulary: false
 双耳相位差	shuang er xiang wei cha	0
 双飞蝴蝶	shuang fei hu die	0
 双肺叶切除术	shuang fei ye qie chu shu	1
-双肺移植	shuang fei yi zhi	3
+双肺移植	shuang fei yi zhi	2
 双干脊髓	shuang gan ji sui	0
 双钩藤	shuang gou teng	0
 双股箭	shuang gu jian	0
@@ -16146,7 +16146,7 @@ use_preset_vocabulary: false
 双料喉风散	shuang liao hou feng san	1
 双翎草	shuang ling cao	0
 双菱形皮瓣	shuang ling xing pi ban	0
-双盲实验	shuang mang shi yan	135
+双盲实验	shuang mang shi yan	117
 双颞叶切除后综合征	shuang nie ye qie chu hou zong he zheng	0
 双皮	shuang pi	5
 双腔右心室	shuang qiang you xin shi	0
@@ -16410,7 +16410,7 @@ use_preset_vocabulary: false
 顺经汤	shun jing tang	0
 顺气降逆	shun qi jiang ni	1
 顺蠕动吻合	shun ru dong wen he	0
-瞬时记忆	shun shi ji yi	65
+瞬时记忆	shun shi ji yi	63
 瞬时空腔	shun shi kong qiang	3
 顺式作用元件	shun shi zuo yong yuan jian	0
 顺向插入	shun xiang cha ru	0
@@ -16533,7 +16533,7 @@ use_preset_vocabulary: false
 松醇	song chun	0
 松打七	song da qi	0
 松动牙固定术	song dong ya gu ding shu	0
-诵读困难	song du kun nan	1
+诵读困难	song du kun nan	0
 松橄榄	song gan lan	0
 松根	song gen	8
 松果体母细胞瘤	song guo ti mu xi bao liu	0
@@ -17054,7 +17054,7 @@ use_preset_vocabulary: false
 特伦德伦堡试验	te lun de lun bao shi yan	0
 特纳牙	te na ya	0
 特纳综合征	te na zong he zheng	2
-特殊儿童	te shu er tong	114
+特殊儿童	te shu er tong	112
 特殊分化粘膜	te shu fen hua nian mo	0
 特殊环境心理学	te shu huan jing xin li xue	0
 特殊迁移	te shu qian yi	4
@@ -17164,7 +17164,7 @@ use_preset_vocabulary: false
 田螺壳	tian luo ke	4
 天罗水	tian luo shui	0
 田螺厣	tian luo yan	0
-田麻	tian ma	6
+田麻	tian ma	4
 天麻钩藤石决明	tian ma gou teng shi jue ming	0
 甜梦胶囊	tian meng jiao nang	0
 天名精	tian ming jing	0
@@ -17580,7 +17580,7 @@ use_preset_vocabulary: false
 土沙参	tu sha shen	0
 吐舌弄舌	tu she nong she	0
 吐舌习惯	tu she xi guan	0
-图式	tu shi	165
+图式	tu shi	160
 图式理论	tu shi li lun	2
 图式形成	tu shi xing cheng	0
 徒手肌力测定	tu shou ji li ce ding	1
@@ -17596,7 +17596,7 @@ use_preset_vocabulary: false
 土细辛	tu xi xin	1
 吐涎沫	tu xian mo	2
 图像重构	tu xiang chong gou	6
-图像记忆	tu xiang ji yi	0
+图像记忆	tu xiang ji yi	94
 土香薷	tu xiang ru	0
 吐血病	tu xie bing	1
 图形后效	tu xing hou xiao	0
@@ -17634,7 +17634,7 @@ use_preset_vocabulary: false
 吞酸吐苦	tun suan tu ku	0
 吞唾液症	tun tuo ye zheng	0
 吞涎症	tun xian zheng	0
-吞咽不下	tun yan bu xia	2
+吞咽不下	tun yan bu xia	3
 臀痈病	tun yong bing	0
 脱病	tuo bing	1
 托槽粘着定位器	tuo cao nian zhe ding wei qi	0
@@ -17702,13 +17702,13 @@ use_preset_vocabulary: false
 外壁绒型假体	wai bi rong xing jia ti	0
 外部表象	wai bu biao xiang	0
 外部言语	wai bu yan yu	1
-外部注意	wai bu zhu yi	0
+外部注意	wai bu zhu yi	2
 外侧膝状体核	wai ce xi zhuang ti he	0
 外侧下丘脑区	wai ce xia qiu nao qu	0
 外耳道狭窄	wai er dao xia zhai	3
 外耳道再造术	wai er dao zai zao shu	0
 外耳畸形	wai er ji xing	0
-外风	wai feng	1
+外风	wai feng	2
 外感风邪头痛	wai gan feng xie tou tong	0
 外感高热病	wai gan gao re bing	0
 外感咳嗽病	wai gan ke sou bing	0
@@ -17736,7 +17736,7 @@ use_preset_vocabulary: false
 外科其他病蝎螫伤病	wai ke qi ta bing xie shi shang bing	0
 外科证候	wai ke zheng hou	0
 外括约肌成形术	wai kuo yue ji cheng xing shu	0
-外陵	wai ling	1
+外陵	wai ling	0
 外陵穴	wai ling xue	0
 外貌吸引力	wai mao xi yin li	1
 外泌汗腺	wai mi han xian	0
@@ -18170,9 +18170,9 @@ use_preset_vocabulary: false
 问题解决定势	wen ti jie jue ding shi	0
 问题空间	wen ti kong jian	0
 问题特	wen ti te	0
-问题箱	wen ti xiang	2
+问题箱	wen ti xiang	1
 温通	wen tong	15
-温下	wen xia	20
+温下	wen xia	19
 温邪	wen xie	2
 温邪内陷证	wen xie nei xian zheng	0
 温邪侵袭肺卫证	wen xie qin xi fei wei zheng	0
@@ -18488,7 +18488,7 @@ use_preset_vocabulary: false
 细胞输注	xi bao shu zhu	3
 细胞栓塞	xi bao shuan se	0
 细胞栓子	xi bao shuan zi	0
-细胞损伤	xi bao sun shang	43
+细胞损伤	xi bao sun shang	39
 细胞替代因子	xi bao ti dai yin zi	0
 细胞外被	xi bao wai bei	0
 细胞向性	xi bao xiang xing	0
@@ -18553,7 +18553,7 @@ use_preset_vocabulary: false
 析取概念	xi qu gai nian	0
 膝屈曲畸形	xi qu qu ji xing	0
 息肉病	xi rou bing	9
-息肉切除	xi rou qie chu	4
+息肉切除	xi rou qie chu	3
 息肉手法摘除术	xi rou shou fa zhai chu shu	0
 息肉痔病	xi rou zhi bing	0
 吸入性损伤	xi ru xing sun shang	0
@@ -18591,7 +18591,7 @@ use_preset_vocabulary: false
 侠白	xia bai	0
 侠白穴	xia bai xue	0
 下差别阈	xia cha bie yu	0
-下唇线	xia chun xian	1
+下唇线	xia chun xian	0
 下唇正中裂	xia chun zheng zhong lie	0
 下此以往未之闻也	xia ci yi wang wei zhi wen ye	0
 下疳样脓皮病	xia gan yang nong pi bing	0
@@ -18668,7 +18668,7 @@ use_preset_vocabulary: false
 下肢长	xia zhi chang	2
 仙半夏	xian ban xia	0
 痫病	xian bing	0
-现场抢救	xian chang qiang jiu	7
+现场抢救	xian chang qiang jiu	5
 先成论	xian cheng lun	1
 先成说	xian cheng shuo	0
 先揣其本	xian chuai qi ben	0
@@ -19016,7 +19016,7 @@ use_preset_vocabulary: false
 小胡麻	xiao hu ma	0
 小环结扎术	xiao huan jie za shu	0
 小黄药	xiao huang yao	0
-消积	xiao ji	26
+消积	xiao ji	27
 小蓟草	xiao ji cao	0
 小棘毛壅病	xiao ji mao yong bing	0
 小棘苔藓	xiao ji tai xian	0
@@ -19253,7 +19253,7 @@ use_preset_vocabulary: false
 心火亢盛证	xin huo kang sheng zheng	0
 心火偏亢证	xin huo pian kang zheng	0
 心火上炎证	xin huo shang yan zheng	0
-心肌保护	xin ji bao hu	1
+心肌保护	xin ji bao hu	0
 心肌挫伤	xin ji cuo shang	0
 心肌冬眠	xin ji dong mian	0
 心肌断裂	xin ji duan lie	0
@@ -19282,9 +19282,9 @@ use_preset_vocabulary: false
 心理机能定位	xin li ji neng ding wei	1
 心理技术学	xin li ji shu xue	0
 心理能动性	xin li neng dong xing	0
-心理逆反	xin li ni fan	2
+心理逆反	xin li ni fan	1
 心理评定	xin li ping ding	2
-心理倾向	xin li qing xiang	22
+心理倾向	xin li qing xiang	21
 心理群体	xin li qun ti	0
 心理扫描	xin li sao miao	0
 心理社会剥夺	xin li she hui bo duo	0
@@ -19535,7 +19535,7 @@ use_preset_vocabulary: false
 星体球	xing ti qiu	0
 星体丝	xing ti si	0
 星网状层	xing wang zhuang ceng	0
-性味	xing wei	44
+性味	xing wei	42
 行为工程学	xing wei gong cheng xue	0
 行为同源	xing wei tong yuan	0
 行为显现	xing wei xian xian	0
@@ -19685,7 +19685,7 @@ use_preset_vocabulary: false
 蓄血病	xu xue bing	0
 虚阳上浮证	xu yang shang fu zheng	0
 虚阳外越	xu yang wai yue	0
-虚证	xu zheng	47
+虚证	xu zheng	46
 絮状麦皮癣菌	xu zhuang mai pi xuan jun	0
 选拔与安置测验	xuan ba yu an zhi ce yan	0
 宣白承气汤	xuan bai cheng qi tang	0
@@ -19925,7 +19925,7 @@ use_preset_vocabulary: false
 血府当归生地桃	xue fu dang gui sheng di tao	0
 血府逐瘀颗粒	xue fu zhu yu ke li	0
 血府逐淤汤	xue fu zhu yu tang	0
-血供	xue gong	169
+血供	xue gong	168
 血臌病	xue gu bing	0
 血管成形术	xue guan cheng xing shu	5
 血管搭桥移植术	xue guan da qiao yi zhi shu	0
@@ -19939,14 +19939,14 @@ use_preset_vocabulary: false
 血管活性肠肽	xue guan huo xing chang tai	0
 血管减压术	xue guan jian ya shu	0
 血管紧张素酶	xue guan jin zhang su mei	1
-血管痉挛	xue guan jing luan	32
-血管扩张	xue guan kuo zhang	151
+血管痉挛	xue guan jing luan	30
+血管扩张	xue guan kuo zhang	146
 血管扩张器	xue guan kuo zhang qi	1
 血管迷走	xue guan mi zou	0
 血管内激光照射疗法	xue guan nei ji guang zhao she liao fa	0
 血管内神经外科	xue guan nei shen jing wai ke	0
 血管内氧合	xue guan nei yang he	0
-血管内支架	xue guan nei zhi jia	1
+血管内支架	xue guan nei zhi jia	0
 血管内治疗	xue guan nei zhi liao	0
 血管旁路移植术	xue guan pang lu yi zhi shu	1
 血管平滑肌瘤	xue guan ping hua ji liu	0
@@ -20035,7 +20035,7 @@ use_preset_vocabulary: false
 血栓闭塞性血管炎	xue shuan bi se xing xue guan yan	0
 血栓切除术	xue shuan qie chu shu	0
 血栓心脉宁胶囊	xue shuan xin mai ning jiao nang	0
-血栓形成	xue shuan xing cheng	129
+血栓形成	xue shuan xing cheng	128
 血栓性静脉炎	xue shuan xing jing mai yan	3
 血栓性脉管炎	xue shuan xing mai guan yan	0
 血栓性外痔	xue shuan xing wai zhi	2
@@ -20046,7 +20046,7 @@ use_preset_vocabulary: false
 血吸虫色素	xue xi chong se su	0
 血吸虫尾蚴皮炎	xue xi chong wei you pi yan	0
 学习的场论	xue xi de chang lun	0
-学习的反馈	xue xi de fan kui	11
+学习的反馈	xue xi de fan kui	10
 学习的联结	xue xi de lian jie	2
 学习的联结说	xue xi de lian jie shuo	0
 学习的内在动机	xue xi de nei zai dong ji	1
@@ -20142,7 +20142,7 @@ use_preset_vocabulary: false
 寻常性银屑病	xun chang xing yin xie bing	0
 寻常性鱼鳞病	xun chang xing yu lin bing	0
 寻此贰途	xun ci er tu	0
-循环反应	xun huan fan ying	0
+循环反应	xun huan fan ying	11
 偱经传	xun jing zhuan	0
 寻开口	xun kai kou	0
 训练迁移	xun lian qian yi	0
@@ -20281,7 +20281,7 @@ use_preset_vocabulary: false
 牙面外观	ya mian wai guan	0
 牙模型	ya mo xing	3
 牙囊	ya nang	1
-牙内	ya nei	6
+牙内	ya nei	5
 牙内钉	ya nei ding	0
 牙内吸收	ya nei xi shou	0
 牙内陷	ya nei xian	0
@@ -20516,7 +20516,7 @@ use_preset_vocabulary: false
 颜色四方形	yan se si fang xing	0
 焰色痣	yan se zhi	0
 盐沙苑子	yan sha yuan zi	0
-颜色饱和度	yan shai bao he du	46
+颜色饱和度	yan shai bao he du	45
 颜色方程	yan shai fang cheng	0
 颜色恒常性	yan shai heng chang xing	4
 颜色宽容度	yan shai kuan rong du	0
@@ -20568,7 +20568,7 @@ use_preset_vocabulary: false
 言语范畴知觉	yan yu fan chou zhi jue	0
 言语干扰级	yan yu gan rao ji	0
 言语功能测试	yan yu gong neng ce shi	0
-言语活动	yan yu huo dong	3
+言语活动	yan yu huo dong	4
 言语清晰度	yan yu qing xi du	3
 言语生成	yan yu sheng cheng	0
 言语心理学	yan yu xin li xue	0
@@ -20996,7 +20996,7 @@ use_preset_vocabulary: false
 遗传负荷	yi chuan fu he	2
 遗传复合体	yi chuan fu he ti	0
 遗传过敏性皮炎	yi chuan guo min xing pi yan	0
-遗传距离	yi chuan ju li	4
+遗传距离	yi chuan ju li	3
 遗传平衡	yi chuan ping heng	0
 遗传图	yi chuan tu	1
 遗传性残毁性角化病	yi chuan xing can hui xing jiao hua bing	0
@@ -21086,7 +21086,7 @@ use_preset_vocabulary: false
 医疗处理	yi liao chu li	0
 医疗分类	yi liao fen lei	0
 医疗性行走	yi liao xing xing zou	0
-医疗艺术	yi liao yi shu	0
+医疗艺术	yi liao yi shu	1
 医淋	yi lin	0
 议论人物	yi lun ren wu	0
 移码	yi ma	4
@@ -21255,7 +21255,7 @@ use_preset_vocabulary: false
 以运万类	yi yun wan lei	1
 胰胀	yi zhang	0
 已知成份培养液	yi zhi cheng fen pei yang ye	0
-抑制蛋白	yi zhi dan bai	10
+抑制蛋白	yi zhi dan bai	9
 一枝蒿	yi zhi hao	1
 抑制基因	yi zhi ji yin	12
 移植抗原	yi zhi kang yuan	0
@@ -21760,7 +21760,7 @@ use_preset_vocabulary: false
 油茶子	you cha zi	0
 有创压力监测	you chuang ya li jian ce	0
 釉丛	you cong	0
-油葱	you cong	9
+油葱	you cong	8
 又到病家	you dao bing jia	0
 诱导前期	you dao qian qi	0
 诱导色	you dao se	0
@@ -22119,7 +22119,7 @@ use_preset_vocabulary: false
 缘豆	yuan dou	0
 远段输尿管不发育	yuan duan shu niao guan bu fa yu	0
 圆萼刺参	yuan e ci shen	0
-原发	yuan fa	155
+原发	yuan fa	154
 原发变应原	yuan fa bian ying yuan	0
 原发复合征	yuan fa fu he zheng	0
 原发畸形	yuan fa ji xing	0
@@ -22238,7 +22238,7 @@ use_preset_vocabulary: false
 月经过多病	yue jing guo duo bing	0
 月经过少病	yue jing guo shao bing	0
 月经后期病	yue jing hou qi bing	0
-月经量多	yue jing liang duo	10
+月经量多	yue jing liang duo	8
 月经前痤疮	yue jing qian cuo chuang	2
 月经先后无定期病	yue jing xian hou wu ding qi bing	0
 月经先期病	yue jing xian qi bing	0
@@ -22301,7 +22301,7 @@ use_preset_vocabulary: false
 云牛膝	yun niu xi	0
 云朴	yun pu	0
 云杉球果	yun shan qiu guo	0
-云实	yun shi	3
+云实	yun shi	2
 云实根	yun shi gen	0
 云实皮	yun shi pi	0
 云实蛀虫	yun shi zhu chong	0
@@ -22342,7 +22342,7 @@ use_preset_vocabulary: false
 仔榄树	zai lan shu	0
 灾前期	zai qian qi	0
 灾情监测	zai qing jian ce	2
-再认	zai ren	60
+再认	zai ren	59
 再认广度	zai ren guang du	0
 在人体躬	zai ren ti gong	0
 再认阈限	zai ren yu xian	0
@@ -22672,7 +22672,7 @@ use_preset_vocabulary: false
 正式组织	zheng shi zu zhi	0
 正态曲线	zheng tai qu xian	9
 整体健康	zheng ti jian kang	0
-整体康复	zheng ti kang fu	3
+整体康复	zheng ti kang fu	2
 整体软骨支架	zheng ti ruan gu zhi jia	0
 正误法	zheng wu fa	0
 正心泰胶囊	zheng xin tai jiao nang	0
@@ -22748,7 +22748,7 @@ use_preset_vocabulary: false
 制刺猬皮	zhi ci wei pi	0
 志存救济	zhi cun jiu ji	0
 制大黄	zhi da huang	1
-止带	zhi dai	3
+止带	zhi dai	4
 肢带型肌营养不良	zhi dai xing ji ying yang bu liang	0
 指导语	zhi dao yu	18
 支点线	zhi dian xian	0
@@ -22764,7 +22764,7 @@ use_preset_vocabulary: false
 枝儿条	zhi er tiao	0
 脂肪瓣	zhi fang ban	1
 脂肪沉积	zhi fang chen ji	29
-脂肪分解	zhi fang fen jie	139
+脂肪分解	zhi fang fen jie	133
 脂肪分解酶	zhi fang fen jie mei	0
 脂肪过多症	zhi fang guo duo zheng	0
 脂肪坏死	zhi fang huai si	8
@@ -22773,7 +22773,7 @@ use_preset_vocabulary: false
 脂肪颗粒注射移植	zhi fang ke li zhu she yi zhi	0
 脂肪切除术	zhi fang qie chu shu	0
 脂肪肉瘤	zhi fang rou liu	2
-脂肪水解	zhi fang shui jie	5
+脂肪水解	zhi fang shui jie	4
 脂肪水肿	zhi fang shui zhong	0
 脂肪萎缩	zhi fang wei suo	2
 脂肪消散	zhi fang xiao san	0
@@ -22784,7 +22784,7 @@ use_preset_vocabulary: false
 治风	zhi feng	4
 知风草	zhi feng cao	0
 治风化痰	zhi feng hua tan	0
-指腹	zhi fu	184
+指腹	zhi fu	183
 雉肝	zhi gan	0
 炙甘草汤参姜桂	zhi gan cao tang can jiang gui	0
 直杆蓝桉叶	zhi gan lan an ye	0
@@ -22862,7 +22862,7 @@ use_preset_vocabulary: false
 直流电同步心律转复	zhi liu dian tong bu xin lv zhuan fu	0
 直流感应电检查	zhi liu gan ying dian jian cha	0
 致瘤性转化	zhi liu xing zhuan hua	0
-芝麻菜	zhi ma cai	42
+芝麻菜	zhi ma cai	43
 制马兜铃	zhi ma dou ling	0
 炙麻黄	zhi ma huang	9
 芝麻皮炎	zhi ma pi yan	0
@@ -22931,7 +22931,7 @@ use_preset_vocabulary: false
 致缩因子	zhi suo yin zi	0
 肢体沉重	zhi ti chen zhong	4
 肢体浮肿	zhi ti fu zhong	2
-肢体倦怠	zhi ti juan dai	5
+肢体倦怠	zhi ti juan dai	4
 肢体困重	zhi ti kun zhong	5
 质体系	zhi ti xi	0
 肢体延长术	zhi ti yan chang shu	0
@@ -23044,7 +23044,7 @@ use_preset_vocabulary: false
 中渎穴	zhong du xue	0
 中风痰厥	zhong feng tan jue	0
 中封穴	zhong feng xue	0
-中腑	zhong fu	1
+中腑	zhong fu	0
 中府穴	zhong fu xue	1
 中国繁缕	zhong guo fan lv	0
 中国九分法	zhong guo jiu fen fa	0
@@ -23105,7 +23105,7 @@ use_preset_vocabulary: false
 中膜体	zhong mo ti	0
 终模型	zhong mo xing	0
 中脑出血	zhong nao chu xie	0
-中年危机	zhong nian wei ji	602
+中年危机	zhong nian wei ji	603
 中胚叶肾瘤	zhong pei ye shen liu	0
 中频电疗法	zhong pin dian liao fa	2
 中频电诊断法	zhong pin dian zhen duan fa	0
@@ -23155,7 +23155,7 @@ use_preset_vocabulary: false
 中医内科杂病证治新义	zhong yi nei ke za bing zheng zhi xin yi	0
 终印模	zhong yin mo	0
 重用生姜温胃好	zhong yong sheng jiang wen wei hao	0
-中脏	zhong zang	0
+中脏	zhong zang	1
 肿胀技术吸脂术	zhong zhang ji shu xi zhi shu	0
 肿胀舌	zhong zhang she	0
 重症多形	zhong zheng duo xing	0
@@ -23210,7 +23210,7 @@ use_preset_vocabulary: false
 竹柏根	zhu bai gen	0
 筑宾	zhu bin	1
 筑宾穴	zhu bin xue	1
-主病	zhu bing	12
+主病	zhu bing	11
 逐步回归分析	zhu bu hui gui fen xi	4
 筑巢行为	zhu chao xing wei	2
 猪胆	zhu dan	2
@@ -23371,7 +23371,7 @@ use_preset_vocabulary: false
 抓地龙	zhua di long	0
 转胞	zhuan bao	0
 转胞病	zhuan bao bing	0
-转化基因	zhuan hua ji yin	1
+转化基因	zhuan hua ji yin	0
 转化灶	zhuan hua zao	0
 转换部位	zhuan huan bu wei	0
 转换性障碍	zhuan huan xing zhang ai	0
@@ -23619,7 +23619,7 @@ use_preset_vocabulary: false
 紫葳茎叶	zi wei jing ye	0
 紫薇皮	zi wei pi	0
 紫薇叶	zi wei ye	0
-自我刺激	zi wo ci ji	0
+自我刺激	zi wo ci ji	28
 自我挫败	zi wo cuo bai	4
 自我观察	zi wo guan cha	0
 自我归因	zi wo gui yin	10
@@ -23681,7 +23681,7 @@ use_preset_vocabulary: false
 自助小组	zi zhu xiao zu	0
 自主运动错觉	zi zhu yun dong cuo jue	0
 孜孜汲汲	zi zi ji ji	0
-自组装	zi zu zhuang	55
+自组装	zi zu zhuang	54
 粽粑叶	zong ba ye	0
 棕板	zong ban	1
 纵隔肠囊肿	zong ge chang nang zhong	0
@@ -23760,7 +23760,7 @@ use_preset_vocabulary: false
 足五里穴	zu wu li xue	0
 卒心痛病	zu xin tong bing	0
 阻抑物	zu yi wu	0
-组织病理学	zu zhi bing li xue	17
+组织病理学	zu zhi bing li xue	16
 组织处理技术	zu zhi chu li ji shu	0
 组织代用品	zu zhi dai yong pin	0
 组织定型	zu zhi ding xing	0
@@ -23781,7 +23781,7 @@ use_preset_vocabulary: false
 组织心理学	zu zhi xin li xue	0
 组织型培养	zu zhi xing pei yang	0
 组织样麻风瘤	zu zhi yang ma feng liu	0
-组织再生	zu zhi zai sheng	27
+组织再生	zu zhi zai sheng	23
 组织诊断	zu zhi zhen duan	3
 组织贮存	zu zhi zhu cun	0
 组织转化	zu zhi zhuan hua	0
@@ -23965,7 +23965,7 @@ use_preset_vocabulary: false
 丙氨酸氨基转移酶试剂盒	bing an suan an ji zhuan yi mei shi ji he	0
 丙氨酸氨基转移酶血站用	bing an suan an ji zhuan yi mei xue zhan yong	0
 病毒检测试剂	bing du jian ce shi ji	0
-丙肝病毒	bing gan bing du	23
+丙肝病毒	bing gan bing du	21
 丙肝抗体抗	bing gan kang ti kang	0
 丙肝试剂盒	bing gan shi ji he	0
 病历车	bing li che	1
@@ -24543,7 +24543,7 @@ use_preset_vocabulary: false
 冠脉内旋切装置及配件	guan mai nei xuan qie zhuang zhi ji pei jian	0
 冠脉球囊	guan mai qiu nang	1
 冠脉远端保护装置	guan mai yuan duan bao hu zhuang zhi	0
-冠脉支架	guan mai zhi jia	61
+冠脉支架	guan mai zhi jia	59
 冠脉支架不锈钢支架	guan mai zhi jia bu xiu gang zhi jia	0
 冠脉支架非不锈钢支架	guan mai zhi jia fei bu xiu gang zhi jia	0
 管腔吻合器	guan qiang wen he qi	0
@@ -25278,7 +25278,7 @@ use_preset_vocabulary: false
 女性拭子	nv xing shi zi	0
 排龈线排龈膏	pai yin xian pai yin gao	0
 膀胱穿刺针灭菌	pang guang chuan ci zhen mie jun	0
-抛光刷	pao guang shua	0
+抛光刷	pao guang shua	1
 泡镊筒	pao nie tong	0
 胚胎解冻液	pei tai jie dong ye	0
 胚胎冷冻液	pei tai leng dong ye	0
@@ -26255,7 +26255,7 @@ use_preset_vocabulary: false
 血气毛细采血管	xue qi mao xi cai xie guan	0
 血清蛋白电泳检验试剂	xue qing dan bai dian yong jian yan shi ji	0
 血清抗环瓜氨酸肽抗体	xue qing kang huan gua an suan tai kang ti	0
-血清铁	xue qing tie	5
+血清铁	xue qing tie	4
 血清载脂蛋白	xue qing zai zhi dan bai	0
 血球定标液	xue qiu ding biao ye	0
 血球计数仪试剂	xue qiu ji shu yi shi ji	0
@@ -26784,7 +26784,7 @@ use_preset_vocabulary: false
 银夹	yin jia	1
 阴茎夹	yin jing jia	0
 印模托盘	yin mu tuo pan	0
-隐形义齿	yin xing yi chi	3
+隐形义齿	yin xing yi chi	1
 隐血检验试剂	yin xue jian yan shi ji	0
 隐血试纸	yin xue shi zhi	0
 隐血试纸条	yin xue shi zhi tiao	0
@@ -27198,7 +27198,7 @@ use_preset_vocabulary: false
 胆俞穴	dan shu xue	0
 当阳穴	dang yang xue	0
 定喘穴	ding chuan xue	0
-顶区	ding qu	10
+顶区	ding qu	7
 顶穴	ding xue	0
 督俞穴	du shu xue	0
 独阴穴	du yin xue	0
@@ -27228,7 +27228,7 @@ use_preset_vocabulary: false
 腹穴	fu xue	0
 肝经	gan jing	101
 感冒点	gan mao dian	0
-肝区	gan qu	52
+肝区	gan qu	51
 肝俞穴	gan shu xue	2
 肝穴	gan xue	0
 肝炎点	gan yan dian	0
@@ -27251,7 +27251,7 @@ use_preset_vocabulary: false
 饥点	ji dian	0
 脊中穴	ji zhong xue	0
 夹承浆穴	jia cheng jiang xue	0
-肩前	jian qian	23
+肩前	jian qian	20
 肩前穴	jian qian xue	0
 肩区	jian qu	0
 肩穴	jian xue	0
@@ -27295,7 +27295,7 @@ use_preset_vocabulary: false
 目一	mu yi	3
 内鼻	nei bi	0
 内踝尖穴	nei huai jian xue	0
-内生殖器	nei sheng zhi qi	9
+内生殖器	nei sheng zhi qi	8
 内膝眼穴	nei xi yan xue	0
 内迎香穴	nei ying xiang xue	0
 颞区	nie qu	11
@@ -27409,7 +27409,7 @@ use_preset_vocabulary: false
 阳跷脉	yang qiao mai	0
 阳维脉	yang wei mai	0
 腰骶椎	yao di zhui	1
-腰肌	yao ji	205
+腰肌	yao ji	204
 腰奇穴	yao qi xue	0
 腰俞穴	yao shu xue	0
 腰痛点穴	yao tong dian xue	0
@@ -27445,7 +27445,7 @@ use_preset_vocabulary: false
 足三阴	zu san yin	4
 足少阳	zu shao yang	6
 足少阴	zu shao yin	8
-足太阳	zu tai yang	7
+足太阳	zu tai yang	6
 足太阴	zu tai yin	8
 足阳明	zu yang ming	9
 醉点	zui dian	0
@@ -27769,8 +27769,8 @@ use_preset_vocabulary: false
 艾本	ai ben	10
 矮茶素	ai cha su	0
 艾畅	ai chang	0
-艾达	ai da	308
-爱大	ai da	10
+艾达	ai da	309
+爱大	ai da	30
 艾达乐	ai da le	0
 艾达生	ai da sheng	0
 癌蛋白	ai dan bai	1
@@ -29384,7 +29384,7 @@ use_preset_vocabulary: false
 蓓隆	bei long	0
 倍珞	bei luo	0
 贝洛特	bei luo te	2
-北美草原	bei mei cao yuan	1
+北美草原	bei mei cao yuan	0
 贝美格	bei mei ge	0
 贝美格注射液	bei mei ge zhu she ye	0
 倍美力	bei mei li	0
@@ -29933,7 +29933,7 @@ use_preset_vocabulary: false
 苄乙铵	bian yi an	0
 变因子原	bian yin zi yuan	0
 边中脉	bian zhong mai	0
-表达谱	biao da pu	9
+表达谱	biao da pu	11
 表达序列标签	biao da xu lie biao qian	0
 标度树	biao du shu	0
 表海他西林	biao hai ta xi lin	0
@@ -30023,7 +30023,7 @@ use_preset_vocabulary: false
 冰冻干燥	bing dong gan zao	0
 冰冻蚀刻	bing dong shi ke	0
 冰冻撕裂	bing dong si lie	0
-病毒颗粒	bing du ke li	38
+病毒颗粒	bing du ke li	37
 病毒外壳蛋白	bing du wai ke dan bai	0
 病毒衣壳病毒壳体	bing du yi ke bing du qiao ti	0
 病毒抑制	bing du yi zhi	1
@@ -30918,7 +30918,7 @@ use_preset_vocabulary: false
 茶苯海明含片	cha ben hai ming han pian	0
 茶苯海明片	cha ben hai ming pian	1
 茶丙特罗	cha bing te luo	0
-茶粉	cha fen	28
+茶粉	cha fen	27
 茶剂	cha ji	0
 茶碱缓释胶囊	cha jian huan shi jiao nang	0
 茶碱缓释片	cha jian huan shi pian	0
@@ -31211,7 +31211,7 @@ use_preset_vocabulary: false
 朝阳丸	chao yang wan	0
 超氧物歧化酶	chao yang wu qi hua mei	0
 超诱导	chao you dao	0
-超阈值	chao yu zhi	1
+超阈值	chao yu zhi	2
 呫吨翔酸	che dun xiang suan	0
 车前二糖	che qian er tang	0
 车前番泻	che qian fan xie	0
@@ -31752,7 +31752,7 @@ use_preset_vocabulary: false
 促甲状旁腺激素	cu jia zhuang pang xian ji su	1
 醋甲唑胺片	cu jia zuo an pian	0
 促进白细胞增生药	cu jin bai xi bao zeng sheng yao	0
-促进抗体	cu jin kang ti	5
+促进抗体	cu jin kang ti	4
 醋卡溴脲	cu ka xiu niao	0
 醋柳黄酮	cu liu huang tong	0
 醋柳黄酮片	cu liu huang tong pian	0
@@ -32171,9 +32171,9 @@ use_preset_vocabulary: false
 代谢节律	dai xie jie lv	0
 代谢平衡	dai xie ping heng	12
 代谢顺序	dai xie shun xu	0
-代谢途径	dai xie tu jing	66
-代谢消耗	dai xie xiao hao	8
-代谢异常	dai xie yi chang	105
+代谢途径	dai xie tu jing	65
+代谢消耗	dai xie xiao hao	6
+代谢异常	dai xie yi chang	84
 代谢抑制物	dai xie yi zhi wu	0
 代谢值	dai xie zhi	0
 代盐	dai yan	46
@@ -32615,7 +32615,7 @@ use_preset_vocabulary: false
 得每通肠溶胶囊	de mei tong chang rong jiao nang	0
 得普利麻	de pu li ma	0
 的确当滴眼液	de que dang di yan ye	0
-得生	de sheng	25
+得生	de sheng	27
 得生胶囊	de sheng jiao nang	0
 得生片	de sheng pian	0
 得生丸	de sheng wan	0
@@ -32623,10 +32623,10 @@ use_preset_vocabulary: false
 得斯芬	de si fen	0
 德特利尔	de te li er	0
 德天欣	de tian xin	0
-德维	de wei	26
+德维	de wei	23
 德阳市旌阳区五味大药房	de yang shi jing yang qu wu wei da yao fang	0
 德阳市区长春堂药店	de yang shi qu chang chun tang yao dian	0
-得治	de zhi	140
+得治	de zhi	141
 等螯	deng ao	0
 等长片段	deng chang pian duan	0
 等电点聚焦	deng dian dian ju jiao	0
@@ -32854,7 +32854,7 @@ use_preset_vocabulary: false
 迪谢反应	di xie fan ying	0
 低压冻干器	di ya dong gan qi	0
 滴眼用利福平	di yan yong li fu ping	0
-迪洋	di yang	0
+迪洋	di yang	1
 第一次分裂	di yi ci fen lie	11
 地衣多糖酶	di yi duo tang mei	0
 地衣二酚	di yi er fen	0
@@ -33155,7 +33155,7 @@ use_preset_vocabulary: false
 丁酸氢化可的松乳膏	ding suan qing hua ke di song ru gao	3
 丁酸氢化可的松软膏	ding suan qing hua ke di song ruan gao	3
 丁酸盐	ding suan yan	4
-丁糖	ding tang	1
+丁糖	ding tang	0
 顶突	ding tu	0
 丁烷二胍	ding wan er gua	0
 定位点诱变	ding wei dian you bian	0
@@ -33366,7 +33366,7 @@ use_preset_vocabulary: false
 毒剧药散剂	du ju yao san ji	0
 杜鹃素	du juan su	0
 杜拉宝	du la bao	0
-独立分配	du li fen pei	0
+独立分配	du li fen pei	2
 毒藜碱	du li jian	0
 都梁	du liang	0
 都梁滴丸	du liang di wan	0
@@ -33678,7 +33678,7 @@ use_preset_vocabulary: false
 多种密码子识别	duo zhong mi ma zi shi bie	0
 多种微量元素	duo zhong wei liang yuan su	24
 多种微量元素注射液	duo zhong wei liang yuan su zhu she ye	0
-多种维生素	duo zhong wei sheng su	76
+多种维生素	duo zhong wei sheng su	71
 多种维生素片	duo zhong wei sheng su pian	1
 多足纲	duo zu gang	2
 多足纲节肢动物	duo zu gang jie zhi dong wu	0
@@ -33813,7 +33813,7 @@ use_preset_vocabulary: false
 儿茶酚酶	er cha fen mei	0
 儿茶酚氧化酶	er cha fen yang hua mei	0
 儿茶钩藤碱	er cha gou teng jian	0
-二陈	er chen	0
+二陈	er chen	14
 二陈口服液	er chen kou fu ye	0
 二陈浓缩丸	er chen nong suo wan	0
 二齿兽	er chi shou	0
@@ -33995,7 +33995,7 @@ use_preset_vocabulary: false
 二羟维	er qiang wei	0
 二羟杏仁酸	er qiang xing ren suan	0
 二羟乙基甘氨酸	er qiang yi ji gan an suan	0
-二氢	er qing	41
+二氢	er qing	40
 二氢埃托啡	er qing ai tuo fei	0
 二氢埃托啡片	er qing ai tuo fei pian	0
 二氢埃托啡注射液	er qing ai tuo fei zhu she ye	0
@@ -34205,7 +34205,7 @@ use_preset_vocabulary: false
 二氧丙嗪颗粒	er yang bing qin ke li	0
 二氧丙嗪片	er yang bing qin pian	0
 二氧化碳补偿点	er yang hua tan bu chang dian	0
-二氧化碳固定	er yang hua tan gu ding	7
+二氧化碳固定	er yang hua tan gu ding	6
 二氧化碳容量	er yang hua tan rong liang	0
 二氧化碳施肥	er yang hua tan shi fei	0
 二氧化碳张力	er yang hua tan zhang li	0
@@ -34229,7 +34229,7 @@ use_preset_vocabulary: false
 二乙酰吗啡	er yi xian ma fei	7
 二硬脂酰磷脂酰胆碱	er ying zhi xian lin zhi xian dan jian	0
 二硬脂酰磷脂酰乙醇胺	er ying zhi xian lin zhi xian yi chun an	0
-二至	er zhi	120
+二至	er zhi	111
 儿滞灵	er zhi ling	0
 儿滞灵颗粒	er zhi ling ke li	0
 二至浓缩丸	er zhi nong suo wan	0
@@ -34395,7 +34395,7 @@ use_preset_vocabulary: false
 防化保障	fang hua bao zhang	0
 防己关节	fang ji guan jie	0
 防己关节丸	fang ji guan jie wan	0
-方克	fang ke	11
+方克	fang ke	10
 放射层析	fang she ceng xi	0
 放射剂量	fang she ji liang	14
 放射蜕变	fang she tui bian	0
@@ -36938,7 +36938,7 @@ use_preset_vocabulary: false
 氟甲松龙	fu jia song long	0
 伏甲索	fu jia suo	0
 副甲氧基安非他明	fu jia yang ji an fei ta ming	0
-腹节	fu jie	8
+腹节	fu jie	7
 妇洁	fu jie	0
 妇洁搽剂	fu jie cha ji	0
 妇洁舒	fu jie shu	0
@@ -37690,7 +37690,7 @@ use_preset_vocabulary: false
 甘加乐	gan jia le	0
 肝加欣	gan jia xin	0
 肝加欣片	gan jia xin pian	0
-肝健	gan jian	3
+肝健	gan jian	1
 肝健胶囊	gan jian jiao nang	0
 干胶	gan jiao	4
 干胶片	gan jiao pian	0
@@ -38024,7 +38024,7 @@ use_preset_vocabulary: false
 甘油糖脂	gan you tang zhi	0
 甘油脂类	gan you zhi lei	0
 甘油助溶	gan you zhu rong	0
-感愈	gan yu	1
+感愈	gan yu	0
 感愈胶囊	gan yu jiao nang	0
 肝郁调经	gan yu tiao jing	0
 肝郁调经膏	gan yu tiao jing gao	0
@@ -38103,7 +38103,7 @@ use_preset_vocabulary: false
 高铁血色原	gao tie xue se yuan	0
 高铁止血剂	gao tie zhi xue ji	0
 睾丸片	gao wan pian	0
-睾丸切除	gao wan qie chu	4
+睾丸切除	gao wan qie chu	6
 睾丸下降	gao wan xia jiang	0
 睾丸移植	gao wan yi zhi	4
 高位芽植物	gao wei ya zhi wu	0
@@ -38178,7 +38178,7 @@ use_preset_vocabulary: false
 格岚停	ge lan ting	0
 葛兰心宁	ge lan xin ning	0
 葛兰心宁软胶囊	ge lan xin ning ruan jiao nang	0
-隔离层	ge li ceng	53
+隔离层	ge li ceng	52
 格利福斯	ge li fu si	0
 格力特	ge li te	3
 隔离种群	ge li zhong qun	0
@@ -38465,8 +38465,8 @@ use_preset_vocabulary: false
 固定态	gu ding tai	0
 古豆碱	gu dou jian	0
 固尔苏	gu er su	0
-骨发生	gu fa sheng	0
-骨分离	gu fen li	3
+骨发生	gu fa sheng	1
+骨分离	gu fen li	2
 骨风宁	gu feng ning	0
 骨风宁胶囊	gu feng ning jiao nang	0
 骨骼风痛	gu ge feng tong	0
@@ -38486,7 +38486,7 @@ use_preset_vocabulary: false
 古汉养生精片	gu han yang sheng jing pian	0
 古汉养生颗粒	gu han yang sheng ke li	0
 谷合	gu he	0
-谷红	gu hong	3
+谷红	gu hong	2
 骨化二醇	gu hua er chun	3
 骨化二醇胶囊	gu hua er chun jiao nang	0
 骨化三醇软胶囊	gu hua san chun ruan jiao nang	0
@@ -38522,7 +38522,7 @@ use_preset_vocabulary: false
 骨痨敌	gu lao di	0
 骨痨敌注射液	gu lao di zhu she ye	0
 骨类粘蛋白	gu lei zhan dan bai	0
-孤立化	gu li hua	9
+孤立化	gu li hua	8
 骨力胶囊	gu li jiao nang	0
 钴啉胺酸	gu lin an suan	0
 钴啉醇酸	gu lin chun suan	0
@@ -38626,7 +38626,7 @@ use_preset_vocabulary: false
 骨折愈合刺激素	gu zhe yu he ci ji su	0
 骨折再生	gu zhe zai sheng	0
 骨折再生丸	gu zhe zai sheng wan	0
-谷正	gu zheng	9
+谷正	gu zheng	10
 臌症丸	gu zheng wan	0
 骨质宁	gu zhi ning	0
 骨质宁搽剂	gu zhi ning cha ji	0
@@ -39574,7 +39574,7 @@ use_preset_vocabulary: false
 红藻门	hong zao men	0
 后白蛋白	hou bai dan bai	0
 后半体	hou ban ti	0
-后鼻孔	hou bi kong	0
+后鼻孔	hou bi kong	3
 厚壁组织	hou bi zu zhi	0
 后唇基	hou chun ji	0
 鲎蛋白	hou dan bai	0
@@ -39596,7 +39596,7 @@ use_preset_vocabulary: false
 喉疾灵胶囊	hou ji ling jiao nang	0
 喉疾灵片	hou ji ling pian	0
 厚角组织	hou jiao zu zhi	0
-后静脉	hou jing mai	0
+后静脉	hou jing mai	1
 喉康	hou kang	0
 喉康散	hou kang san	1
 厚壳烯酮内酯	hou ke xi tong nei zhi	0
@@ -39773,7 +39773,7 @@ use_preset_vocabulary: false
 华安正庄白树油	hua an zheng zhuang bai shu you	0
 华安正庄红花油	hua an zheng zhuang hong hua you	0
 华安正庄栳枫油	hua an zheng zhuang lao feng you	0
-花百	hua bai	5
+花百	hua bai	6
 花百胶囊	hua bai jiao nang	0
 花斑癣药水	hua ban xuan yao shui	0
 花菜豆酸	hua cai dou suan	0
@@ -39790,7 +39790,7 @@ use_preset_vocabulary: false
 花翠素鼠李葡糖苷	hua cui su shu li pu tang gan	0
 华迪	hua di	0
 滑动关节	hua dong guan jie	0
-化毒	hua du	9
+化毒	hua du	5
 化毒丹	hua du dan	0
 化毒散	hua du san	0
 化毒丸	hua du wan	0
@@ -40659,7 +40659,7 @@ use_preset_vocabulary: false
 吉姆欣	ji mu xin	0
 肌内膜	ji nei mo	0
 脊内隙	ji nei xi	0
-机能障碍	ji neng zhang ai	6
+机能障碍	ji neng zhang ai	7
 济尼新	ji ni xin	0
 肌宁蛋白	ji ning dan bai	0
 济诺	ji nuo	4
@@ -40674,7 +40674,7 @@ use_preset_vocabulary: false
 吉如心	ji ru xin	0
 吉如心片	ji ru xin pian	0
 基瑞松	ji rui song	0
-吉萨	ji sa	66
+吉萨	ji sa	70
 吉赛欣	ji sai xin	0
 济肾胶囊	ji shen jiao nang	0
 脊神经根	ji shen jing gen	18
@@ -40685,7 +40685,7 @@ use_preset_vocabulary: false
 济生肾气	ji sheng shen qi	0
 济生肾气片	ji sheng shen qi pian	0
 济生圣气丸	ji sheng sheng qi wan	0
-寄生生物	ji sheng sheng wu	34
+寄生生物	ji sheng sheng wu	33
 济生万应锭	ji sheng wan ying ding	0
 济生胃泰	ji sheng wei tai	0
 基生叶	ji sheng ye	5
@@ -40700,7 +40700,7 @@ use_preset_vocabulary: false
 汲松	ji song	0
 肌素	ji su	0
 激素类抗肿瘤药	ji su lei kang zhong liu yao	0
-激素受体	ji su shou ti	17
+激素受体	ji su shou ti	16
 鸡苏丸	ji su wan	1
 激素原	ji su yuan	0
 己酸氟可龙	ji suan fu ke long	0
@@ -40730,7 +40730,7 @@ use_preset_vocabulary: false
 激肽酶	ji tai mei	0
 济泰片	ji tai pian	0
 激肽原酶	ji tai yuan mei	0
-己糖	ji tang	4
+己糖	ji tang	2
 己糖胺醇	ji tang an chun	0
 己糖二酸	ji tang er suan	0
 己糖基	ji tang ji	0
@@ -40740,7 +40740,7 @@ use_preset_vocabulary: false
 己糖磷酸羟乙醛酶途径	ji tang lin suan qiang yi quan mei tu jing	0
 己糖醛酸	ji tang quan suan	3
 机体说	ji ti shuo	0
-机体组成	ji ti zu cheng	2
+机体组成	ji ti zu cheng	1
 己酮可可碱	ji tong ke ke jian	0
 己酮可可碱肠溶胶囊	ji tong ke ke jian chang rong jiao nang	0
 己酮可可碱肠溶片	ji tong ke ke jian chang rong pian	0
@@ -40780,11 +40780,11 @@ use_preset_vocabulary: false
 肌小节	ji xiao jie	24
 机械分散法	ji xie fen san fa	0
 机械化学偶联假说	ji xie hua xue ou lian jia shuo	0
-极性氨基酸	ji xing an ji suan	2
+极性氨基酸	ji xing an ji suan	1
 肌形成	ji xing cheng	0
 急性毒性无环鸟苷	ji xing du xing wu huan niao gan	0
 畸形发生	ji xing fa sheng	5
-急性感染	ji xing gan ran	49
+急性感染	ji xing gan ran	50
 极性基团	ji xing ji tuan	11
 急性期蛋白	ji xing qi dan bai	0
 急性期反应	ji xing qi fan ying	1
@@ -40822,7 +40822,7 @@ use_preset_vocabulary: false
 基因内重组	ji yin nei chong zu	0
 基因内校正	ji yin nei jiao zheng	0
 基因内容	ji yin nei rong	0
-基因识别	ji yin shi bie	3
+基因识别	ji yin shi bie	2
 基因受体	ji yin shou ti	1
 基因树	ji yin shu	3
 基因水平转移	ji yin shui ping zhuan yi	8
@@ -40908,7 +40908,7 @@ use_preset_vocabulary: false
 甲碘酸双氢麦角碱	jia dian suan shuang qing mai jiao jian	0
 蛱蝶科	jia die ke	0
 佳多乐	jia duo le	0
-加尔	jia er	318
+加尔	jia er	316
 甲二醇	jia er chun	0
 佳尔纳	jia er na	0
 甲二氢吗啡	jia er qing ma fei	0
@@ -41525,7 +41525,7 @@ use_preset_vocabulary: false
 健康补肾酒	jian kang bu shen jiu	0
 健朗晨	jian lang chen	0
 健朗星	jian lang xing	0
-见林	jian lin	9
+见林	jian lin	6
 剑麻蛋白酶	jian ma dan bai mei	0
 剑霉酸	jian mei suan	0
 健民咽喉	jian min yan hou	0
@@ -41688,7 +41688,7 @@ use_preset_vocabulary: false
 健心片	jian xin pian	0
 碱性蛋白质	jian xing dan bai zhi	0
 碱性凝胶电泳	jian xing ning jiao dian yong	0
-碱性条件	jian xing tiao jian	6
+碱性条件	jian xing tiao jian	7
 健血	jian xue	0
 健血颗粒	jian xue ke li	0
 减压反射	jian ya fan she	0
@@ -42484,14 +42484,14 @@ use_preset_vocabulary: false
 筋痛消	jin tong xiao	0
 筋痛消酊	jin tong xiao ding	0
 金童玉儿	jin tong yu er	0
-今威	jin wei	2
+今威	jin wei	0
 金维康	jin wei kang	0
 金维他片	jin wei ta pian	0
 金乌骨通	jin wu gu tong	0
 金乌骨通胶囊	jin wu gu tong jiao nang	0
 金喜素	jin xi su	0
 近向	jin xiang	1
-金香	jin xiang	15
+金香	jin xiang	16
 金香胶囊	jin xiang jiao nang	0
 金馨尼	jin xin ni	0
 晋新泰	jin xin tai	0
@@ -42653,7 +42653,7 @@ use_preset_vocabulary: false
 晶砂	jing sha	0
 晶神含漱	jing shen han shu	0
 精神抑制药	jing shen yi zhi yao	0
-精神诊断	jing shen zhen duan	5
+精神诊断	jing shen zhen duan	4
 净石灵	jing shi ling	0
 净石灵胶囊	jing shi ling jiao nang	0
 颈舒	jing shu	0
@@ -43171,7 +43171,7 @@ use_preset_vocabulary: false
 菌管	jun guan	0
 菌核	jun he	0
 君菏	jun he	0
-君佳	jun jia	65
+君佳	jun jia	64
 君洁	jun jie	2
 君捷亭	jun jie ting	0
 均聚体	jun ju ti	0
@@ -43195,7 +43195,7 @@ use_preset_vocabulary: false
 菌髓	jun sui	1
 菌索	jun suo	0
 菌体抗原	jun ti kang yuan	0
-君为	jun wei	70
+君为	jun wei	71
 君欣	jun xin	1
 均一性	jun yi xing	25
 菌瘿	jun ying	0
@@ -43260,7 +43260,7 @@ use_preset_vocabulary: false
 咔啉二氮芴	ka lin er dan wu	0
 卡林优	ka lin you	0
 卡林优滴眼液	ka lin you di yan ye	0
-卡洛	ka luo	243
+卡洛	ka luo	242
 卡洛芬	ka luo fen	0
 卡络磺钠	ka luo huang na	1
 卡络磺钠片	ka luo huang na pian	0
@@ -43371,7 +43371,7 @@ use_preset_vocabulary: false
 凯特力	kai te li	0
 凯特瑞	kai te rui	0
 凯亭	kai ting	0
-开同	kai tong	1
+开同	kai tong	0
 开同片	kai tong pian	0
 凯托米酮	kai tuo mi tong	0
 开韦夫	kai wei fu	0
@@ -43387,7 +43387,7 @@ use_preset_vocabulary: false
 开胃丸	kai wei wan	0
 开胃消食	kai wei xiao shi	4
 开胃消食口服液	kai wei xiao shi kou fu ye	0
-开文	kai wen	13
+开文	kai wen	15
 凯西莱	kai xi lai	0
 开新康	kai xin kang	0
 开胸理气	kai xiong li qi	0
@@ -43538,7 +43538,7 @@ use_preset_vocabulary: false
 康惠尔	kang hui er	0
 康惠尔糊剂	kang hui er hu ji	0
 抗寄生	kang ji sheng	0
-抗寄生虫免疫	kang ji sheng chong mian yi	1
+抗寄生虫免疫	kang ji sheng chong mian yi	0
 抗激素	kang ji su	0
 抗饥消渴	kang ji xiao ke	0
 抗饥消渴片	kang ji xiao ke pian	0
@@ -43606,7 +43606,7 @@ use_preset_vocabulary: false
 康脑宁	kang nao ning	0
 抗脑衰	kang nao shuai	0
 抗脑衰胶囊	kang nao shuai jiao nang	0
-康能	kang neng	0
+康能	kang neng	4
 康尼	kang ni	105
 康逆胶囊	kang ni jiao nang	0
 抗尿毒氨基酸	kang niao du an ji suan	0
@@ -43618,7 +43618,7 @@ use_preset_vocabulary: false
 抗凝血素	kang ning xue su	1
 抗凝血药	kang ning xue yao	9
 抗凝作用	kang ning zuo yong	5
-康诺	kang nuo	8
+康诺	kang nuo	7
 康诺美沙	kang nuo mei sha	0
 康帕斯	kang pa si	4
 抗贫血药	kang pin xue yao	7
@@ -43826,7 +43826,7 @@ use_preset_vocabulary: false
 刻迪	ke di	0
 可的松片	ke di song pian	0
 可的松注射液	ke di song zhu she ye	0
-刻定	ke ding	2
+刻定	ke ding	3
 壳顶	ke ding	0
 可多华	ke duo hua	1
 可多克辛	ke duo ke xin	0
@@ -43926,7 +43926,7 @@ use_preset_vocabulary: false
 咳立停	ke li ting	0
 咳立停糖浆	ke li ting tang jiang	0
 可利新	ke li xin	0
-颗粒形成	ke li xing cheng	7
+颗粒形成	ke li xing cheng	6
 克利溴胺	ke li xiu an	0
 颗粒质	ke li zhi	1
 可立治	ke li zhi	0
@@ -44042,7 +44042,7 @@ use_preset_vocabulary: false
 可溶颗粒剂	ke rong ke li ji	0
 可溶性纤维素钠	ke rong xing xian wei su na	0
 可溶性纤维素钠贴膏	ke rong xing xian wei su na tie gao	0
-可溶性液体	ke rong xing ye ti	1
+可溶性液体	ke rong xing ye ti	0
 可溶性止血纱布	ke rong xing zhi xue sha bu	0
 克瑞帕	ke rui pa	0
 克瑞特	ke rui te	3
@@ -44091,7 +44091,7 @@ use_preset_vocabulary: false
 克痛酊	ke tong ding	0
 克痛王	ke tong wang	0
 可突变位点	ke tu bian wei dian	0
-克托	ke tuo	21
+克托	ke tuo	25
 咳丸	ke wan	0
 克为德	ke wei de	0
 可维加	ke wei jia	0
@@ -44259,7 +44259,7 @@ use_preset_vocabulary: false
 苦豆子油搽剂	ku dou zi you cha ji	0
 苦豆子总碱	ku dou zi zong jian	0
 枯否氏细胞	ku fou shi xi bao	1
-苦甘	ku gan	6
+苦甘	ku gan	5
 苦甘颗粒	ku gan ke li	0
 苦黄	ku huang	2
 苦黄颗粒	ku huang ke li	0
@@ -44641,7 +44641,7 @@ use_preset_vocabulary: false
 乐净	le jing	0
 乐卡地平	le ka di ping	0
 乐亢	le kang	0
-乐来	le lai	3
+乐来	le lai	9
 乐朗	le lang	3
 乐乐霜	le le shuang	0
 乐力	le li	11
@@ -44779,7 +44779,7 @@ use_preset_vocabulary: false
 力邦啡	li bang fei	0
 力邦特	li bang te	0
 力邦英特	li bang ying te	0
-利宝	li bao	33
+利宝	li bao	32
 力保肪宁	li bao fang ning	0
 力贝尔	li bei er	0
 利倍思	li bei si	0
@@ -44937,7 +44937,7 @@ use_preset_vocabulary: false
 利君益定	li jun yi ding	0
 丽康可松	li kang ke song	0
 利康永达	li kang yong da	0
-里克	li ke	281
+里克	li ke	279
 丽科得诺	li ke de nuo	0
 立可菲	li ke fei	0
 丽科吉	li ke ji	0
@@ -44984,7 +44984,7 @@ use_preset_vocabulary: false
 利脑心胶囊	li nao xin jiao nang	0
 利脑心片	li nao xin pian	0
 利尿八味散	li niao ba wei san	0
-利尿激素	li niao ji su	2
+利尿激素	li niao ji su	1
 利尿剂脱水剂	li niao ji tuo shui ji	0
 利尿口服液	li niao kou fu ye	0
 力诺	li nuo	0
@@ -45071,7 +45071,7 @@ use_preset_vocabulary: false
 理新彤	li xin tong	0
 利心丸	li xin wan	0
 利心丸浓缩水丸	li xin wan nong suo shui wan	0
-粒性白细胞	li xing bai xi bao	1
+粒性白细胞	li xing bai xi bao	0
 利血宝	li xue bao	0
 利血宝注射液	li xue bao zhu she ye	0
 利血明目	li xue ming mu	0
@@ -45282,7 +45282,7 @@ use_preset_vocabulary: false
 蓼参胶囊	liao can jiao nang	0
 疗肺宁	liao fei ning	0
 疗肺宁片	liao fei ning pian	0
-疗效肯定	liao xiao ken ding	5
+疗效肯定	liao xiao ken ding	6
 疗癣卡西甫散	liao xuan ka xi fu san	0
 疗癣卡西甫丸	liao xuan ka xi fu wan	0
 辽源七厘	liao yuan qi li	0
@@ -45694,7 +45694,7 @@ use_preset_vocabulary: false
 馏程测定法	liu cheng ce ding fa	0
 硫醇基	liu chun ji	2
 硫醇盐	liu chun yan	2
-硫代	liu dai	13
+硫代	liu dai	11
 硫代芬太尼	liu dai fen tai ni	0
 硫代甘油	liu dai gan you	0
 硫代硫酸钠溶液	liu dai liu suan na rong ye	2
@@ -45861,7 +45861,7 @@ use_preset_vocabulary: false
 硫酸核糖核酸	liu suan he tang he suan	0
 硫酸核糖霉素	liu suan he tang mei su	0
 硫酸核糖霉素注射液	liu suan he tang mei su zhu she ye	0
-硫酸化酶	liu suan hua mei	1
+硫酸化酶	liu suan hua mei	0
 硫酸化物	liu suan hua wu	0
 硫酸化因子	liu suan hua yin zi	0
 硫酸角质	liu suan jiao zhi	0
@@ -47298,7 +47298,7 @@ use_preset_vocabulary: false
 美雌醇	mei ci chun	0
 美达西泮	mei da xi pan	0
 美达消肿膏	mei da xiao zhong gao	0
-酶蛋白	mei dan bai	12
+酶蛋白	mei dan bai	11
 美得喜	mei de xi	0
 美登木素	mei deng mu su	4
 美登素	mei deng su	0
@@ -47816,7 +47816,7 @@ use_preset_vocabulary: false
 莫雷西嗪	mo lei xi qin	1
 莫雷西嗪片	mo lei xi qin pian	0
 茉莉酮	mo li tong	0
-摩罗	mo luo	54
+摩罗	mo luo	51
 摩罗感灵	mo luo gan ling	0
 摩罗口服液	mo luo kou fu ye	0
 莫米松	mo mi song	2
@@ -47884,7 +47884,7 @@ use_preset_vocabulary: false
 木霉素	mu mei su	0
 母皿	mu min	0
 木内苏铁	mu nei su tie	0
-母乳多	mu ru duo	2
+母乳多	mu ru duo	1
 母乳多颗粒	mu ru duo ke li	0
 木射线	mu she xian	32
 木栓化	mu shuan hua	1
@@ -48252,7 +48252,7 @@ use_preset_vocabulary: false
 能安均宁	neng an jun ning	0
 能安均宁胶囊	neng an jun ning jiao nang	0
 能安均宁散	neng an jun ning san	0
-能力佳	neng li jia	4
+能力佳	neng li jia	3
 能量口服液	neng liang kou fu ye	0
 能量液	neng liang ye	1
 能气朗	neng qi lang	0
@@ -48372,7 +48372,7 @@ use_preset_vocabulary: false
 黏菌素片	nian jun su pian	0
 粘膜溃疡散	nian mo kui yang san	0
 粘膜系列	nian mo xi lie	0
-粘性	nian xing	2322
+粘性	nian xing	2321
 粘性粉体	nian xing fen ti	0
 粘性质粒	nian xing zhi li	0
 粘性质粒载体	nian xing zhi li zai ti	0
@@ -48463,7 +48463,7 @@ use_preset_vocabulary: false
 尿素维乳膏	niao su wei ru gao	0
 尿素循环	niao su xun huan	6
 尿酸尿	niao suan niao	0
-尿酸盐	niao suan yan	96
+尿酸盐	niao suan yan	93
 尿酸氧化酶	niao suan yang hua mei	3
 尿纤溶酶原激活物	niao xian rong mei yuan ji huo wu	0
 鸟疫	niao yi	0
@@ -48867,7 +48867,7 @@ use_preset_vocabulary: false
 哌泊塞嗪注射液	pai bo sai qin zhu she ye	0
 哌泊噻嗪棕榈酸酯注射液	pai bo sai qin zong lv suan zhi zhu she ye	0
 哌泊噻棕榈酸酯	pai bo sai zong lv suan zhi	0
-排出量	pai chu liang	28
+排出量	pai chu liang	29
 哌醋甲酯	pai cu jia zhi	3
 派得	pai de	0
 哌啶	pai ding	5
@@ -48927,7 +48927,7 @@ use_preset_vocabulary: false
 哌替啶片	pai ti ding pian	0
 哌替啶注射液	pai ti ding zhu she ye	0
 派汀	pai ting	1
-派同	pai tong	0
+派同	pai tong	1
 派通欣	pai tong xin	0
 派维舒	pai wei shu	0
 派威欣	pai wei xin	0
@@ -48947,7 +48947,7 @@ use_preset_vocabulary: false
 泮立苏	pan li su	0
 盘龙七药酒	pan long qi yao jiu	1
 潘南金	pan nan jin	0
-潘诺	pan nuo	9
+潘诺	pan nuo	7
 潘舒泰克	pan shu tai ke	0
 泮替膦酸	pan ti lin suan	0
 泮托拉唑钠	pan tuo la zuo na	0
@@ -49016,7 +49016,7 @@ use_preset_vocabulary: false
 配位数	pei wei shu	18
 胚细胞	pei xi bao	7
 培欣	pei xin	0
-培养物	pei yang wu	14
+培养物	pei yang wu	13
 配液	pei ye	7
 胚原基	pei yuan ji	0
 培元通脑	pei yuan tong nao	0
@@ -49158,7 +49158,7 @@ use_preset_vocabulary: false
 皮甾五醇	pi zai wu chun	0
 皮质激素类	pi zhi ji su lei	0
 皮质类固醇	pi zhi lei gu chun	77
-皮质类固醇激素	pi zhi lei gu chun ji su	7
+皮质类固醇激素	pi zhi lei gu chun ji su	6
 皮质类固醇结合	pi zhi lei gu chun jie he	0
 皮质甾醇受体	pi zhi zai chun shou ti	0
 皮质甾类	pi zhi zai lei	1
@@ -49186,7 +49186,7 @@ use_preset_vocabulary: false
 氕音撇	pie yin pie	0
 品川	pin chuan	34
 贫污水	pin wu shui	0
-品种间	pin zhong jian	13
+品种间	pin zhong jian	12
 品种间杂交	pin zhong jian za jiao	0
 平癌片	ping ai pian	0
 平安丸	ping an wan	0
@@ -49454,7 +49454,7 @@ use_preset_vocabulary: false
 葡萄糖电解质泡腾片	pu tao tang dian jie zhi pao teng pian	0
 葡萄糖非软袋单管单塞	pu tao tang fei ruan dai dan guan dan sai	0
 葡萄糖非软袋双管双塞	pu tao tang fei ruan dai shuang guan shuang sai	0
-葡萄糖口服	pu tao tang kou fu	0
+葡萄糖口服	pu tao tang kou fu	1
 葡萄糖氯化钙注射液	pu tao tang lv hua gai zhu she ye	0
 葡萄糖氯化钠非软袋单管单塞	pu tao tang lv hua na fei ruan dai dan guan dan sai	0
 葡萄糖氯化钠非软袋双管双塞	pu tao tang lv hua na fei ruan dai shuang guan shuang sai	0
@@ -49511,7 +49511,7 @@ use_preset_vocabulary: false
 普通乳	pu tong ru	0
 普通散剂	pu tong san ji	0
 普通制剂	pu tong zhi ji	5
-普威	pu wei	1
+普威	pu wei	0
 普西兰	pu xi lan	0
 扑锌片	pu xin pian	0
 普辛清	pu xin qing	0
@@ -49579,9 +49579,9 @@ use_preset_vocabulary: false
 七氟烷	qi fu wan	40
 奇谷安	qi gu an	0
 奇谷克	qi gu ke	0
-器官发生	qi guan fa sheng	19
+器官发生	qi guan fa sheng	16
 气管鳃	qi guan sai	4
-器官形成	qi guan xing cheng	9
+器官形成	qi guan xing cheng	7
 气管炎溶菌疫苗	qi guan yan rong jun yi miao	0
 气管炎丸	qi guan yan wan	0
 气管炎橡胶膏	qi guan yan xiang jiao gao	0
@@ -49616,7 +49616,7 @@ use_preset_vocabulary: false
 杞菊地黄片	qi ju di huang pian	0
 杞菊地黄丸浓缩丸	qi ju di huang wan nong suo wan	0
 杞菊润目颗粒	qi ju run mu ke li	0
-齐克	qi ke	32
+齐克	qi ke	31
 奇科马宁碱	qi ke ma ning jian	0
 芪棱	qi leng	0
 芪棱片	qi leng pian	0
@@ -49937,7 +49937,7 @@ use_preset_vocabulary: false
 前列康舒胶囊	qian lie kang shu jiao nang	0
 前列癃闭通	qian lie long bi tong	0
 前列癃闭通胶囊	qian lie long bi tong jiao nang	0
-前列宁	qian lie ning	1
+前列宁	qian lie ning	0
 前列宁胶囊	qian lie ning jiao nang	0
 前列平	qian lie ping	0
 前列平胶囊	qian lie ping jiao nang	0
@@ -50523,7 +50523,7 @@ use_preset_vocabulary: false
 清火栀麦胶囊	qing huo zhi mai jiao nang	0
 氰甲基巯基糖苷	qing jia ji qiu ji tang gan	0
 清健	qing jian	4
-清降	qing jiang	10
+清降	qing jiang	9
 清降片	qing jiang pian	0
 清降丸	qing jiang wan	0
 清解颗粒	qing jie ke li	0
@@ -50600,7 +50600,7 @@ use_preset_vocabulary: false
 青霉素钾片	qing mei su jia pian	0
 青霉素皮试剂	qing mei su pi shi ji	0
 青霉素皮试液	qing mei su pi shi ye	0
-清蒙	qing meng	3
+清蒙	qing meng	2
 清脑安神	qing nao an shen	0
 清脑安神丸	qing nao an shen wan	0
 清脑复神	qing nao fu shen	0
@@ -50721,7 +50721,7 @@ use_preset_vocabulary: false
 清身饮颗粒	qing shen yin ke li	0
 晴世格	qing shi ge	0
 青石颗粒	qing shi ke li	0
-轻舒	qing shu	10
+轻舒	qing shu	9
 清暑解毒	qing shu jie du	0
 清暑解毒颗粒	qing shu jie du ke li	0
 轻舒颗粒	qing shu ke li	0
@@ -50752,8 +50752,8 @@ use_preset_vocabulary: false
 清瘟解毒丸	qing wen jie du wan	0
 清瘟消肿九味丸	qing wen xiao zhong jiu wei wan	0
 清瘟止痛十一味丸	qing wen zhi tong shi yi wei wan	0
-清洗消毒剂	qing xi xiao du ji	1
-清洗消毒液	qing xi xiao du ye	1
+清洗消毒剂	qing xi xiao du ji	0
+清洗消毒液	qing xi xiao du ye	0
 清涎快膈	qing xian kuai ge	0
 清涎快膈丸	qing xian kuai ge wan	0
 氢小檗碱	qing xiao bo jian	0
@@ -50884,7 +50884,7 @@ use_preset_vocabulary: false
 清燥润肺	qing zao run fei	2
 清燥润肺口服液	qing zao run fei kou fu ye	0
 清障明目胶囊	qing zhang ming mu jiao nang	0
-清之	qing zhi	22
+清之	qing zhi	20
 清脂胶囊	qing zhi jiao nang	0
 轻质碳酸镁	qing zhi tan suan mei	0
 轻质氧化镁	qing zhi yang hua mei	0
@@ -51245,7 +51245,7 @@ use_preset_vocabulary: false
 醛糖酸	quan tang suan	0
 醛糖酸内酯	quan tang suan nei zhi	0
 醛糖糖酸	quan tang tang suan	0
-全体说	quan ti shuo	2
+全体说	quan ti shuo	0
 全天麻	quan tian ma	0
 全天麻片	quan tian ma pian	0
 醛脱氢酶	quan tuo qing mei	5
@@ -51381,7 +51381,7 @@ use_preset_vocabulary: false
 人参北芪片	ren shen bei qi pian	0
 人参鳖甲	ren shen bie jia	0
 人参鳖甲煎丸	ren shen bie jia jian wan	0
-人参补	ren shen bu	3
+人参补	ren shen bu	2
 人参补膏	ren shen bu gao	0
 人参补气胶囊	ren shen bu qi jiao nang	0
 人参补丸	ren shen bu wan	0
@@ -51603,7 +51603,7 @@ use_preset_vocabulary: false
 鞣酸苦参碱	rou suan ku shen jian	0
 鞣酸苦参碱胶囊	rou suan ku shen jian jiao nang	0
 鞣酸苦参碱片	rou suan ku shen jian pian	0
-鞣酸类物	rou suan lei wu	1
+鞣酸类物	rou suan lei wu	0
 鞣酸绿黎安	rou suan lv li an	0
 鞣酸软膏	rou suan ruan gao	2
 鞣酸小檗碱	rou suan xiao bo jian	0
@@ -51901,7 +51901,7 @@ use_preset_vocabulary: false
 锐林	rui lin	0
 锐迈	rui mai	0
 瑞美隆	rui mei long	1
-瑞能	rui neng	4
+瑞能	rui neng	3
 瑞宁得	rui ning de	0
 瑞诺美心	rui nuo mei xin	0
 瑞潘通	rui pan tong	0
@@ -51929,7 +51929,7 @@ use_preset_vocabulary: false
 瑞他定	rui ta ding	0
 瑞泰	rui tai	56
 瑞坦	rui tan	1
-瑞特	rui te	334
+瑞特	rui te	333
 瑞替普酶	rui ti pu mei	0
 瑞田	rui tian	0
 瑞婷	rui ting	1
@@ -52959,8 +52959,8 @@ use_preset_vocabulary: false
 舍曲林片	she qu lin pian	0
 蛇犬化毒	she quan hua du	0
 蛇犬化毒散	she quan hua du san	0
-蛇肉	she rou	50
-摄入率	she ru lv	1
+蛇肉	she rou	51
+摄入率	she ru lv	0
 蛇伤解毒	she shang jie du	0
 蛇伤解毒片	she shang jie du pian	0
 蛇伤散	she shang san	0
@@ -53094,7 +53094,7 @@ use_preset_vocabulary: false
 神经传递素	shen jing chuan di su	5
 神经蛋白	shen jing dan bai	1
 神经毒碱	shen jing du jian	0
-神经发生	shen jing fa sheng	32
+神经发生	shen jing fa sheng	30
 神经分泌	shen jing fen mi	0
 神经苷脂	shen jing gan zhi	0
 神经弓	shen jing gong	0
@@ -53118,7 +53118,7 @@ use_preset_vocabulary: false
 神经磷脂	shen jing lin zhi	0
 神经膜	shen jing mo	0
 神经膜细胞	shen jing mo xi bao	0
-神经内分泌	shen jing nei fen mi	38
+神经内分泌	shen jing nei fen mi	36
 神经内膜	shen jing nei mo	0
 神经能	shen jing neng	0
 神经逆向传导	shen jing ni xiang chuan dao	0
@@ -53432,7 +53432,7 @@ use_preset_vocabulary: false
 升华硫氯化氨基汞洗剂	sheng hua liu lv hua an ji gong xi ji	0
 生化丸	sheng hua wan	0
 升华物	sheng hua wu	0
-生活本能	sheng huo ben neng	0
+生活本能	sheng huo ben neng	9
 生肌八宝	sheng ji ba bao	0
 生肌八宝散	sheng ji ba bao san	0
 圣济鳖甲丸	sheng ji bie jia wan	0
@@ -53505,7 +53505,7 @@ use_preset_vocabulary: false
 生色团	sheng se tuan	2
 生态等值种	sheng tai deng zhi zhong	0
 生态隔离	sheng tai ge li	4
-生态进化	sheng tai jin hua	3
+生态进化	sheng tai jin hua	2
 生态龛	sheng tai kan	1
 生态类群	sheng tai lei qun	0
 生态性能	sheng tai xing neng	1
@@ -53526,11 +53526,11 @@ use_preset_vocabulary: false
 生物发生律	sheng wu fa sheng lv	0
 生物防除	sheng wu fang chu	0
 生物防范	sheng wu fang fan	0
-生物个体	sheng wu ge ti	63
+生物个体	sheng wu ge ti	62
 生物公害	sheng wu gong hai	0
 生物合成人胰岛素	sheng wu he cheng ren yi dao su	0
 生物机制	sheng wu ji zhi	0
-生物检测	sheng wu jian ce	11
+生物检测	sheng wu jian ce	8
 生物鉴定	sheng wu jian ding	0
 生物类黄酮	sheng wu lei huang tong	24
 生物气候论	sheng wu qi hou lun	0
@@ -53757,7 +53757,7 @@ use_preset_vocabulary: false
 石龙清血	shi long qing xue	0
 适洛特	shi luo te	0
 狮马龙红花	shi ma long hong hua	0
-使麻醉	shi ma zui	1
+使麻醉	shi ma zui	0
 石麦清	shi mai qing	0
 石麦清口服液	shi mai qing kou fu ye	0
 史密斯高碘酸降解	shi mi si gao dian suan jiang jie	0
@@ -53845,7 +53845,7 @@ use_preset_vocabulary: false
 嗜酸乳杆菌胶囊	shi suan ru gan jun jiao nang	0
 嗜酸乳杆菌散	shi suan ru gan jun san	0
 使他静	shi ta jing	0
-时泰	shi tai	1
+时泰	shi tai	5
 施太可	shi tai ke	1
 施泰乐	shi tai le	0
 十碳	shi tan	2
@@ -54829,7 +54829,7 @@ use_preset_vocabulary: false
 四季感冒	si ji gan mao	0
 四季感冒胶囊	si ji gan mao jiao nang	0
 四季感冒片	si ji gan mao pian	1
-四级结构	si ji jie gou	29
+四级结构	si ji jie gou	28
 四季抗病毒合剂	si ji kang bing du he ji	1
 四季抗病毒口服液	si ji kang bing du kou fu ye	0
 思吉宁	si ji ning	0
@@ -55017,7 +55017,7 @@ use_preset_vocabulary: false
 思泽	si ze	2
 思则凯	si ze kai	0
 思真	si zhen	3
-四正	si zheng	11
+四正	si zheng	10
 四正丸	si zheng wan	0
 四制香附	si zhi xiang fu	0
 四制香附丸	si zhi xiang fu wan	0
@@ -55151,7 +55151,7 @@ use_preset_vocabulary: false
 素引	su yin	0
 苏云金杆菌	su yun jin gan jun	3
 速甾醇	su zai chun	0
-苏之	su zhi	28
+苏之	su zhi	14
 速止水泻颗粒	su zhi shui xie ke li	0
 苏子降气	su zi jiang qi	0
 苏子降气丸	su zi jiang qi wan	0
@@ -55424,7 +55424,7 @@ use_preset_vocabulary: false
 坦立达	tan li da	0
 坦洛新	tan luo xin	0
 碳尿素	tan niao su	2
-碳水化	tan shui hua	3
+碳水化	tan shui hua	2
 碳酸钙胆骨化醇	tan suan gai dan gu hua chun	0
 碳酸钙二甲硅油	tan suan gai er jia gui you	0
 碳酸钙二甲硅油咀嚼片	tan suan gai er jia gui you ju jue pian	0
@@ -55559,7 +55559,7 @@ use_preset_vocabulary: false
 桃仁油	tao ren you	0
 套细胞	tao xi bao	0
 套眼点	tao yan dian	0
-桃汁	tao zhi	10
+桃汁	tao zhi	12
 特安欣	te an xin	0
 特比萘芬搽剂	te bi nai fen cha ji	0
 特比萘芬凝胶	te bi nai fen ning jiao	0
@@ -55636,7 +55636,7 @@ use_preset_vocabulary: false
 梯度离心	ti du li xin	1
 提毒散	ti du san	0
 梯度洗脱	ti du xi tuo	1
-提肌	ti ji	196
+提肌	ti ji	166
 体积比浓度	ti ji bi nong du	0
 体积基准	ti ji ji zhun	0
 体积佐剂	ti ji zuo ji	0
@@ -56021,7 +56021,7 @@ use_preset_vocabulary: false
 痛安	tong an	0
 铜氨液	tong an ye	0
 痛安注射液	tong an zhu she ye	0
-同奥	tong ao	11
+同奥	tong ao	3
 童宝乐	tong bao le	0
 童宝乐片	tong bao le pian	0
 通堡氏管	tong bao shi guan	0
@@ -56755,7 +56755,7 @@ use_preset_vocabulary: false
 外感平安茶	wai gan ping an cha	0
 外感平安茶颗粒	wai gan ping an cha ke li	0
 外感平安颗粒	wai gan ping an ke li	0
-外感受器	wai gan shou qi	0
+外感受器	wai gan shou qi	1
 外界膜	wai jie mo	0
 外菌幕	wai jun mu	0
 外髁	wai ke	2
@@ -57036,7 +57036,7 @@ use_preset_vocabulary: false
 胃好	wei hao	11
 维宏	wei hong	0
 微环镜	wei huan jing	0
-微环境	wei huan jing	132
+微环境	wei huan jing	131
 维皇双宝	wei huang shuang bao	0
 微灰化	wei hui hua	0
 胃活灵	wei huo ling	0
@@ -57059,7 +57059,7 @@ use_preset_vocabulary: false
 胃康灵	wei kang ling	0
 胃康灵胶囊	wei kang ling jiao nang	0
 胃康灵颗粒	wei kang ling ke li	0
-威克	wei ke	154
+威克	wei ke	150
 胃可安	wei ke an	0
 卫可安	wei ke an	0
 胃可安胶囊	wei ke an jiao nang	0
@@ -57116,7 +57116,7 @@ use_preset_vocabulary: false
 微量滴定	wei liang di ding	2
 微量养料	wei liang yang liao	0
 微量移液管	wei liang yi ye guan	0
-微量营养	wei liang ying yang	37
+微量营养	wei liang ying yang	34
 维磷	wei lin	0
 维磷颗粒	wei lin ke li	0
 维磷葡钙	wei lin pu gai	0
@@ -57176,7 +57176,7 @@ use_preset_vocabulary: false
 围皮	wei pi	1
 威普辛	wei pu xin	0
 维普欣	wei pu xin	0
-维奇	wei qi	331
+维奇	wei qi	325
 威奇达	wei qi da	0
 微气管	wei qi guan	1
 卫起汀	wei qi ting	0
@@ -57485,7 +57485,7 @@ use_preset_vocabulary: false
 五黄膏	wu huang gao	0
 武活龙	wu huo long	0
 五积	wu ji	1
-戊己	wu ji	44
+戊己	wu ji	46
 乌鸡白凤胶囊	wu ji bai feng jiao nang	0
 乌鸡白凤颗粒	wu ji bai feng ke li	0
 乌鸡白凤口服液	wu ji bai feng kou fu ye	0
@@ -57818,19 +57818,19 @@ use_preset_vocabulary: false
 希柏澳	xi bai ao	0
 息百克	xi bai ke	0
 西班牙基立福	xi ban ya ji li fu	0
-细胞表面	xi bao biao mian	98
+细胞表面	xi bao biao mian	95
 细胞表面识别	xi bao biao mian shi bie	0
 细胞表面受体	xi bao biao mian shou ti	19
 细胞产生	xi bao chan sheng	0
 细胞呈递	xi bao cheng di	1
-细胞成分	xi bao cheng fen	14
+细胞成分	xi bao cheng fen	13
 细胞池杯	xi bao chi bei	0
 细胞触觉素	xi bao chu jue su	0
 细胞定位	xi bao ding wei	0
 细胞毒性抗体	xi bao du xing kang ti	0
 细胞分裂停滞	xi bao fen lie ting zhi	0
 细胞分裂抑制	xi bao fen lie yi zhi	0
-细胞分泌	xi bao fen mi	54
+细胞分泌	xi bao fen mi	53
 细胞分散因子	xi bao fen san yin zi	0
 细胞骨架蛋白	xi bao gu jia dan bai	1
 细胞刮棒	xi bao gua bang	0
@@ -57847,8 +57847,8 @@ use_preset_vocabulary: false
 细胞解离液	xi bao jie li ye	0
 硒宝康	xi bao kang	0
 细胞冷冻	xi bao leng dong	0
-细胞瘤	xi bao liu	18
-细胞命运	xi bao ming yun	12
+细胞瘤	xi bao liu	16
+细胞命运	xi bao ming yun	11
 细胞内毒素检查法	xi bao nei du su jian cha fa	0
 细胞内含物	xi bao nei han wu	0
 细胞内消化	xi bao nei xiao hua	5
@@ -57856,8 +57856,8 @@ use_preset_vocabulary: false
 细胞粘着细胞粘附	xi bao nian zhe xi bao nian fu	0
 细胞破裂	xi bao po lie	6
 细胞破碎	xi bao po sui	0
-细胞迁移	xi bao qian yi	8
-细胞群体	xi bao qun ti	6
+细胞迁移	xi bao qian yi	5
+细胞群体	xi bao qun ti	8
 细胞色素肠溶片	xi bao se su chang rong pian	0
 细胞色素还原酶	xi bao se su huan yuan mei	0
 细胞色素氧化酶	xi bao se su yang hua mei	6
@@ -57868,7 +57868,7 @@ use_preset_vocabulary: false
 细胞嗜性	xi bao shi xing	0
 细胞收获	xi bao shou huo	0
 细胞输运	xi bao shu yun	0
-细胞死亡	xi bao si wang	0
+细胞死亡	xi bao si wang	96
 细胞素	xi bao su	1
 细胞糖脂	xi bao tang zhi	0
 细胞突变	xi bao tu bian	19
@@ -57882,7 +57882,7 @@ use_preset_vocabulary: false
 细胞选择蛋白	xi bao xuan ze dan bai	0
 细胞寻靶	xi bao xun ba	0
 细胞延长	xi bao yan chang	0
-细胞氧化	xi bao yang hua	10
+细胞氧化	xi bao yang hua	8
 细胞再循环	xi bao zai xun huan	0
 细胞粘连蛋白	xi bao zhan lian dan bai	0
 细胞致癌基因	xi bao zhi ai ji yin	0
@@ -57923,7 +57923,7 @@ use_preset_vocabulary: false
 希存	xi cun	1
 硒代胱氨酸	xi dai guang an suan	0
 烯胆甾烷醇	xi dan zai wan chun	0
-希德	xi de	97
+希德	xi de	99
 喜得镇	xi de zhen	0
 西地碘片	xi di dian pian	0
 西迪吉尔	xi di ji er	0
@@ -57953,7 +57953,7 @@ use_preset_vocabulary: false
 吸附蛋白	xi fu dan bai	0
 吸附等压线	xi fu deng ya xian	0
 西福多维	xi fu duo wei	0
-吸附法	xi fu fa	19
+吸附法	xi fu fa	13
 悉复欢	xi fu huan	0
 吸附霍乱菌苗	xi fu huo luan jun miao	0
 吸附霍乱类毒素菌苗	xi fu huo luan lei du su jun miao	0
@@ -58016,7 +58016,7 @@ use_preset_vocabulary: false
 细菌溶解产物	xi jun rong jie chan wu	0
 细菌素	xi jun su	2
 细菌萜醇	xi jun tie chun	0
-细菌芽孢	xi jun ya bao	8
+细菌芽孢	xi jun ya bao	7
 细菌用胰化胨	xi jun yong yi hua dong	0
 细菌游离基因	xi jun you li ji yin	0
 细菌紫红质	xi jun zi hong zhi	0
@@ -58138,7 +58138,7 @@ use_preset_vocabulary: false
 吸收性明胶海绵	xi shou xing ming jiao hai mian	0
 吸收性氧化纤维素	xi shou xing yang hua xian wei su	0
 吸收性氧化纤维素止血	xi shou xing yang hua xian wei su zhi xue	0
-吸收障碍	xi shou zhang ai	15
+吸收障碍	xi shou zhang ai	6
 吸收组织渗出液	xi shou zu zhi shen chu ye	0
 昔舒	xi shu	0
 喜树次碱	xi shu ci jian	0
@@ -58283,7 +58283,7 @@ use_preset_vocabulary: false
 现代药物制剂	xian dai yao wu zhi ji	0
 现代药物制剂技术	xian dai yao wu zhi ji ji shu	2
 先导化合物	xian dao hua he wu	82
-先定	xian ding	221
+先定	xian ding	219
 仙蛾酒	xian e jiu	0
 显尔抗	xian er kang	0
 仙方活命片	xian fang huo ming pian	0
@@ -58409,7 +58409,7 @@ use_preset_vocabulary: false
 纤维酶原	xian wei mei yuan	0
 纤维四糖	xian wei si tang	0
 纤维素类	xian wei su lei	7
-纤维素食物	xian wei su shi wu	1
+纤维素食物	xian wei su shi wu	0
 纤维素衍生物	xian wei su yan sheng wu	0
 纤维戊糖	xian wei wu tang	0
 纤维性颤动	xian wei xing chan dong	5
@@ -58894,7 +58894,7 @@ use_preset_vocabulary: false
 小儿咳喘宁	xiao er ke chuan ning	0
 小儿咳喘宁糖浆	xiao er ke chuan ning tang jiang	0
 小儿咳宁糖浆	xiao er ke ning tang jiang	0
-小儿咳嗽	xiao er ke sou	1
+小儿咳嗽	xiao er ke sou	0
 小儿咳嗽宁	xiao er ke sou ning	0
 小儿咳嗽宁糖浆	xiao er ke sou ning tang jiang	0
 小儿咳嗽糖浆	xiao er ke sou tang jiang	0
@@ -59107,7 +59107,7 @@ use_preset_vocabulary: false
 小儿至宝丸	xiao er zhi bao wan	1
 小儿止咳	xiao er zhi ke	0
 小儿止咳化痰口服液	xiao er zhi ke hua tan kou fu ye	0
-小儿智力	xiao er zhi li	1
+小儿智力	xiao er zhi li	0
 小儿智力糖浆	xiao er zhi li tang jiang	0
 小儿止嗽	xiao er zhi sou	0
 小儿止嗽金丹	xiao er zhi sou jin dan	0
@@ -59144,7 +59144,7 @@ use_preset_vocabulary: false
 硝呋太尔制霉素阴道软胶囊	xiao fu tai er zhi mei su yin dao ruan jiao nang	0
 消肝利胆颗粒	xiao gan li dan ke li	0
 消疳散	xiao gan san	0
-小梗	xiao geng	2
+小梗	xiao geng	17
 消更延经	xiao geng yan jing	0
 小骨片	xiao gu pian	6
 消核	xiao he	0
@@ -59156,7 +59156,7 @@ use_preset_vocabulary: false
 消化管脂肪族	xiao hua guan zhi fang zu	0
 消化肾管	xiao hua shen guan	0
 消化舒良肽	xiao hua shu liang tai	0
-消化新	xiao hua xin	0
+消化新	xiao hua xin	1
 小茴香醇	xiao hui xiang chun	0
 消火	xiao huo	9
 消火解毒丸	xiao huo jie du wan	0
@@ -59628,7 +59628,7 @@ use_preset_vocabulary: false
 协同因子	xie tong yin zi	0
 协同运输	xie tong yun shu	0
 协同转导	xie tong zhuan dao	0
-协同转运	xie tong zhuan yun	3
+协同转运	xie tong zhuan yun	2
 泻心胶囊	xie xin jiao nang	0
 协新舒	xie xin shu	0
 泄殖道	xie zhi dao	2
@@ -60146,7 +60146,7 @@ use_preset_vocabulary: false
 熊去氧胆酸片	xiong qu yang dan suan pian	0
 雄酮	xiong tong	2
 胸腺产生细胞	xiong xian chan sheng xi bao	0
-胸腺蛋白	xiong xian dan bai	2
+胸腺蛋白	xiong xian dan bai	0
 胸腺蛋白口服液	xiong xian dan bai kou fu ye	0
 胸腺激素	xiong xian ji su	2
 胸腺嘧啶氮芥	xiong xian mi ding dan jie	0
@@ -60306,7 +60306,7 @@ use_preset_vocabulary: false
 宣乌	xuan wu	0
 玄夏祛毒	xuan xia qu du	0
 玄夏祛毒胶囊	xuan xia qu du jiao nang	0
-癣药膏	xuan yao gao	3
+癣药膏	xuan yao gao	0
 癣药玉红膏	xuan yao yu hong gao	0
 眩晕宁颗粒	xuan yun ning ke li	0
 眩晕宁片	xuan yun ning pian	0
@@ -60498,7 +60498,7 @@ use_preset_vocabulary: false
 血氧合计	xue yang he ji	0
 血液滤过置换液	xue ye lv guo zhi huan ye	0
 血液凝固	xue ye ning gu	48
-血液生成	xue ye sheng cheng	2
+血液生成	xue ye sheng cheng	1
 血液中红细胞	xue ye zhong hong xi bao	8
 血因子	xue yin zi	0
 血瘀通	xue yu tong	0
@@ -60698,7 +60698,7 @@ use_preset_vocabulary: false
 延迪诺	yan di nuo	0
 炎毒清	yan du qing	0
 炎毒清注射液	yan du qing zhu she ye	1
-眼房	yan fang	2
+眼房	yan fang	6
 盐酚芬氟拉明片	yan fen fen fu la ming pian	0
 严弗	yan fu	0
 眼敷膏	yan fu gao	0
@@ -62316,7 +62316,7 @@ use_preset_vocabulary: false
 液泡系	ye pao xi	0
 腋片	ye pian	0
 液平疗	ye ping liao	0
-叶色素	ye se su	1
+叶色素	ye se su	0
 野山花	ye shan hua	0
 野生苗	ye sheng miao	0
 野生性	ye sheng xing	1
@@ -63980,7 +63980,7 @@ use_preset_vocabulary: false
 愈创维林那敏	yu chuang wei lin na min	0
 愈创维林那敏片	yu chuang wei lin na min pian	0
 萸苁强肾胶囊	yu cong qiang shen jiao nang	0
-域大	yu da	8
+域大	yu da	7
 愈带	yu dai	0
 玉丹荣心丸	yu dan rong xin wan	0
 裕尔	yu er	1
@@ -64284,7 +64284,7 @@ use_preset_vocabulary: false
 悦可婷片	yue ke ting pian	0
 悦南珊	yue nan shan	0
 悦宁定	yue ning ding	0
-乐派	yue pai	290
+乐派	yue pai	291
 乐沙定	yue sha ding	0
 月泰贴脐片	yue tai tie qi pian	0
 悦亭	yue ting	0
@@ -64299,7 +64299,7 @@ use_preset_vocabulary: false
 运德素	yun de su	0
 运德素注射液	yun de su zhu she ye	0
 云迪恩	yun di en	0
-运动器官	yun dong qi guan	23
+运动器官	yun dong qi guan	24
 运动神经原	yun dong shen jing yuan	1
 孕二烯酮片	yun er xi tong pian	0
 孕妇金花胶囊	yun fu jin hua jiao nang	0
@@ -64337,7 +64337,7 @@ use_preset_vocabulary: false
 芸香碱	yun xiang jian	0
 云香十五味丸	yun xiang shi wu wei wan	0
 允许条件	yun xu tiao jian	0
-允许细胞	yun xu xi bao	1
+允许细胞	yun xu xi bao	0
 运血红素蛋白	yun xue hong su dan bai	0
 孕甾二醇	yun zai er chun	0
 孕甾二醇葡糖醛酸	yun zai er chun pu tang quan suan	0
@@ -64532,7 +64532,7 @@ use_preset_vocabulary: false
 褶间凹	zhe jian ao	0
 柘木颗粒	zhe mu ke li	0
 柘木糖浆	zhe mu tang jiang	0
-着生	zhe sheng	18
+着生	zhe sheng	19
 蔗糖铁	zhe tang tie	0
 蔗糖铁注射液	zhe tang tie zhu she ye	0
 蔗糖硬脂酸酯	zhe tang ying zhi suan zhi	0
@@ -64592,7 +64592,7 @@ use_preset_vocabulary: false
 镇脑宁	zhen nao ning	0
 镇脑平肝丸	zhen nao ping gan wan	0
 珍哌	zhen pai	0
-真皮床	zhen pi chuang	18
+真皮床	zhen pi chuang	17
 珍芪补血	zhen qi bu xue	0
 珍芪补血口服液	zhen qi bu xue kou fu ye	0
 贞芪扶正颗粒	zhen qi fu zheng ke li	2
@@ -64718,7 +64718,7 @@ use_preset_vocabulary: false
 整形素	zheng xing su	0
 正圆窗	zheng yuan chuang	0
 正元胶囊	zheng yuan jiao nang	0
-征之	zheng zhi	30
+征之	zheng zhi	29
 致癌发生	zhi ai fa sheng	0
 知柏地黄胶囊	zhi bai di huang jiao nang	0
 知柏地黄颗粒	zhi bai di huang ke li	0
@@ -64773,13 +64773,13 @@ use_preset_vocabulary: false
 脂肪乳中长链	zhi fang ru zhong chang lian	0
 脂肪乳注射液	zhi fang ru zhu she ye	0
 脂肪疝	zhi fang shan	0
-脂肪生成	zhi fang sheng cheng	10
+脂肪生成	zhi fang sheng cheng	8
 脂肪酸过氧化物酶	zhi fang suan guo yang hua wu mei	0
 脂肪酸活化酶	zhi fang suan huo hua mei	0
 脂肪酸山梨坦	zhi fang suan shan li tan	0
 脂肪氧化酶	zhi fang yang hua mei	3
-脂肪油	zhi fang you	10
-脂肪增多	zhi fang zeng duo	11
+脂肪油	zhi fang you	9
+脂肪增多	zhi fang zeng duo	8
 脂肪族胺类生物碱	zhi fang zu an lei sheng wu jian	0
 脂分解系数	zhi fen jie xi shu	0
 芷风	zhi feng	0
@@ -64905,7 +64905,7 @@ use_preset_vocabulary: false
 致乱剂	zhi luan ji	0
 脂脉康	zhi mai kang	1
 脂脉康胶囊	zhi mai kang jiao nang	0
-脂酶	zhi mei	15
+脂酶	zhi mei	16
 制霉菌甘油	zhi mei jun gan you	0
 制霉菌素制霉素	zhi mei jun su zhi mei su	0
 制霉素片	zhi mei su pian	1
@@ -65258,7 +65258,7 @@ use_preset_vocabulary: false
 中性胰岛素	zhong xing yi dao su	0
 中性胰岛素注射液	zhong xing yi dao su zhu she ye	0
 中性脂肪	zhong xing zhi fang	19
-中胸	zhong xiong	48
+中胸	zhong xiong	47
 中胸背板	zhong xiong bei ban	0
 中胸盾片	zhong xiong dun pian	0
 中胸腹板	zhong xiong fu ban	0
@@ -72325,17 +72325,17 @@ use_preset_vocabulary: false
 侧副沟	ce fu gou	0
 侧副管	ce fu guan	0
 侧副隆起	ce fu long qi	0
-侧副韧带	ce fu ren dai	35
+侧副韧带	ce fu ren dai	34
 侧副三角	ce fu san jiao	0
 侧副支	ce fu zhi	0
-侧角	ce jiao	6
+侧角	ce jiao	4
 侧块	ce kuai	2
 侧脑室脉络丛	ce nao shi mai luo cong	2
 侧脑室脉络丛支	ce nao shi mai luo cong zhi	0
 侧脑室内侧静脉	ce nao shi nei ce jing mai	0
 侧脑室外侧静脉	ce nao shi wai ce jing mai	0
 侧脑室下静脉	ce nao shi xia jing mai	0
-侧屈	ce qu	113
+侧屈	ce qu	111
 侧缘	ce yuan	4
 肠丛	chang cong	0
 肠干	chang gan	7
@@ -72952,7 +72952,7 @@ use_preset_vocabulary: false
 分裂韧带	fen lie ren dai	0
 分泌神经元	fen mi shen jing yuan	1
 分歧韧带	fen qi ren dai	0
-分子层	fen zi ceng	21
+分子层	fen zi ceng	20
 分子层纹	fen zi ceng wen	0
 缝骨	feng gu	0
 缝匠肌腱下囊	feng jiang ji jian xia nang	0
@@ -73032,7 +73032,7 @@ use_preset_vocabulary: false
 腹前核	fu qian he	0
 腹腔丛	fu qiang cong	0
 腹腔动脉	fu qiang dong mai	1
-腹腔淋巴结	fu qiang lin ba jie	6
+腹腔淋巴结	fu qiang lin ba jie	5
 腹腔神经节	fu qiang shen jing jie	2
 腹腔支	fu qiang zhi	0
 副腮腺	fu sai xian	0
@@ -73351,11 +73351,11 @@ use_preset_vocabulary: false
 股直肌	gu zhi ji	74
 股中间肌	gu zhong jian ji	9
 股中间皮神经	gu zhong jian pi shen jing	0
-怪网	guai wang	1
+怪网	guai wang	0
 关节凹	guan jie ao	3
 关节半月板	guan jie ban yue ban	0
 关节唇	guan jie chun	6
-关节肌	guan jie ji	2
+关节肌	guan jie ji	0
 关节突	guan jie tu	5
 关节突关节	guan jie tu guan jie	14
 关节血管环	guan jie xue guan huan	0
@@ -73516,7 +73516,7 @@ use_preset_vocabulary: false
 壶腹膜脚	hu fu mo jiao	0
 壶腹憩室	hu fu qi shi	0
 呼吸膜	hu xi mo	6
-呼吸区	hu xi qu	8
+呼吸区	hu xi qu	7
 呼吸性细支气管	hu xi xing xi zhi qi guan	0
 弧影	hu ying	2
 滑车凹	hua che ao	1
@@ -73533,7 +73533,7 @@ use_preset_vocabulary: false
 滑车下神经	hua che xia shen jing	0
 滑膜壁	hua mo bi	0
 滑膜襞	hua mo bi	5
-滑膜层	hua mo ceng	7
+滑膜层	hua mo ceng	6
 滑膜关节	hua mo guan jie	7
 滑膜绒毛	hua mo rong mao	0
 滑膜脂垫	hua mo zhi dian	0
@@ -73659,7 +73659,7 @@ use_preset_vocabulary: false
 脊膜支	ji mo zhi	0
 肌皮神经	ji pi shen jing	3
 肌腔隙	ji qiang xi	0
-肌肉群	ji rou qun	0
+肌肉群	ji rou qun	675
 肌三角	ji san jiao	0
 嵴上平面	ji shang ping mian	0
 脊神经丛	ji shen jing cong	0
@@ -73860,7 +73860,7 @@ use_preset_vocabulary: false
 交通后部	jiao tong hou bu	0
 交通前部	jiao tong qian bu	0
 交通支	jiao tong zhi	6
-胶状质	jiao zhuang zhi	1
+胶状质	jiao zhuang zhi	2
 结肠半月襞	jie chang ban yue bi	0
 结肠带	jie chang dai	10
 结肠动脉	jie chang dong mai	0
@@ -74145,7 +74145,7 @@ use_preset_vocabulary: false
 口角轴	kou jue zhou	1
 口裂	kou lie	19
 口腔腺	kou qiang xian	3
-口咽	kou yan	37
+口咽	kou yan	36
 髋骨的固有韧带	kuan gu de gu you ren dai	0
 髋臼唇	kuan jiu chun	5
 髋臼横韧带	kuan jiu heng ren dai	0
@@ -74419,7 +74419,7 @@ use_preset_vocabulary: false
 明带	ming dai	8
 膜板	mo ban	0
 膜半规管	mo ban gui guan	1
-膜壁	mo bi	4
+膜壁	mo bi	3
 膜部	mo bu	4
 膜壶腹	mo hu fu	1
 膜化骨	mo hua gu	0
@@ -74460,7 +74460,7 @@ use_preset_vocabulary: false
 脑干网状结构	nao gan wang zhuang jie gou	11
 脑根	nao gen	2
 脑回压迹	nao hui ya ji	0
-脑颅	nao lu	19
+脑颅	nao lu	20
 脑膜返支	nao mo fan zhi	0
 脑膜副支	nao mo fu zhi	0
 脑膜后动脉	nao mo hou dong mai	0
@@ -74490,7 +74490,7 @@ use_preset_vocabulary: false
 脑神经核	nao shen jing he	0
 脑神经节	nao shen jing jie	1
 内侧板	nei ce ban	1
-内侧半月板	nei ce ban yue ban	33
+内侧半月板	nei ce ban yue ban	30
 内侧背核	nei ce bei he	0
 内侧壁	nei ce bi	4
 内侧部	nei ce bu	4
@@ -74512,7 +74512,7 @@ use_preset_vocabulary: false
 内侧髁上嵴	nei ce ke shang ji	0
 内侧髁上线	nei ce ke shang xian	0
 内侧隆起	nei ce long qi	0
-内侧面	nei ce mian	34
+内侧面	nei ce mian	32
 内侧皮支	nei ce pi zhi	0
 内侧丘系	nei ce qiu xi	4
 内侧丘系交叉	nei ce qiu xi jiao cha	1
@@ -74647,7 +74647,7 @@ use_preset_vocabulary: false
 颞中静脉	nie zhong jing mai	0
 女尿道	nv niao dao	0
 女性内生殖器官	nv xing nei sheng zhi qi guan	1
-女性生殖器	nv xing sheng zhi qi	19
+女性生殖器	nv xing sheng zhi qi	18
 女性外生殖器官	nv xing wai sheng zhi qi guan	0
 女阴裂	nv yin lie	0
 攀缘纤维	pan yuan xian wei	0
@@ -74852,7 +74852,7 @@ use_preset_vocabulary: false
 前壶腹神经	qian hu fu shen jing	0
 前极	qian ji	0
 前尖	qian jian	6
-前角	qian jiao	18
+前角	qian jiao	17
 前交通动脉	qian jiao tong dong mai	1
 前结节	qian jie jie	1
 前距关节面	qian ju guan jie mian	0
@@ -75241,7 +75241,7 @@ use_preset_vocabulary: false
 上牙龈支	shang ya yin zhi	0
 上牙支	shang ya zhi	0
 上叶支	shang ye zhi	0
-上缘	shang yuan	68
+上缘	shang yuan	67
 上支	shang zhi	1
 上支持筋膜	shang zhi chi jin mo	0
 上肢带	shang zhi dai	3
@@ -75282,7 +75282,7 @@ use_preset_vocabulary: false
 舌滤泡	she lv pao	0
 舌盲孔	she mang kong	1
 舌面干	she mian gan	0
-舌黏膜	she nian mo	2
+舌黏膜	she nian mo	1
 舌前腺	she qian xian	0
 舌深动脉	she shen dong mai	0
 舌神经	she shen jing	7
@@ -75570,7 +75570,7 @@ use_preset_vocabulary: false
 头半棘肌	tou ban ji ji	3
 头臂干	tou bi gan	1
 头臂静脉	tou bi jing mai	1
-头侧	tou ce	37
+头侧	tou ce	36
 头长肌	tou chang ji	5
 骰骨粗隆	tou gu cu long	0
 骰关节面	tou guan jie mian	0
@@ -75597,7 +75597,7 @@ use_preset_vocabulary: false
 头状骨	tou zhuang gu	2
 头最长肌	tou zui chang ji	2
 突触后部	tu chu hou bu	0
-突触间隙	tu chu jian xi	26
+突触间隙	tu chu jian xi	24
 突触前部	tu chu qian bu	0
 突触小泡	tu chu xiao pao	11
 突触小球	tu chu xiao qiu	0
@@ -75664,7 +75664,7 @@ use_preset_vocabulary: false
 外侧髁	wai ce ke	17
 外侧髁上嵴	wai ce ke shang ji	0
 外侧髁上线	wai ce ke shang xian	0
-外侧面	wai ce mian	17
+外侧面	wai ce mian	16
 外侧皮支	wai ce pi zhi	0
 外侧丘系	wai ce qiu xi	0
 外侧丘系核	wai ce qiu xi he	0
@@ -75758,7 +75758,7 @@ use_preset_vocabulary: false
 尾侧	wei ce	4
 尾丛	wei cong	0
 胃丛	wei cong	0
-胃底	wei di	31
+胃底	wei di	24
 未定带	wei ding dai	0
 尾段	wei duan	122
 胃短动脉	wei duan dong mai	1
@@ -75949,7 +75949,7 @@ use_preset_vocabulary: false
 下神经节	xia shen jing jie	0
 下矢状窦	xia shi zhuang dou	0
 下髓帆	xia sui fan	0
-下托	xia tuo	8
+下托	xia tuo	7
 下外侧面	xia wai ce mian	0
 下吻合静脉	xia wen he jing mai	0
 下项线	xia xiang xian	0
@@ -75974,8 +75974,8 @@ use_preset_vocabulary: false
 腺内淋巴结	xian nei lin ba jie	0
 腺上皮	xian shang pi	2
 腺实质	xian shi zhi	0
-纤维层	xian wei ceng	47
-纤维结缔组织	xian wei jie di zu zhi	18
+纤维层	xian wei ceng	44
+纤维结缔组织	xian wei jie di zu zhi	16
 纤维连结	xian wei lian jie	2
 纤维膜	xian wei mo	10
 纤维囊	xian wei nang	6
@@ -76240,7 +76240,7 @@ use_preset_vocabulary: false
 旋后肌嵴	xuan hou ji ji	0
 旋肩胛动脉	xuan jian jia dong mai	0
 旋肩胛静脉	xuan jian jia jing mai	0
-旋内	xuan nei	24
+旋内	xuan nei	25
 旋髂浅动脉	xuan qia qian dong mai	0
 旋髂浅静脉	xuan qia qian jing mai	1
 旋髂深动脉	xuan qia shen dong mai	1
@@ -76249,7 +76249,7 @@ use_preset_vocabulary: false
 旋前肌粗隆	xuan qian ji cu long	0
 旋外	xuan wai	20
 血管丛	xue guan cong	0
-血管膜	xue guan mo	5
+血管膜	xue guan mo	4
 血管膜部	xue guan mo bu	0
 血管腔隙	xue guan qiang xi	0
 血管周围纤维囊	xue guan zhou wei xian wei nang	0
@@ -76522,7 +76522,7 @@ use_preset_vocabulary: false
 阴茎根	yin jing gen	0
 阴茎海绵体白膜	yin jing hai mian ti bai mo	0
 阴茎海绵体腔	yin jing hai mian ti qiang	0
-阴茎海绵体神经	yin jing hai mian ti shen jing	1
+阴茎海绵体神经	yin jing hai mian ti shen jing	0
 阴茎海绵体小梁	yin jing hai mian ti xiao liang	0
 阴茎脚	yin jing jiao	1
 阴茎颈	yin jing jing	0
@@ -76611,7 +76611,7 @@ use_preset_vocabulary: false
 右锁骨下干	you suo gu xia gan	5
 右头臂静脉	you tou bi jing mai	0
 右下肺静脉	you xia fei jing mai	0
-右下肢	you xia zhi	4
+右下肢	you xia zhi	3
 右纤维环	you xian wei huan	0
 右纤维三角	you xian wei san jiao	0
 右心耳	you xin er	5
@@ -76899,7 +76899,7 @@ use_preset_vocabulary: false
 终神经	zhong shen jing	0
 终神经节	zhong shen jing jie	0
 终室	zhong shi	0
-中枢神经系	zhong shu shen jing xi	1
+中枢神经系	zhong shu shen jing xi	0
 中枢支	zhong shu zhi	0
 终纹	zhong wen	2
 终纹床核	zhong wen chuang he	0
@@ -76907,7 +76907,7 @@ use_preset_vocabulary: false
 中心腱	zhong xin jian	3
 中央沟动脉	zhong yang gou dong mai	0
 中央骨	zhong yang gu	0
-中央管	zhong yang guan	5
+中央管	zhong yang guan	4
 中央核	zhong yang he	3
 中央后沟	zhong yang hou gou	0
 中央后沟动脉	zhong yang hou gou dong mai	0
@@ -76961,7 +76961,7 @@ use_preset_vocabulary: false
 主动脉后淋巴结	zhu dong mai hou lin ba jie	0
 主动脉口	zhu dong mai kou	2
 主动脉裂孔	zhu dong mai lie kong	2
-主动脉旁淋巴结	zhu dong mai pang lin ba jie	2
+主动脉旁淋巴结	zhu dong mai pang lin ba jie	1
 主动脉旁体	zhu dong mai pang ti	0
 主动脉前淋巴结	zhu dong mai qian lin ba jie	0
 主动脉前庭	zhu dong mai qian ting	1
@@ -77091,7 +77091,7 @@ use_preset_vocabulary: false
 足底深弓	zu di shen gong	0
 足底外侧动脉	zu di wai ce dong mai	0
 足底外侧神经	zu di wai ce shen jing	0
-足关节	zu guan jie	3
+足关节	zu guan jie	2
 足内侧缘	zu nei ce yuan	2
 足外侧缘	zu wai ce yuan	0
 足心动脉	zu xin dong mai	0
@@ -77185,7 +77185,7 @@ use_preset_vocabulary: false
 苯磺贝他斯汀片	ben huang bei ta si ting pian	0
 苯磺酸氨氯地平滴丸	ben huang suan an lv di ping di wan	0
 炎热清颗粒	yan re qing ke li	0
-注册名称	zhu ce ming cheng	19
+注册名称	zhu ce ming cheng	18
 创薇修痕平纹霜	chuang wei xiu hen ping wen shuang	0
 欢颜子益膏	huan yan zi yi gao	0
 六草凝胶	liu cao ning jiao	0
@@ -77624,12 +77624,12 @@ use_preset_vocabulary: false
 爱之际露	ai zhi ji lu	0
 艾庄粉刺消	ai zhuang fen ci xiao	0
 艾庄头痒灵	ai zhuang tou yang ling	0
-艾滋病病人	ai zi bing bing ren	27
+艾滋病病人	ai zi bing bing ren	26
 艾滋病初筛实验室	ai zi bing chu shai shi yan shi	0
 艾滋病毒感染	ai zi bing du gan ran	5
 艾滋病毒感染者	ai zi bing du gan ran zhe	7
 艾滋病防治科	ai zi bing fang zhi ke	0
-艾滋病感染	ai zi bing gan ran	20
+艾滋病感染	ai zi bing gan ran	21
 艾滋病感染者	ai zi bing gan ran zhe	39
 艾滋病科	ai zi bing ke	0
 艾滋病筛查	ai zi bing shai cha	2
@@ -77744,7 +77744,7 @@ use_preset_vocabulary: false
 氨基丁酸镁	an ji ding suan mei	0
 氨基丁酸能纤维	an ji ding suan neng xian wei	0
 氨基丁酸旁路	an ji ding suan pang lu	0
-氨基丁酸受体	an ji ding suan shou ti	2
+氨基丁酸受体	an ji ding suan shou ti	1
 氨基丁酸突触传递	an ji ding suan tu chu chuan di	0
 氨基丁酸盐	an ji ding suan yan	0
 氨基丁酸转氨酶	an ji ding suan zhuan an mei	0
@@ -78509,7 +78509,7 @@ use_preset_vocabulary: false
 百日咳杆菌培养	bai ri ke gan jun pei yang	0
 百日咳合并肺炎	bai ri ke he bing fei yan	0
 白塞氏综合征	bai sai shi zong he zheng	1
-白三烯受体	bai san xi shou ti	13
+白三烯受体	bai san xi shou ti	2
 白色斑块状萎缩症	bai se ban kuai zhuang wei suo zheng	0
 白色海绵状痣	bai se hai mian zhuang zhi	0
 白色念珠菌抗体	bai se nian zhu jun kang ti	0
@@ -80342,7 +80342,7 @@ use_preset_vocabulary: false
 病理性哭笑	bing li xing ku xiao	0
 病理性人格	bing li xing ren ge	1
 病理性偷窃	bing li xing tou qie	0
-病理性眼压	bing li xing yan ya	2
+病理性眼压	bing li xing yan ya	1
 病理性纵火	bing li xing zong huo	0
 丙亮脑啡肽	bing liang nao fei tai	0
 丙硫苯并咪唑	bing liu ben bing mi zuo	0
@@ -81607,7 +81607,7 @@ use_preset_vocabulary: false
 肠炎灵胶囊	chang yan ling jiao nang	0
 肠炎性包块	chang yan xing bao kuai	0
 肠胰岛轴	chang yi dao zhou	0
-肠移植	chang yi zhi	2
+肠移植	chang yi zhi	3
 肠移植失败或排斥	chang yi zhi shi bai huo pai chi	0
 肠移植状态	chang yi zhi zhuang tai	0
 肠音亢进	chang yin kang jin	0
@@ -81968,7 +81968,7 @@ use_preset_vocabulary: false
 持续呼吸功能检测	chi xu hu xi gong neng jian ce	0
 持续性创伤后鼓膜穿孔	chi xu xing chuang shang hou gu mo chuan kong	0
 持续性蛋白尿	chi xu xing dan bai niao	2
-持续性发热	chi xu xing fa re	5
+持续性发热	chi xu xing fa re	4
 持续性免疫	chi xu xing mian yi	0
 持续性胎儿循环	chi xu xing tai er xun huan	0
 持续性头痛	chi xu xing tou tong	6
@@ -82025,7 +82025,7 @@ use_preset_vocabulary: false
 虫媒传染病	chong mei chuan ran bing	0
 虫媒介病毒性发热	chong mei jie bing du xing fa re	0
 虫霉菌病	chong mei jun bing	0
-重庆智飞	chong qing zhi fei	2
+重庆智飞	chong qing zhi fei	1
 虫蚀状	chong shi zhuang	2
 虫蚀状皮肤萎缩	chong shi zhuang pi fu wei suo	0
 充填式无张力疝修补术	chong tian shi wu zhang li shan xiu bu shu	0
@@ -82604,7 +82604,7 @@ use_preset_vocabulary: false
 刺槐素二葡糖醛酸苷	ci huai su er pu tang quan suan gan	0
 次黄苷二磷酸	ci huang gan er lin suan	0
 次黄苷三磷酸	ci huang gan san lin suan	0
-刺激蛋白	ci ji dan bai	2
+刺激蛋白	ci ji dan bai	3
 刺激电极	ci ji dian ji	2
 刺激反应心理学	ci ji fan ying xin li xue	0
 刺激分泌偶联	ci ji fen mi ou lian	0
@@ -82615,16 +82615,16 @@ use_preset_vocabulary: false
 雌激素过多症	ci ji su guo duo zheng	0
 雌激素黄体酮	ci ji su huang ti tong	0
 雌激素肌酐比值	ci ji su ji gan bi zhi	0
-雌激素减少	ci ji su jian shao	4
+雌激素减少	ci ji su jian shao	2
 雌激素类黄体酮合剂	ci ji su lei huang ti tong he ji	0
 雌激素雄激素疗法	ci ji su xiong ji su liao fa	0
-雌激素增加	ci ji su zeng jia	3
-刺激效应	ci ji xiao ying	4
+雌激素增加	ci ji su zeng jia	2
+刺激效应	ci ji xiao ying	3
 刺激效应偶联	ci ji xiao ying ou lian	0
 刺激性接触性湿疹	ci ji xing jie chu xing shi zhen	0
 刺激性轻泻剂中毒	ci ji xing qing xie ji zhong du	0
 次级性索	ci ji xing suo	0
-刺激性小	ci ji xing xiao	31
+刺激性小	ci ji xing xiao	29
 刺激因子	ci ji yin zi	14
 刺激应答偶联	ci ji ying da ou lian	0
 次甲基环丙基甘氨酸	ci jia ji huan bing ji gan an suan	0
@@ -83092,7 +83092,7 @@ use_preset_vocabulary: false
 蛋白丢失性胃肠病	dan bai diu shi xing wei chang bing	0
 蛋白复合物	dan bai fu he wu	13
 蛋白光谱检查	dan bai guang pu jian cha	0
-蛋白含量	dan bai han liang	82
+蛋白含量	dan bai han liang	74
 蛋白合成	dan bai he cheng	32
 蛋白琥珀酸铁口服溶液	dan bai hu po suan tie kou fu rong ye	1
 蛋白甲基酶	dan bai jia ji mei	0
@@ -84084,7 +84084,7 @@ use_preset_vocabulary: false
 低血容量休克	di xue rong liang xiu ke	3
 低血容量症	di xue rong liang zheng	0
 低血色素性贫血	di xue se su xing pin xue	0
-低血糖反应	di xue tang fan ying	34
+低血糖反应	di xue tang fan ying	33
 低血糖昏迷	di xue tang hun mi	7
 低血糖性昏迷	di xue tang xing hun mi	1
 低血氧性红细胞增多症	di xue yang xing hong xi bao zeng duo zheng	0
@@ -84628,7 +84628,7 @@ use_preset_vocabulary: false
 动脉内膜炎	dong mai nei mo yan	0
 动脉内压力监测	dong mai nei ya li jian ce	0
 动脉内注射	dong mai nei zhu she	0
-动脉破裂	dong mai po lie	7
+动脉破裂	dong mai po lie	5
 动脉切开取栓术	dong mai qie kai qu shuan shu	0
 动脉切开探查术	dong mai qie kai tan cha shu	0
 动脉球囊扩张术	dong mai qiu nang kuo zhang shu	0
@@ -84698,7 +84698,7 @@ use_preset_vocabulary: false
 动物散布	dong wu san bu	0
 动物社会顺序	dong wu she hui shun xu	0
 动物生物学	dong wu sheng wu xue	8
-动物试验	dong wu shi yan	78
+动物试验	dong wu shi yan	77
 动物统计学	dong wu tong ji xue	1
 动物细胞学	dong wu xi bao xue	0
 动物形态学	dong wu xing tai xue	0
@@ -84817,7 +84817,7 @@ use_preset_vocabulary: false
 毒性肾病变	du xing shen bing bian	0
 毒性噬菌体	du xing shi jun ti	0
 毒性突变体	du xing tu bian ti	0
-毒性物质	du xing wu zhi	46
+毒性物质	du xing wu zhi	40
 杜兴综合征型	du xing zong he zheng xing	0
 杜学英内科诊所	du xue ying nei ke zhen suo	0
 毒蕈环肽	du xun huan tai	0
@@ -85191,7 +85191,7 @@ use_preset_vocabulary: false
 多普勒频移效应	duo pu le pin yi xiao ying	1
 多普勒双功能超声检查	duo pu le shuang gong neng chao sheng jian cha	0
 多普勒小儿血压检测	duo pu le xiao er xue ya jian ce	0
-多普适	duo pu shi	1
+多普适	duo pu shi	0
 多器官功能紊乱综合症	duo qi guan gong neng wen luan zong he zheng	0
 多器官功能障碍综合症	duo qi guan gong neng zhang ai zong he zheng	1
 多器官回收和交换计划	duo qi guan hui shou he jiao huan ji hua	0
@@ -85588,7 +85588,7 @@ use_preset_vocabulary: false
 耳操作后疾患	er cao zuo hou ji huan	0
 二层色树脂牙	er ceng se shu zhi ya	0
 儿茶酚胺分泌过多	er cha fen an fen mi guo duo	0
-儿茶酚胺类	er cha fen an lei	11
+儿茶酚胺类	er cha fen an lei	12
 儿茶酚二加氧酶	er cha fen er jia yang mei	0
 儿茶酚甲基转移酶	er cha fen jia ji zhuan yi mei	0
 二成分第系	er cheng fen di xi	0
@@ -86477,7 +86477,7 @@ use_preset_vocabulary: false
 发育性诵读困难	fa yu xing song du kun nan	0
 发育性语音学障碍	fa yu xing yu yin xue zhang ai	0
 发育性运动不良	fa yu xing yun dong bu liang	0
-发育障碍	fa yu zhang ai	115
+发育障碍	fa yu zhang ai	110
 法乐氏三联矫形术	fa yue shi san lian jiao xing shu	0
 法乐氏三联症根治术	fa yue shi san lian zheng gen zhi shu	0
 法乐氏四联症根治术	fa yue shi si lian zheng gen zhi shu	0
@@ -86575,7 +86575,7 @@ use_preset_vocabulary: false
 樊尚奋森氏口炎	fan shang fen sen shi kou yan	0
 樊尚膜性咽峡炎	fan shang mo xing yan xia yan	0
 樊尚龈炎	fan shang yin yan	0
-反射减弱	fan she jian ruo	4
+反射减弱	fan she jian ruo	2
 反射描记器	fan she miao ji qi	0
 反射响应	fan she xiang ying	0
 反射性膈痉挛	fan she xing ge jing luan	0
@@ -86771,7 +86771,7 @@ use_preset_vocabulary: false
 芳香类止痛药中毒	fang xiang lei zhi tong yao zhong du	0
 芳香硫酸酶	fang xiang liu suan mei	0
 芳香羟胺甲基转移酶	fang xiang qiang an jia ji zhuan yi mei	0
-芳香物质	fang xiang wu zhi	75
+芳香物质	fang xiang wu zhi	74
 放血疗法	fang xie liao fa	95
 房性段改变	fang xing duan gai bian	0
 房性过早收缩	fang xing guo zao shou suo	0
@@ -86787,7 +86787,7 @@ use_preset_vocabulary: false
 仿真内镜	fang zhen nei jing	0
 防芷鼻炎	fang zhi bi yan	0
 防芷鼻炎片糖衣	fang zhi bi yan pian tang yi	0
-防止并发症	fang zhi bing fa zheng	12
+防止并发症	fang zhi bing fa zheng	10
 防治策略	fang zhi ce lue	3
 防治机构	fang zhi ji gou	0
 防止脊柱过度后伸	fang zhi ji zhu guo du hou shen	0
@@ -87296,7 +87296,7 @@ use_preset_vocabulary: false
 肺袖式切除术	fei xiu shi qie chu shu	0
 非选择性阻滞剂	fei xuan ze xing zu zhi ji	0
 费雪二氏粘度计	fei xue er shi nian du ji	0
-肺血管病	fei xue guan bing	0
+肺血管病	fei xue guan bing	1
 肺血管畸形	fei xue guan ji xing	0
 肺血管瘤	fei xue guan liu	0
 肺血管破裂	fei xue guan po lie	0
@@ -87504,7 +87504,7 @@ use_preset_vocabulary: false
 分子病理学诊断技术	fen zi bing li xue zhen duan ji shu	0
 分子交联	fen zi jiao lian	2
 分子排阻色潽法	fen zi pai zu se pu fa	0
-分子形式	fen zi xing shi	0
+分子形式	fen zi xing shi	16
 分子影像学	fen zi ying xiang xue	0
 分子状态	fen zi zhuang tai	0
 冯埃科诺莫克吕谢病	feng ai ke nuo mo ke lv xie bing	0
@@ -87687,9 +87687,9 @@ use_preset_vocabulary: false
 伏波试验	fu bo shi yan	0
 腹部疤痕切除手术	fu bu ba hen qie chu shou shu	0
 腹部瘢痕切除术	fu bu ban hen qie chu shu	0
-腹部饱胀	fu bu bao zhang	15
+腹部饱胀	fu bu bao zhang	14
 腹部病害切除术	fu bu bing hai qie chu shu	0
-腹部不适	fu bu bu shi	40
+腹部不适	fu bu bu shi	38
 腹部挫伤	fu bu cuo shang	1
 腹部多脂	fu bu duo zhi	0
 腹部交界恶性肿瘤	fu bu jiao jie e xing zhong liu	0
@@ -88113,7 +88113,7 @@ use_preset_vocabulary: false
 复合性人工血管置换术	fu he xing ren gong xue guan zhi huan shu	0
 复合性牙齿瘤	fu he xing ya chi liu	0
 复合因子浓缩剂	fu he yin zi nong suo ji	0
-负荷运动	fu he yun dong	4
+负荷运动	fu he yun dong	2
 复合痣	fu he zhi	0
 复合制膜法	fu he zhi mo fa	0
 复合组织游离移植	fu he zu zhi you li yi zhi	0
@@ -89157,7 +89157,7 @@ use_preset_vocabulary: false
 肝区脂肪沉积	gan qu zhi fang chen ji	0
 肝区脂质沉积	gan qu zhi zhi chen ji	0
 肝全部切除术	gan quan bu qie chu shu	0
-感染初期	gan ran chu qi	16
+感染初期	gan ran chu qi	15
 感染后甲状腺机能减退	gan ran hou jia zhuang xian ji neng jian tui	0
 感染后脑积水	gan ran hou nao ji shui	0
 感染后器质性精神病	gan ran hou qi zhi xing jing shen bing	0
@@ -89165,7 +89165,7 @@ use_preset_vocabulary: false
 感染加重	gan ran jia zhong	5
 感染免疫学检测	gan ran mian yi xue jian ce	0
 感染切口扩创术	gan ran qie kou kuo chuang shu	0
-感染途径	gan ran tu jing	47
+感染途径	gan ran tu jing	46
 感染性唇部皮炎	gan ran xing chun bu pi yan	0
 感染性腹膜炎	gan ran xing fu mo yan	2
 感染性睾丸水囊肿	gan ran xing gao wan shui nang zhong	0
@@ -89191,7 +89191,7 @@ use_preset_vocabulary: false
 感染性荨麻疹	gan ran xing xun ma zhen	0
 感染性眼内炎	gan ran xing yan nei yan	0
 感染易感性增加	gan ran yi gan xing zeng jia	0
-感染因素	gan ran yin su	0
+感染因素	gan ran yin su	13
 干扰素测定	gan rao su ce ding	0
 干扰素共轭聚乙二醇	gan rao su gong e ju yi er chun	0
 干扰素拉色地平	gan rao su la se di ping	0
@@ -89271,9 +89271,9 @@ use_preset_vocabulary: false
 甘旭升	gan xu sheng	0
 肝血池显像	gan xue chi xian xiang	0
 肝血管结扎术	gan xue guan jie za shu	0
-肝血管瘤	gan xue guan liu	20
+肝血管瘤	gan xue guan liu	19
 肝血管瘤包膜外剥脱术	gan xue guan liu bao mo wai bo tuo shu	0
-肝血管瘤病	gan xue guan liu bing	0
+肝血管瘤病	gan xue guan liu bing	1
 肝血管瘤缝扎术	gan xue guan liu feng zha shu	0
 肝血管瘤切除术	gan xue guan liu qie chu shu	0
 肝血管瘤栓塞	gan xue guan liu shuan se	0
@@ -89344,7 +89344,7 @@ use_preset_vocabulary: false
 甘油辛酸酯	gan you xin suan zhi	1
 甘油油酸酯	gan you you suan zhi	0
 干预策略	gan yu ce lue	6
-干预措施	gan yu cuo shi	160
+干预措施	gan yu cuo shi	162
 干预评价	gan yu ping jia	0
 肝淤血	gan yu xue	2
 肝原发性恶性肿瘤	gan yuan fa xing e xing zhong liu	0
@@ -89425,7 +89425,7 @@ use_preset_vocabulary: false
 肛门及外生殖器	gang men ji wai sheng zhi qi	0
 肛门结核病	gang men jie he bing	0
 肛门痉挛	gang men jing luan	0
-肛门静脉	gang men jing mai	1
+肛门静脉	gang men jing mai	0
 肛门括约肌恶性肿瘤	gang men kuo yue ji e xing zhong liu	0
 肛门括约肌切除术	gang men kuo yue ji qie chu shu	0
 肛门括约肌切断术	gang men kuo yue ji qie duan shu	0
@@ -89726,8 +89726,8 @@ use_preset_vocabulary: false
 高血糖素分泌细胞瘤	gao xue tang su fen mi xi bao liu	0
 高血糖素分泌异常	gao xue tang su fen mi yi chang	0
 高血压大鼠	gao xue ya da shu	0
-高血压防治	gao xue ya fang zhi	3
-高血压患者	gao xue ya huan zhe	219
+高血压防治	gao xue ya fang zhi	2
+高血压患者	gao xue ya huan zhe	216
 高血压加重	gao xue ya jia zhong	0
 高血压间脑综合症	gao xue ya jian nao zong he zheng	0
 高血压性红细胞增多症	gao xue ya xing hong xi bao zeng duo zheng	0
@@ -89743,7 +89743,7 @@ use_preset_vocabulary: false
 高压泵氧气雾化	gao ya beng yang qi wu hua	0
 高雅二氏小体	gao ya er shi xiao ti	0
 高亚麻酸	gao ya ma suan	1
-高压灭菌	gao ya mie jun	11
+高压灭菌	gao ya mie jun	13
 高雅尼二氏小体	gao ya ni er shi xiao ti	0
 高压氧舱治疗	gao ya yang cang zhi liao	1
 高眼压	gao yan ya	39
@@ -89857,7 +89857,7 @@ use_preset_vocabulary: false
 隔离病人	ge li bing ren	5
 格李二氏综合症	ge li er shi zong he zheng	0
 格李特尔二氏综合症	ge li te er er shi zong he zheng	0
-隔离治疗	ge li zhi liao	228
+隔离治疗	ge li zhi liao	227
 格列美脲杂质	ge lie mei niao za zhi	0
 格列斯罗明法	ge lie si luo ming fa	0
 格列斯罗明试剂	ge lie si luo ming shi ji	0
@@ -91081,7 +91081,7 @@ use_preset_vocabulary: false
 关节切开异物取出术	guan jie qie kai yi wu qu chu shu	0
 关节切开引流术	guan jie qie kai yin liu shu	0
 关节软骨肉瘤	guan jie ruan gu rou liu	0
-关节上方	guan jie shang fang	2
+关节上方	guan jie shang fang	1
 关节松动训练	guan jie song dong xun lian	0
 关节松解术	guan jie song jie shu	1
 关节痛膏	guan jie tong gao	0
@@ -91106,7 +91106,7 @@ use_preset_vocabulary: false
 关节置换术后	guan jie zhi huan shu hou	0
 关节止痛	guan jie zhi tong	0
 关节肿物	guan jie zhong wu	0
-关节肿胀	guan jie zhong zhang	43
+关节肿胀	guan jie zhong zhang	44
 关节轴眶平面	guan jie zhou kuang ping mian	0
 关节周围骨化	guan jie zhou wei gu hua	0
 关节自发性脱位	guan jie zi fa xing tuo wei	0
@@ -91801,7 +91801,7 @@ use_preset_vocabulary: false
 核酸复正	he suan fu zheng	0
 核酸糖磷酸还原酶	he suan tang lin suan huan yuan mei	0
 赫泰二氏胃镜	he tai er shi wei jing	0
-核糖核苷	he tang he gan	1
+核糖核苷	he tang he gan	0
 核糖核酸蛋白	he tang he suan dan bai	0
 核糖核酸蛋白复合体	he tang he suan dan bai fu he ti	0
 核糖核酸蛋白复合物	he tang he suan dan bai fu he wu	0
@@ -91877,7 +91877,7 @@ use_preset_vocabulary: false
 颌下肿瘤切除术	he xia zhong liu qie chu shu	0
 颌下肿物	he xia zhong wu	0
 核小体间碎裂	he xiao ti jian sui lie	0
-核心蛋白质	he xin dan bai zhi	0
+核心蛋白质	he xin dan bai zhi	1
 核心抗体	he xin kang ti	13
 核心抗原	he xin kang yuan	3
 合心皮果	he xin pi guo	0
@@ -92532,10 +92532,10 @@ use_preset_vocabulary: false
 护士病人相互作用	hu shi bing ren xiang hu zuo yong	0
 护士计算机相互作用	hu shi ji suan ji xiang hu zuo yong	0
 呼吸抽动障碍	hu xi chou dong zhang ai	0
-呼吸代谢	hu xi dai xie	5
+呼吸代谢	hu xi dai xie	4
 呼吸道分泌物	hu xi dao fen mi wu	18
 呼吸道腐蚀伤	hu xi dao fu shi shang	0
-呼吸道感染	hu xi dao gan ran	136
+呼吸道感染	hu xi dao gan ran	135
 呼吸道梗阻	hu xi dao geng zu	8
 呼吸道合包病毒	hu xi dao he bao bing du	0
 呼吸道合胞病毒肺炎	hu xi dao he bao bing du fei yan	0
@@ -92580,7 +92580,7 @@ use_preset_vocabulary: false
 呼吸性碱中毒	hu xi xing jian zhong du	18
 呼吸性酸中毒	hu xi xing suan zhong du	3
 呼吸徐缓	hu xi xu huan	0
-呼吸抑制	hu xi yi zhi	47
+呼吸抑制	hu xi yi zhi	48
 呼吸音耳语间断群	hu xi yin er yu jian duan qun	0
 呼吸遇冷风酸痛	hu xi yu leng feng suan tong	0
 呼吸运动计	hu xi yun dong ji	0
@@ -92610,7 +92610,7 @@ use_preset_vocabulary: false
 华急救中心	hua ji jiu zhong xin	0
 花葵素葡糖苷	hua kui su pu tang gan	0
 华兰肌丙	hua lan ji bing	0
-化疗方案	hua liao fang an	100
+化疗方案	hua liao fang an	91
 化疗后骨髓抑制	hua liao hou gu sui yi zhi	1
 花梦避孕套	hua meng bi yun tao	0
 华米二氏重排	hua mi er shi chong pai	0
@@ -92880,7 +92880,7 @@ use_preset_vocabulary: false
 缓解状态双相情感障碍	huan jie zhuang tai shuang xiang qing gan zhang ai	0
 环境防护预防性抗生素	huan jing fang hu yu fang xing kang sheng su	0
 环颈球安全漏斗	huan jing qiu an quan lou dou	0
-环境消毒	huan jing xiao du	75
+环境消毒	huan jing xiao du	71
 环境药理学	huan jing yao li xue	0
 唤康胶囊	huan kang jiao nang	0
 环链互变异构	huan lian hu bian yi gou	0
@@ -92962,7 +92962,7 @@ use_preset_vocabulary: false
 还原病毒载体	huan yuan bing du zai ti	0
 还原酶类	huan yuan mei lei	0
 还原酶抑制剂	huan yuan mei yi zhi ji	10
-还原氧化	huan yuan yang hua	2
+还原氧化	huan yuan yang hua	1
 还原氧化反应	huan yuan yang hua fan ying	0
 还原转座子	huan yuan zhuan zuo zi	0
 环枕畸形减压术	huan zhen ji xing jian ya shu	0
@@ -93133,7 +93133,7 @@ use_preset_vocabulary: false
 挥发脂肪酸	hui fa zhi fang suan	0
 回返性抑制	hui fan xing yi zhi	0
 恢复期血清	hui fu qi xue qing	1
-恢复意识	hui fu yi shi	92
+恢复意识	hui fu yi shi	88
 喙肱韧带扭伤和劳损	hui gong ren dai niu shang he lao sun	0
 汇合而成	hui he er cheng	10
 灰黄青霉素菌	hui huang qing mei su jun	0
@@ -93642,7 +93642,7 @@ use_preset_vocabulary: false
 季赫霍三氏综合症	ji he huo san shi zong he zheng	0
 几何图形侵蚀溃疡	ji he tu xing qin shi kui yang	0
 集合系统	ji he xi tong	0
-集合作用	ji he zuo yong	0
+集合作用	ji he zuo yong	1
 吉黑二氏关系方程式	ji hei er shi guan xi fang cheng shi	0
 吉黑二氏式	ji hei er shi shi	0
 肌红蛋白尿	ji hong dan bai niao	2
@@ -93714,7 +93714,7 @@ use_preset_vocabulary: false
 季节性节律	ji jie xing jie lv	0
 季节性流行	ji jie xing liu xing	2
 季节性升高	ji jie xing sheng gao	0
-季节周期	ji jie zhou qi	4
+季节周期	ji jie zhou qi	3
 肌筋膜瓣	ji jin mo ban	1
 急进型高血压病	ji jin xing gao xue ya bing	0
 急进型肾小球病	ji jin xing shen xiao qiu bing	0
@@ -93807,10 +93807,10 @@ use_preset_vocabulary: false
 肌肉瘢痕	ji rou ban hen	0
 肌肉病损切除术	ji rou bing sun qie chu shu	0
 肌肉不随意收缩	ji rou bu sui yi shou suo	0
-肌肉分解	ji rou fen jie	42
+肌肉分解	ji rou fen jie	41
 肌肉分离	ji rou fen li	3
 肌肉钙化和骨化	ji rou gai hua he gu hua	0
-肌肉骨骼病	ji rou gu ge bing	2
+肌肉骨骼病	ji rou gu ge bing	1
 肌肉骨骼神经官能症	ji rou gu ge shen jing guan neng zheng	0
 肌肉骨骼痛	ji rou gu ge tong	0
 肌肉骨骼系统手术	ji rou gu ge xi tong shou shu	0
@@ -93881,7 +93881,7 @@ use_preset_vocabulary: false
 肌松弛治疗	ji song chi zhi liao	0
 激素测定	ji su ce ding	1
 激素抗体复合物	ji su kang ti fu he wu	0
-激素释放	ji su shi fang	7
+激素释放	ji su shi fang	6
 激素受体相互作用	ji su shou ti xiang hu zuo yong	0
 激素替代疗法	ji su ti dai liao fa	0
 激素性白内障	ji su xing bai nei zhang	0
@@ -94122,7 +94122,7 @@ use_preset_vocabulary: false
 急性发热性疾病	ji xing fa re xing ji bing	2
 急性发热性嗜中性皮病	ji xing fa re xing shi zhong xing pi bing	0
 急性发疹性脓疱病	ji xing fa zhen xing nong pao bing	0
-急性发作期	ji xing fa zuo qi	56
+急性发作期	ji xing fa zuo qi	48
 急性泛发性扁平苔藓	ji xing fan fa xing bian ping tai xian	0
 急性放射性皮炎	ji xing fang she xing pi yan	0
 急性肺球孢子菌病	ji xing fei qiu bao zi jun bing	0
@@ -95117,7 +95117,7 @@ use_preset_vocabulary: false
 加替沙星片薄膜衣	jia ti sha xing pian bo mo yi	0
 家庭病床建床费	jia ting bing chuang jian chuang fei	0
 家庭病床巡诊费	jia ting bing chuang xun zhen fei	0
-家庭聚集性	jia ting ju ji xing	4
+家庭聚集性	jia ting ju ji xing	3
 家庭巡诊	jia ting xun zhen	0
 家庭主妇家庭保健助理	jia ting zhu fu jia ting bao jian zhu li	0
 加托二氏定律	jia tuo er shi ding lv	0
@@ -95418,8 +95418,8 @@ use_preset_vocabulary: false
 甲状腺区抽吸	jia zhuang xian qu chou xi	0
 甲状腺区扭伤和劳损	jia zhuang xian qu niu shang he lao sun	1
 甲状腺全部切除术	jia zhuang xian quan bu qie chu shu	0
-甲状腺全切	jia zhuang xian quan qie	41
-甲状腺全切术	jia zhuang xian quan qie shu	4
+甲状腺全切	jia zhuang xian quan qie	42
+甲状腺全切术	jia zhuang xian quan qie shu	3
 甲状腺舌管切除术	jia zhuang xian she guan qie chu shu	0
 甲状腺素单脱碘酶	jia zhuang xian su dan tuo dian mei	0
 甲状腺素碘	jia zhuang xian su dian	0
@@ -96456,7 +96456,7 @@ use_preset_vocabulary: false
 结节性硬化综合症	jie jie xing ying hua zong he zheng	0
 结节性硬皮病	jie jie xing ying pi bing	0
 结节性真皮过敏疹	jie jie xing zhen pi guo min zhen	0
-结节状	jie jie zhuang	34
+结节状	jie jie zhuang	31
 接近回避冲突	jie jin hui bi chong tu	0
 接近接近冲突	jie jin jie jin chong tu	0
 结晶尿症	jie jing niao zheng	0
@@ -96612,7 +96612,7 @@ use_preset_vocabulary: false
 截肢术后	jie zhi shu hou	0
 节制性回肠造口术	jie zhi xing hui chang zao kou shu	0
 疖肿病多发性疖肿病	jie zhong bing duo fa xing jie zhong bing	0
-接种部位	jie zhong bu wei	66
+接种部位	jie zhong bu wei	64
 接种查询	jie zhong cha xun	0
 接种程序	jie zhong cheng xu	18
 疖肿穿剌术	jie zhong chuan la shu	0
@@ -96624,7 +96624,7 @@ use_preset_vocabulary: false
 接种底册	jie zhong di ce	0
 接种对象	jie zhong dui xiang	18
 接种儿童	jie zhong er tong	3
-接种范围	jie zhong fan wei	3
+接种范围	jie zhong fan wei	2
 接种反应	jie zhong fan ying	4
 接种方法	jie zhong fang fa	1
 接种方式	jie zhong fang shi	7
@@ -96635,8 +96635,8 @@ use_preset_vocabulary: false
 接种及时率	jie zhong ji shi lv	0
 接种技术	jie zhong ji shu	0
 接种间隔	jie zhong jian ge	9
-接种禁忌	jie zhong jin ji	16
-接种禁忌症	jie zhong jin ji zheng	4
+接种禁忌	jie zhong jin ji	9
+接种禁忌症	jie zhong jin ji zheng	2
 接种经费	jie zhong jing fei	0
 接种率抽样调查	jie zhong lv chou yang diao cha	0
 接种率调查	jie zhong lv diao cha	0
@@ -97319,7 +97319,7 @@ use_preset_vocabulary: false
 静脉切开置管术	jing mai qie kai zhi guan shu	0
 静脉曲张高位结扎术	jing mai qu zhang gao wei jie za shu	0
 静脉曲张结扎术	jing mai qu zhang jie za shu	0
-静脉曲张破裂	jing mai qu zhang po lie	1
+静脉曲张破裂	jing mai qu zhang po lie	0
 静脉曲张性皮炎	jing mai qu zhang xing pi yan	0
 静脉曲张综合症	jing mai qu zhang zong he zheng	0
 静脉人工血管补片术	jing mai ren gong xue guan bu pian shu	0
@@ -97690,7 +97690,7 @@ use_preset_vocabulary: false
 精液酸性磷酸酶测定	jing ye suan xing lin suan mei ce ding	0
 精液稀释剂	jing ye xi shi ji	0
 精液运动性	jing ye yun dong xing	0
-经阴道	jing yin dao	17
+经阴道	jing yin dao	15
 经阴道超检查	jing yin dao chao jian cha	0
 经阴道超声	jing yin dao chao sheng	8
 经阴道后穹窿活检术	jing yin dao hou qiong long huo jian shu	0
@@ -97792,7 +97792,7 @@ use_preset_vocabulary: false
 精子缺乏	jing zi que fa	1
 精子受精能力测定	jing zi shou jing neng li ce ding	0
 精子受体	jing zi shou ti	1
-精子异常	jing zi yi chang	8
+精子异常	jing zi yi chang	7
 精子运动轨迹分析	jing zi yun dong gui ji fen xi	0
 井字状纹	jing zi zhuang wen	0
 颈总动脉结扎术	jing zong dong mai jie za shu	0
@@ -97894,7 +97894,7 @@ use_preset_vocabulary: false
 局部用药反应	ju bu yong yao fan ying	0
 局部制剂中毒	ju bu zhi ji zhong du	0
 局部肿胀肿块和肿物	ju bu zhong zhang zhong kuai he zhong wu	0
-局部注射	ju bu zhu she	14
+局部注射	ju bu zhu she	13
 局部组织前徙瓣	ju bu zu zhi qian xi ban	0
 锯齿形图解	ju chi xing tu jie	0
 锯齿缘离断	ju chi yuan li duan	0
@@ -98434,7 +98434,7 @@ use_preset_vocabulary: false
 康复意见	kang fu yi jian	0
 康复预防	kang fu yu fang	0
 康复预防三层次	kang fu yu fang san ceng ci	0
-康复治疗	kang fu zhi liao	302
+康复治疗	kang fu zhi liao	297
 康复治疗方案	kang fu zhi liao fang an	3
 康复治疗士	kang fu zhi liao shi	1
 康复治疗组	kang fu zhi liao zu	1
@@ -98583,7 +98583,7 @@ use_preset_vocabulary: false
 抗体激素复合物	kang ti ji su fu he wu	0
 抗体缺陷综合症	kang ti que xian zong he zheng	0
 抗体水平	kang ti shui ping	53
-抗体阳性	kang ti yang xing	54
+抗体阳性	kang ti yang xing	53
 抗体阳转率	kang ti yang zhuan lv	12
 抗脱氧核糖核酸酶测定	kang tuo yang he tang he suan mei ce ding	0
 康王复方酮康唑洗剂	kang wang fu fang tong kang zuo xi ji	0
@@ -98890,7 +98890,7 @@ use_preset_vocabulary: false
 克林诺	ke lin nuo	0
 克隆伽玛	ke long jia ma	0
 克隆普克代二氏麻痹	ke long pu ke dai er shi ma bi	0
-克隆清除	ke long qing chu	1
+克隆清除	ke long qing chu	0
 克隆氏病	ke long shi bing	2
 克隆无能	ke long wu neng	0
 克隆细胞系	ke long xi bao xi	0
@@ -99136,7 +99136,7 @@ use_preset_vocabulary: false
 控涎汤	kong xian tang	0
 空心取骨环钻	kong xin qu gu huan zuan	0
 空穴电子对	kong xue dian zi dui	0
-控制病情	kong zhi bing qing	196
+控制病情	kong zhi bing qing	184
 控制区洗涤	kong zhi qu xi di	0
 控制释药	kong zhi shi yao	0
 控制疫情	kong zhi yi qing	0
@@ -99186,7 +99186,7 @@ use_preset_vocabulary: false
 口服乳液	kou fu ru ye	1
 口服糖丸	kou fu tang wan	0
 口服洗肠盐协和	kou fu xi chang yan xie he	0
-口服吸收	kou fu xi shou	24
+口服吸收	kou fu xi shou	23
 口服小儿麻痹糖丸	kou fu xiao er ma bi tang wan	1
 口服药品	kou fu yao pin	1
 口服液体剂	kou fu ye ti ji	0
@@ -99215,7 +99215,7 @@ use_preset_vocabulary: false
 口腔白斑病	kou qiang bai ban bing	0
 口腔白色角化病	kou qiang bai se jiao hua bing	0
 口腔包块切除术	kou qiang bao kuai qie chu shu	0
-口腔本部	kou qiang ben bu	1
+口腔本部	kou qiang ben bu	0
 口腔鼻窦瘘修补术	kou qiang bi dou lou xiu bu shu	0
 口腔鼻瘘修补术	kou qiang bi lou xiu bu shu	0
 口腔扁平湿疣	kou qiang bian ping shi you	0
@@ -99617,7 +99617,7 @@ use_preset_vocabulary: false
 阔韧带血肿	kuo ren dai xue zhong	0
 扩散结整流器	kuo san jie zheng liu qi	0
 扩散宿主	kuo san su zhu	0
-扩散途径	kuo san tu jing	3
+扩散途径	kuo san tu jing	2
 扩散型结	kuo san xing jie	0
 廓威二氏杆菌	kuo wei er shi gan jun	0
 廓威二氏结膜炎	kuo wei er shi jie mo yan	0
@@ -100707,7 +100707,7 @@ use_preset_vocabulary: false
 粒子带电	li zi dai dian	2
 粒子电离压强计	li zi dian li ya qiang ji	0
 粒子电离真空计	li zi dian li zhen kong ji	0
-粒子辐射	li zi fu she	23
+粒子辐射	li zi fu she	22
 粒子辐射器	li zi fu she qi	0
 粒子辐射体	li zi fu she ti	0
 粒子激发射线分析	li zi ji fa she xian fen xi	0
@@ -100718,7 +100718,7 @@ use_preset_vocabulary: false
 粒子屏蔽	li zi ping bi	0
 粒子射程	li zi she cheng	0
 离子渗透法	li zi shen tou fa	0
-粒子探测器	li zi tan ce qi	5
+粒子探测器	li zi tan ce qi	4
 粒子污染测量探头	li zi wu ran ce liang tan tou	0
 粒子污染探头	li zi wu ran tan tou	0
 离子型造影剂	li zi xing zao ying ji	0
@@ -101039,7 +101039,7 @@ use_preset_vocabulary: false
 临床分型	lin chuang fen xing	19
 临床光固化修补	lin chuang guang gu hua xiu bu	0
 临床鉴定	lin chuang jian ding	0
-临床经过	lin chuang jing guo	0
+临床经过	lin chuang jing guo	1
 临床口腔医学杂志	lin chuang kou qiang yi xue za zhi	3
 临床类型	lin chuang lei xing	14
 临床体征	lin chuang ti zheng	5
@@ -101811,7 +101811,7 @@ use_preset_vocabulary: false
 卵巢输卵管切开术	luan chao shu luan guan qie kai shu	0
 卵巢输卵管粘连	luan chao shu luan guan zhan lian	0
 卵巢衰竭	luan chao shuai jie	0
-卵巢损伤	luan chao sun shang	2
+卵巢损伤	luan chao sun shang	1
 卵巢同种移植术	luan chao tong zhong yi zhi shu	0
 卵巢脱垂	luan chao tuo chui	0
 卵巢楔形切除术	luan chao xie xing qie chu shu	0
@@ -102097,7 +102097,7 @@ use_preset_vocabulary: false
 滤泡变异性乳头状腺癌	lv pao bian yi xing ru tou zhuang xian ai	0
 滤泡继发性恶性肿瘤	lv pao ji fa xing e xing zhong liu	0
 滤泡旁细胞	lv pao pang xi bao	2
-滤泡上皮细胞	lv pao shang pi xi bao	3
+滤泡上皮细胞	lv pao shang pi xi bao	1
 滤泡性变异乳头状癌	lv pao xing bian yi ru tou zhuang ai	0
 滤泡性恶性淋巴瘤	lv pao xing e xing lin ba liu	0
 滤泡性皮炎	lv pao xing pi yan	0
@@ -103029,7 +103029,7 @@ use_preset_vocabulary: false
 面部骨折闭合复位术	mian bu gu zhe bi he fu wei shu	0
 面部骨折复位	mian bu gu zhe fu wei	0
 面部黑毛痣	mian bu hei mao zhi	0
-面部畸形	mian bu ji xing	11
+面部畸形	mian bu ji xing	9
 面部挤压伤	mian bu ji ya shang	0
 面部结缔组织恶性肿瘤	mian bu jie di zu zhi e xing zhong liu	0
 面部结缔组织良性肿瘤	mian bu jie di zu zhi liang xing zhong liu	0
@@ -103055,8 +103055,8 @@ use_preset_vocabulary: false
 面部伤口清创术	mian bu shang kou qing chuang shu	0
 面部嗜酸性肉芽肿	mian bu shi suan xing rou ya zhong	0
 面部水肿	mian bu shui zhong	9
-面部损伤	mian bu sun shang	7
-面部疼痛	mian bu teng tong	7
+面部损伤	mian bu sun shang	5
+面部疼痛	mian bu teng tong	6
 面部外胚层发育不良	mian bu wai pei ceng fa yu bu liang	0
 面部外伤清创整形术	mian bu wai shang qing chuang zheng xing shu	0
 面部萎缩性毛发角化病	mian bu wei suo xing mao fa jiao hua bing	0
@@ -103165,7 +103165,7 @@ use_preset_vocabulary: false
 免疫功能测定	mian yi gong neng ce ding	0
 免疫固定电泳	mian yi gu ding dian yong	0
 免疫规划科	mian yi gui hua ke	0
-免疫疾病	mian yi ji bing	56
+免疫疾病	mian yi ji bing	55
 免疫监测	mian yi jian ce	1
 免疫监测系统	mian yi jian ce xi tong	0
 免疫间隔	mian yi jian ge	0
@@ -103176,7 +103176,7 @@ use_preset_vocabulary: false
 免疫球蛋白缺乏	mian yi qiu dan bai que fa	0
 免疫球蛋白增加	mian yi qiu dan bai zeng jia	2
 免疫缺陷伴短肢身材	mian yi que xian ban duan zhi shen cai	0
-免疫水平	mian yi shui ping	9
+免疫水平	mian yi shui ping	8
 免疫调节疗法	mian yi tiao jie liao fa	0
 免疫效果监测	mian yi xiao guo jian ce	0
 免疫性凝血酶元减少	mian yi xing ning xue mei yuan jian shao	0
@@ -103204,7 +103204,7 @@ use_preset_vocabulary: false
 灭敌灵	mie di ling	0
 灭滴灵片	mie di ling pian	0
 灭活再植术	mie huo zai zhi shu	0
-灭菌处理	mie jun chu li	24
+灭菌处理	mie jun chu li	23
 灭菌纯化水附一	mie jun chun hua shui fu yi	0
 灭菌袋封口机	mie jun dai feng kou ji	0
 灭菌器消毒器	mie jun qi xiao du qi	0
@@ -104032,7 +104032,7 @@ use_preset_vocabulary: false
 年罗门群岛	nian luo men qun dao	0
 粘膜白斑病	nian mo bai ban bing	3
 粘膜白色海绵痣	nian mo bai se hai mian zhi	0
-黏膜充血	nian mo chong xue	5
+黏膜充血	nian mo chong xue	2
 粘膜出血	nian mo chu xie	10
 粘膜红肿	nian mo hong zhong	0
 粘膜溃烂	nian mo kui lan	2
@@ -104044,7 +104044,7 @@ use_preset_vocabulary: false
 粘膜皮肤眼综合症	nian mo pi fu yan zong he zheng	0
 粘膜破溃	nian mo po kui	1
 粘膜情况良好	nian mo qing kuang liang hao	0
-黏膜上皮细胞	nian mo shang pi xi bao	9
+黏膜上皮细胞	nian mo shang pi xi bao	6
 粘膜脱垂	nian mo tuo chui	0
 粘膜下鼻中隔切除术	nian mo xia bi zhong ge qie chu shu	0
 粘膜下层	nian mo xia ceng	21
@@ -104306,7 +104306,7 @@ use_preset_vocabulary: false
 尿酸化功能测定	niao suan hua gong neng ce ding	0
 尿酸疾病智力发育不全	niao suan ji bing zhi li fa yu bu quan	0
 尿酸碱度测定	niao suan jian du ce ding	0
-尿酸生成	niao suan sheng cheng	44
+尿酸生成	niao suan sheng cheng	40
 尿碳酸氢盐测定	niao tan suan qing yan ce ding	0
 尿糖定量测定	niao tang ding liang ce ding	0
 尿糖定性试验	niao tang ding xing shi yan	0
@@ -105006,7 +105006,7 @@ use_preset_vocabulary: false
 皮肤病损激光治疗	pi fu bing sun ji guang zhi liao	0
 皮肤病损切除术	pi fu bing sun qie chu shu	0
 皮肤病性淋巴结炎	pi fu bing xing lin ba jie yan	0
-皮肤层	pi fu ceng	9
+皮肤层	pi fu ceng	10
 皮肤产伤	pi fu chan shang	0
 皮肤潮红	pi fu chao hong	8
 皮肤充填术	pi fu chong tian shu	0
@@ -105020,7 +105020,7 @@ use_preset_vocabulary: false
 皮肤痘疮样斑状萎缩	pi fu dou chuang yang ban zhuang wei suo	0
 皮肤恶性肿瘤	pi fu e xing zhong liu	2
 皮肤二期梅毒	pi fu er qi mei du	0
-皮肤反射	pi fu fan she	4
+皮肤反射	pi fu fan she	3
 皮肤放射损伤	pi fu fang she sun shang	0
 皮肤放线菌病	pi fu fang xian jun bing	0
 皮肤肥大性疾患	pi fu fei da xing ji huan	0
@@ -105098,7 +105098,7 @@ use_preset_vocabulary: false
 皮肤粘膜消毒液	pi fu nian mo xiao du ye	0
 皮肤粘膜眼上皮综合症	pi fu nian mo yan shang pi zong he zheng	0
 皮肤诺卡	pi fu nuo ka	0
-皮肤破损	pi fu po sun	39
+皮肤破损	pi fu po sun	38
 皮肤气味异常	pi fu qi wei yi chang	0
 皮肤牵引术	pi fu qian yin shu	0
 皮肤切取用于移植术	pi fu qie qu yong yu yi zhi shu	0
@@ -105139,7 +105139,7 @@ use_preset_vocabulary: false
 皮肤血管球瘤	pi fu xue guan qiu liu	0
 皮肤血吸虫病	pi fu xue xi chong bing	0
 皮肤炎性肉芽肿	pi fu yan xing rou ya zhong	0
-皮肤异常	pi fu yi chang	8
+皮肤异常	pi fu yi chang	6
 皮肤异色	pi fu yi se	0
 皮肤异色症	pi fu yi se zheng	1
 皮肤移植状态	pi fu yi zhi zhuang tai	0
@@ -105500,7 +105500,7 @@ use_preset_vocabulary: false
 普通型偏头痛	pu tong xing pian tou tong	0
 普通易变型免疫缺陷	pu tong yi bian xing mian yi que xian	0
 普通易感	pu tong yi gan	0
-普通疫苗	pu tong yi miao	0
+普通疫苗	pu tong yi miao	1
 普通针刺	pu tong zhen ci	2
 普维拉	pu wei la	0
 朴欣牌乳酸锌口服液	pu xin pai ru suan xin kou fu ye	0
@@ -105916,7 +105916,7 @@ use_preset_vocabulary: false
 启玄子王冰撰	qi xuan zi wang bing zhuan	0
 脐血干细胞移植	qi xue gan xi bao yi zhi	1
 气血康口服液无糖型	qi xue kang kou fu ye wu tang xing	0
-气血流畅	qi xue liu chang	7
+气血流畅	qi xue liu chang	5
 气穴论篇第五十八	qi xue lun pian di wu shi ba	0
 脐血染色体检查	qi xue ran se ti jian cha	0
 气血双生	qi xue shuang sheng	0
@@ -106317,7 +106317,7 @@ use_preset_vocabulary: false
 腔静脉栓塞	qiang jing mai shuan se	0
 腔静脉血栓性静脉炎	qiang jing mai xue shuan xing jing mai yan	0
 腔静脉阻塞综合症	qiang jing mai zu se zong he zheng	0
-抢救病人	qiang jiu bing ren	35
+抢救病人	qiang jiu bing ren	29
 抢救药物	qiang jiu yao wu	10
 腔口部皮肤结核	qiang kou bu pi fu jie he	0
 羟赖氨酸血症	qiang lai an suan xue zheng	0
@@ -106584,7 +106584,7 @@ use_preset_vocabulary: false
 清胃黄连	qing wei huang lian	0
 清胃黄连片糖衣	qing wei huang lian pian tang yi	0
 清胃黄连丸水丸	qing wei huang lian wan shui wan	0
-轻微酸痛	qing wei suan tong	0
+轻微酸痛	qing wei suan tong	1
 轻微疼痛	qing wei teng tong	42
 清瘟解毒丸大蜜丸	qing wen jie du wan da mi wan	0
 情相依避孕套	qing xiang yi bi yun tao	0
@@ -106841,7 +106841,7 @@ use_preset_vocabulary: false
 去乙酰甲基秋水仙碱	qu yi xian jia ji qiu shui xian jian	0
 去乙酰毛花甙毒	qu yi xian mao hua dai du	0
 去乙酰毛花甙注射液	qu yi xian mao hua dai zhu she ye	0
-区域分化	qu yu fen hua	4
+区域分化	qu yu fen hua	3
 区域淋巴结切除术	qu yu lin ba jie qie chu shu	0
 区域淋巴结清扫术	qu yu lin ba jie qing sao shu	0
 区域性标记	qu yu xing biao ji	0
@@ -106985,7 +106985,7 @@ use_preset_vocabulary: false
 全身性脂肪萎缩	quan shen xing zhi fang wei suo	0
 全身性脂肪营养不良	quan shen xing zhi fang ying yang bu liang	0
 全身炎症反应综合症	quan shen yan zheng fan ying zong he zheng	0
-全身症状	quan shen zheng zhuang	95
+全身症状	quan shen zheng zhuang	94
 全食管切除术	quan shi guan qie chu shu	0
 全手切削痂植皮术	quan shou qie xiao jia zhi pi shu	0
 醛缩酶测定	quan suo mei ce ding	0
@@ -107298,7 +107298,7 @@ use_preset_vocabulary: false
 人凝血酶原复合物冻干	ren ning xue mei yuan fu he wu dong gan	0
 人凝血因子冻干	ren ning xue yin zi dong gan	0
 人禽流感	ren qin liu gan	3
-人群分布	ren qun fen bu	31
+人群分布	ren qun fen bu	30
 人群免疫水平	ren qun mian yi shui ping	0
 人群易感性	ren qun yi gan xing	0
 人日冕病毒感染	ren ri mian bing du gan ran	0
@@ -108189,7 +108189,7 @@ use_preset_vocabulary: false
 沙伊氏综合征	sha yi shi zong he zheng	0
 沙蚤侵染	sha zao qin ran	0
 沙竺阿拉伯	sha zhu a la bo	0
-筛查方法	shai cha fang fa	23
+筛查方法	shai cha fang fa	22
 筛动脉结扎术	shai dong mai jie za shu	0
 筛窦病损切除术	shai dou bing sun qie chu shu	0
 筛窦部分切除术	shai dou bu fen qie chu shu	0
@@ -108327,7 +108327,7 @@ use_preset_vocabulary: false
 伤科接骨片薄膜衣	shang ke jie gu pian bo mo yi	0
 伤科七味片薄膜衣	shang ke qi wei pian bo mo yi	0
 伤口处理	shang kou chu li	32
-伤口感染	shang kou gan ran	104
+伤口感染	shang kou gan ran	103
 伤口裂开缝合术	shang kou lie kai feng he shu	0
 伤口去除腐肉术	shang kou qu chu fu rou shu	0
 上口为心形	shang kou wei xin xing	0
@@ -108578,7 +108578,7 @@ use_preset_vocabulary: false
 舌内肌	she nei ji	0
 舌粘膜下纤维变性	she nian mo xia xian wei bian xing	0
 射频电疗	she pin dian liao	0
-射频消融术后	she pin xiao rong shu hou	1
+射频消融术后	she pin xiao rong shu hou	0
 射频消融术后状态	she pin xiao rong shu hou zhuang tai	0
 舌切开引流术	she qie kai yin liu shu	0
 社区干预	she qu gan yu	3
@@ -108727,7 +108727,7 @@ use_preset_vocabulary: false
 肾功能损害伴水肿	shen gong neng sun hai ban shui zhong	0
 肾骨片薄膜衣	shen gu pian bo mo yi	0
 肾和输尿管疾患家族史	shen he shu niao guan ji huan jia zu shi	0
-砷化合物	shen hua he wu	9
+砷化合物	shen hua he wu	8
 砷化氢中毒	shen hua qing zhong du	0
 肾活检术	shen huo jian shu	0
 肾活素血管紧张素系	shen huo su xue guan jin zhang su xi	0
@@ -109029,7 +109029,7 @@ use_preset_vocabulary: false
 肾萎缩伴有高血压	shen wei suo ban you gao xue ya	0
 肾无功能	shen wu gong neng	1
 渗析池法	shen xi chi fa	0
-伸膝关节	shen xi guan jie	3
+伸膝关节	shen xi guan jie	2
 深吸气量	shen xi qi liang	0
 神犀汤	shen xi tang	0
 肾系统	shen xi tong	2
@@ -109130,7 +109130,7 @@ use_preset_vocabulary: false
 肾盏切开探查术	shen zhan qie kai tan cha shu	0
 肾盏输尿管吻合术	shen zhan shu niao guan wen he shu	0
 肾折叠术	shen zhe die shu	0
-深圳康泰	shen zhen kang tai	6
+深圳康泰	shen zhen kang tai	2
 伸趾长肌肌腱移植术	shen zhi chang ji ji jian yi zhi shu	0
 伸趾长肌切取术	shen zhi chang ji qie qu shu	0
 肾脂肪瘤切除术	shen zhi fang liu qie chu shu	0
@@ -109161,7 +109161,7 @@ use_preset_vocabulary: false
 生产分娩	sheng chan fen mian	1
 生产记录用表格	sheng chan ji lu yong biao ge	0
 生产批号记录	sheng chan pi hao ji lu	0
-生存指数	sheng cun zhi shu	0
+生存指数	sheng cun zhi shu	1
 声带闭合不全	sheng dai bi he bu quan	0
 声带病损激光治疗	sheng dai bing sun ji guang zhi liao	0
 声带病损切除术	sheng dai bing sun qie chu shu	0
@@ -109284,7 +109284,7 @@ use_preset_vocabulary: false
 生物技术药品	sheng wu ji shu yao pin	0
 生物技术药制剂	sheng wu ji shu yao zhi ji	0
 生物碱类	sheng wu jian lei	10
-生物力学等	sheng wu li xue deng	7
+生物力学等	sheng wu li xue deng	6
 生物力学分析	sheng wu li xue fen xi	23
 生物力学损害	sheng wu li xue sun hai	0
 生物媒介	sheng wu mei jie	0
@@ -109292,10 +109292,10 @@ use_preset_vocabulary: false
 生物素缺乏	sheng wu su que fa	0
 生物素依赖羧酶缺乏	sheng wu su yi lai suo mei que fa	0
 生物性传播	sheng wu xing chuan bo	0
-生物学方法	sheng wu xue fang fa	5
+生物学方法	sheng wu xue fang fa	4
 生物学性质	sheng wu xue xing zhi	4
 生物学性状	sheng wu xue xing zhuang	1
-生物药物学	sheng wu yao wu xue	1
+生物药物学	sheng wu yao wu xue	0
 生物药学	sheng wu yao xue	3
 生物遗传因素	sheng wu yi chuan yin su	3
 生物制品经营	sheng wu zhi pin jing ying	0
@@ -109315,7 +109315,7 @@ use_preset_vocabulary: false
 升压素生物检定法	sheng ya su sheng wu jian ding fa	0
 生薏米	sheng yi mi	1
 声影不明显	sheng ying bu ming xian	0
-生长不足	sheng zhang bu zu	0
+生长不足	sheng zhang bu zu	3
 生长激素生成过多	sheng zhang ji su sheng cheng guo duo	0
 生长加速	sheng zhang jia su	0
 生长介素	sheng zhang jie su	0
@@ -109808,7 +109808,7 @@ use_preset_vocabulary: false
 视网膜水肿	shi wang mo shui zhong	1
 视网膜撕裂	shi wang mo si lie	2
 视网膜松解术	shi wang mo song jie shu	0
-视网膜损伤	shi wang mo sun shang	11
+视网膜损伤	shi wang mo sun shang	10
 视网膜铁质沉着病	shi wang mo tie zhi chen zhuo bing	0
 视网膜铜质沉积症	shi wang mo tong zhi chen ji zheng	0
 视网膜脱离复位	shi wang mo tuo li fu wei	1
@@ -109868,7 +109868,7 @@ use_preset_vocabulary: false
 实验室确诊	shi yan shi que zhen	8
 实验室确诊病例	shi yan shi que zhen bing li	0
 实验室诊断	shi yan shi zhen duan	21
-实验小鼠	shi yan xiao shu	14
+实验小鼠	shi yan xiao shu	13
 失盐性肾炎	shi yan xing shen yan	0
 实验性研究	shi yan xing yan jiu	6
 试验制剂	shi yan zhi ji	0
@@ -110062,7 +110062,7 @@ use_preset_vocabulary: false
 手术后颌骨缺损	shou shu hou he gu que sun	0
 手术后虹膜嵌顿	shou shu hou hong mo qian dun	0
 手术后虹膜脱出	shou shu hou hong mo tuo chu	0
-手术后恢复期	shou shu hou hui fu qi	2
+手术后恢复期	shou shu hou hui fu qi	1
 手术后会阴瘘	shou shu hou hui yin lou	0
 手术后脊髓损伤	shou shu hou ji sui sun shang	0
 手术后急性肺机能不全	shou shu hou ji xing fei ji neng bu quan	0
@@ -110670,7 +110670,7 @@ use_preset_vocabulary: false
 水飞蓟宾葡甲胺片糖衣	shui fei ji bin pu jia an pian tang yi	0
 水分测定法	shui fen ce ding fa	0
 水分散体	shui fen san ti	0
-水氟含量	shui fu han liang	7
+水氟含量	shui fu han liang	3
 水负荷试验	shui fu he shi yan	0
 水氟监测	shui fu jian ce	0
 水合氯醛二	shui he lv quan er	0
@@ -110828,7 +110828,7 @@ use_preset_vocabulary: false
 思维灵	si wei ling	0
 斯维平	si wei ping	0
 斯威特皮肤病	si wei te pi fu bing	0
-思维异常	si wei yi chang	6
+思维异常	si wei yi chang	2
 四消丸水丸	si xiao wan shui wan	0
 四氧化钌	si yang hua liao	5
 斯耶格兰氏综合症	si ye ge lan shi zong he zheng	0
@@ -110882,7 +110882,7 @@ use_preset_vocabulary: false
 溯源堂	su yuan tang	0
 速孕保胎灵	su yun bao tai ling	0
 塑制丸	su zhi wan	0
-宿主动物	su zhu dong wu	6
+宿主动物	su zhu dong wu	5
 宿主与媒介	su zhu yu mei jie	0
 酸负荷试验	suan fu he shi yan	0
 酸共聚物	suan gong ju wu	1
@@ -111163,11 +111163,11 @@ use_preset_vocabulary: false
 糖链形成	tang lian xing cheng	0
 糖磷酸代谢	tang lin suan dai xie	0
 糖络通胶囊人民	tang luo tong jiao nang ren min	0
-糖耐量实验	tang nai liang shi yan	8
+糖耐量实验	tang nai liang shi yan	7
 糖尿病伴色素性肝硬变	tang niao bing ban se su xing gan ying bian	0
 糖尿病伴有多个并发症	tang niao bing ban you duo ge bing fa zheng	0
 糖尿病并眼部病变	tang niao bing bing yan bu bing bian	0
-糖尿病防治	tang niao bing fang zhi	9
+糖尿病防治	tang niao bing fang zhi	4
 糖尿病复发	tang niao bing fu fa	0
 糖尿病加重	tang niao bing jia zhong	1
 糖尿病家族史者	tang niao bing jia zu shi zhe	3
@@ -111315,7 +111315,7 @@ use_preset_vocabulary: false
 特效威哥王	te xiao wei ge wang	0
 特效新肤松乳膏	te xiao xin fu song ru gao	0
 特效牙痛灵	te xiao ya tong ling	0
-特效药物	te xiao yao wu	30
+特效药物	te xiao yao wu	29
 特异抗体	te yi kang ti	1
 特异投射系统	te yi tou she xi tong	0
 特异性颌骨感染	te yi xing he gu gan ran	0
@@ -111342,11 +111342,11 @@ use_preset_vocabulary: false
 藤黄健骨丸浓缩蜜丸	teng huang jian gu wan nong suo mi wan	0
 藤黄健骨丸浓缩水蜜丸	teng huang jian gu wan nong suo shui mi wan	0
 疼痛方面	teng tong fang mian	0
-疼痛缓解	teng tong huan jie	31
-疼痛加剧	teng tong jia ju	52
-疼痛减轻	teng tong jian qing	44
+疼痛缓解	teng tong huan jie	28
+疼痛加剧	teng tong jia ju	51
+疼痛减轻	teng tong jian qing	43
 疼痛扣带束毁损术	teng tong kou dai shu hui sun shu	0
-疼痛消失	teng tong xiao shi	39
+疼痛消失	teng tong xiao shi	26
 疼痛性青肿综合症	teng tong xing qing zhong zong he zheng	0
 疼痛性脂肪过多症	teng tong xing zhi fang guo duo zheng	0
 体被系统	ti bei xi tong	0
@@ -111468,7 +111468,7 @@ use_preset_vocabulary: false
 条纹状苔癣	tiao wen zhuang tai xuan	0
 调谐曲线	tiao xie qu xian	0
 跳跃传导	tiao yue chuan dao	0
-跳跃进化	tiao yue jin hua	1
+跳跃进化	tiao yue jin hua	0
 跳跃演化	tiao yue yan hua	0
 调整咬颌	tiao zheng yao he	0
 调制蛋白	tiao zhi dan bai	0
@@ -111504,7 +111504,7 @@ use_preset_vocabulary: false
 听力降低	ting li jiang di	0
 葶苈降血胶囊	ting li jiang xue jiao nang	0
 听力筛选试验	ting li shai xuan shi yan	0
-听力损伤	ting li sun shang	73
+听力损伤	ting li sun shang	72
 听探子检查	ting tan zi jian cha	0
 听小骨融合	ting xiao gu rong he	0
 同胞竞争障碍	tong bao jing zheng zhang ai	0
@@ -112612,7 +112612,7 @@ use_preset_vocabulary: false
 卫生行政执法	wei sheng xing zheng zhi fa	0
 卫生学标准	wei sheng xue biao zhun	0
 卫生学检查	wei sheng xue jian cha	0
-卫生主管部门	wei sheng zhu guan bu men	16
+卫生主管部门	wei sheng zhu guan bu men	15
 胃十二指肠动脉损伤	wei shi er zhi chang dong mai sun shang	0
 胃十二指肠溃疡伴出血	wei shi er zhi chang kui yang ban chu xie	0
 胃十二指肠溃疡伴穿孔	wei shi er zhi chang kui yang ban chuan kong	0
@@ -112805,7 +112805,7 @@ use_preset_vocabulary: false
 物理疗法理疗	wu li liao fa li liao	0
 无力型	wu li xing	1
 无力性肠梗阻	wu li xing chang geng zu	0
-物理学方法	wu li xue fang fa	0
+物理学方法	wu li xue fang fa	3
 物理因素	wu li yin su	0
 乌苓苁蓉合剂	wu ling cong rong he ji	0
 五灵章	wu ling zhang	0
@@ -112871,7 +112871,7 @@ use_preset_vocabulary: false
 细胞间通道	xi bao jian tong dao	0
 细胞角蛋白片段测定	xi bao jiao dan bai pian duan ce ding	0
 细胞介导免疫反应	xi bao jie dao mian yi fan ying	0
-细胞连接	xi bao lian jie	7
+细胞连接	xi bao lian jie	6
 细胞内分枝杆菌	xi bao nei fen zhi gan jun	0
 细胞内分支杆菌感染	xi bao nei fen zhi gan jun gan ran	0
 细胞内寄生	xi bao nei ji sheng	6
@@ -113050,7 +113050,7 @@ use_preset_vocabulary: false
 吸入性炭疽	xi ru xing tan ju	0
 膝上假体安装	xi shang jia ti an zhuang	0
 膝十字韧带断裂	xi shi zi ren dai duan lie	2
-吸收不良	xi shou bu liang	36
+吸收不良	xi shou bu liang	35
 吸收部位	xi shou bu wei	3
 吸收复合体	xi shou fu he ti	0
 吸收机理	xi shou ji li	0
@@ -113247,7 +113247,7 @@ use_preset_vocabulary: false
 狭食性动物	xia shi xing dong wu	0
 下外方	xia wai fang	1
 狭温植物	xia wen zhi wu	0
-下消化道	xia xiao hua dao	8
+下消化道	xia xiao hua dao	7
 下消化道出血	xia xiao hua dao chu xue	5
 下斜肌亢进	xia xie ji kang jin	0
 下斜肌折叠术	xia xie ji zhe die shu	0
@@ -113616,7 +113616,7 @@ use_preset_vocabulary: false
 先天性甲白斑症	xian tian xing jia bai ban zheng	0
 先天性甲病	xian tian xing jia bing	0
 先天性甲形成不全	xian tian xing jia xing cheng bu quan	0
-先天性甲状腺功能减退	xian tian xing jia zhuang xian gong neng jian tui	3
+先天性甲状腺功能减退	xian tian xing jia zhuang xian gong neng jian tui	0
 先天性甲状腺机能不全	xian tian xing jia zhuang xian ji neng bu quan	0
 先天性甲状腺萎缩	xian tian xing jia zhuang xian wei suo	0
 先天性甲状腺肿	xian tian xing jia zhuang xian zhong	0
@@ -114676,7 +114676,7 @@ use_preset_vocabulary: false
 心脑静片薄膜衣	xin nao jing pian bo mo yi	0
 心脑舒通片薄膜衣	xin nao shu tong pian bo mo yi	0
 心脑通口服液	xin nao tong kou fu ye	0
-心脑血管疾病	xin nao xue guan ji bing	434
+心脑血管疾病	xin nao xue guan ji bing	430
 心内超声心动图	xin nei chao sheng xin dong tu	0
 心内电生理学检查异常	xin nei dian sheng li xue jian cha yi chang	0
 心内膜垫缺损矫治术	xin nei mo dian que sun jiao zhi shu	0
@@ -114980,7 +114980,7 @@ use_preset_vocabulary: false
 新型隐球菌性脑膜炎	xin xing yin qiu jun xing nao mo yan	0
 新血尔口服液	xin xue er kou fu ye	0
 心血管变性	xin xue guan bian xing	0
-心血管疾病	xin xue guan ji bing	659
+心血管疾病	xin xue guan ji bing	646
 心血管性神经官能症	xin xue guan xing shen jing guan neng zheng	0
 心血管意外	xin xue guan yi wai	1
 心血管硬化	xin xue guan ying hua	1
@@ -115038,7 +115038,7 @@ use_preset_vocabulary: false
 心脏呼吸衰竭	xin zang hu xi shuai jie	0
 心脏活组织检查术	xin zang huo zu zhi jian cha shu	0
 心脏继发恶性肿瘤	xin zang ji fa e xing zhong liu	0
-心脏畸形	xin zang ji xing	13
+心脏畸形	xin zang ji xing	8
 心脏及血管系统	xin zang ji xue guan xi tong	0
 心脏及血管系统手术	xin zang ji xue guan xi tong shou shu	0
 心脏间隔缺损堵闭术	xin zang jian ge que sun du bi shu	0
@@ -115059,7 +115059,7 @@ use_preset_vocabulary: false
 心脏手术个人史	xin zang shou shu ge ren shi	0
 心脏手术后功能障碍	xin zang shou shu hou gong neng zhang ai	0
 心脏手术后心力衰竭	xin zang shou shu hou xin li shuai jie	0
-心脏术后	xin zang shu hou	8
+心脏术后	xin zang shu hou	6
 心脏术后低心排综合症	xin zang shu hou di xin pai zong he zheng	0
 心脏术后综合症	xin zang shu hou zong he zheng	0
 心脏损伤伴心包积血	xin zang sun shang ban xin bao ji xue	0
@@ -115611,7 +115611,7 @@ use_preset_vocabulary: false
 血管神经性水肿	xue guan shen jing xing shui zhong	15
 血管神经性头痛	xue guan shen jing xing tou tong	1
 血管升压素	xue guan sheng ya su	0
-血管收缩	xue guan shou suo	207
+血管收缩	xue guan shou suo	198
 血管收缩神经	xue guan shou suo shen jing	0
 血管束骨内植入术	xue guan shu gu nei zhi ru shu	0
 血管舒缓素	xue guan shu huan su	0
@@ -115622,7 +115622,7 @@ use_preset_vocabulary: false
 血管束移植充填植骨术	xue guan shu yi zhi chong tian zhi gu shu	0
 血管舒张神经	xue guan shu zhang shen jing	0
 血管栓塞术	xue guan shuan se shu	0
-血管损伤	xue guan sun shang	37
+血管损伤	xue guan sun shang	35
 血管损伤探查及修补	xue guan sun shang tan cha ji xiu bu	0
 血管探查	xue guan tan cha	0
 血管探查术	xue guan tan cha shu	0
@@ -115634,7 +115634,7 @@ use_preset_vocabulary: false
 血管吻合	xue guan wen he	9
 血管吻合术	xue guan wen he shu	0
 血管纤维瘤	xue guan xian wei liu	0
-血管形成	xue guan xing cheng	13
+血管形成	xue guan xing cheng	10
 血管性耳鸣	xue guan xing er ming	0
 血管性肌病	xue guan xing ji bing	0
 血管性脊髓病	xue guan xing ji sui bing	0
@@ -115646,10 +115646,10 @@ use_preset_vocabulary: false
 血管修补术	xue guan xiu bu shu	1
 血管炎脉管炎	xue guan yan mai guan yan	0
 血管炎性肾小球肾炎	xue guan yan xing shen xiao qiu shen yan	0
-血管异常	xue guan yi chang	9
+血管异常	xue guan yi chang	6
 血管抑制性晕厥	xue guan yi zhi xing yun jue	0
 血管运动性鼻炎	xue guan yun dong xing bi yan	13
-血管造影	xue guan zao ying	46
+血管造影	xue guan zao ying	45
 血管造影术	xue guan zao ying shu	1
 血管粘连松解术	xue guan zhan lian song jie shu	0
 血管脂肪瘤切除术	xue guan zhi fang liu qie chu shu	0
@@ -115830,7 +115830,7 @@ use_preset_vocabulary: false
 血视网膜外屏障	xue shi wang mo wai ping zhang	0
 血拴动脉内膜切除术	xue shuan dong mai nei mo qie chu shu	0
 血栓静脉炎性脾大	xue shuan jing mai yan xing pi da	0
-血栓溶解	xue shuan rong jie	7
+血栓溶解	xue shuan rong jie	6
 血栓溶解剂	xue shuan rong jie ji	0
 血栓心脉宁片薄膜衣	xue shuan xin mai ning pian bo mo yi	0
 血栓性静脉炎后综合症	xue shuan xing jing mai yan hou zong he zheng	0
@@ -115893,7 +115893,7 @@ use_preset_vocabulary: false
 血胸清除术	xue xiong qing chu shu	0
 血循环中抗凝物质存在	xue xun huan zhong kang ning wu zhi cun zai	0
 血压检查	xue ya jian cha	0
-血压升高	xue ya sheng gao	230
+血压升高	xue ya sheng gao	202
 血压正常性醛固酮增多	xue ya zheng chang xing quan gu tong zeng duo	0
 血药浓度波动	xue yao nong du bo dong	0
 血药浓度法	xue yao nong du fa	0
@@ -115909,14 +115909,14 @@ use_preset_vocabulary: false
 血液加温治疗	xue ye jia wen zhi liao	0
 血液矿物质水平异常	xue ye kuang wu zhi shui ping yi chang	0
 血液虐原虫检查	xue ye nue yuan chong jian cha	0
-血液培养	xue ye pei yang	3
+血液培养	xue ye pei yang	2
 血液透析	xue ye tou xi	53
 血液透析滤过	xue ye tou xi lv guo	0
 血液透析术	xue ye tou xi shu	0
 血液微丝蚴检查	xue ye wei si you jian cha	0
 血液稀释疗法	xue ye xi shi liao fa	0
 血液性缺氧	xue ye xing que yang	0
-血液循环不佳	xue ye xun huan bu jia	2
+血液循环不佳	xue ye xun huan bu jia	1
 血液一般检查	xue ye yi ban jian cha	0
 血液照射	xue ye zhao she	0
 血一氧化氮分析	xue yi yang hua dan fen xi	0
@@ -116252,7 +116252,7 @@ use_preset_vocabulary: false
 咽部脓肿引流	yan bu nong zhong yin liu	0
 咽部脓肿引流术	yan bu nong zhong yin liu shu	0
 咽部切开探查术	yan bu qie kai tan cha shu	0
-咽部手术	yan bu shou shu	7
+咽部手术	yan bu shou shu	5
 咽部水肿	yan bu shui zhong	0
 咽部撕裂修补术	yan bu si lie xiu bu shu	0
 咽部特殊治疗	yan bu te shu zhi liao	0
@@ -116880,7 +116880,7 @@ use_preset_vocabulary: false
 严重急性呼吸道综合症	yan zhong ji xing hu xi dao zong he zheng	1
 严重联合免疫缺陷症	yan zhong lian he mian yi que xian zheng	0
 咽肿瘤切除术	yan zhong liu qie chu shu	0
-严重慢性病	yan zhong man xing bing	5
+严重慢性病	yan zhong man xing bing	4
 严重烧伤手畸形矫正术	yan zhong shao shang shou ji xing jiao zheng shu	0
 咽肿物切除术	yan zhong wu qie chu shu	0
 眼肿物切除术	yan zhong wu qie chu shu	0
@@ -116956,11 +116956,11 @@ use_preset_vocabulary: false
 羊奶奶叶	yang nai nai ye	0
 氧哌嗪青霉素	yang pai qin qing mei su	0
 氧瓶燃烧法	yang ping ran shao fa	0
-氧气吸入	yang qi xi ru	13
+氧气吸入	yang qi xi ru	12
 氧气意外中毒	yang qi yi wai zhong du	0
 羊乳维钙片	yang ru wei gai pian	0
 杨森波多黎各	yang sen bo duo li ge	0
-养生方法	yang sheng fang fa	84
+养生方法	yang sheng fang fa	82
 阳生植物	yang sheng zhi wu	0
 羊水疾患	yang shui ji huan	0
 羊水结晶检查	yang shui jie jing jian cha	0
@@ -117061,7 +117061,7 @@ use_preset_vocabulary: false
 药品研究	yao pin yan jiu	2
 药品重用规范	yao pin zhong yong gui fan	0
 药品贮运	yao pin zhu yun	0
-药品专利	yao pin zhuan li	26
+药品专利	yao pin zhuan li	24
 药品综述	yao pin zong shu	0
 要求拔除	yao qiu ba chu	1
 要求拔牙	yao qiu ba ya	1
@@ -117079,7 +117079,7 @@ use_preset_vocabulary: false
 腰痛一贴灵	yao tong yi tie ling	0
 腰腿痛丸包衣水丸	yao tui tong wan bao yi shui wan	0
 要我聂	yao wo nie	0
-药物安全性	yao wu an quan xing	11
+药物安全性	yao wu an quan xing	10
 药物靶向	yao wu ba xiang	9
 药物产品	yao wu chan pin	0
 药物沉积量	yao wu chen ji liang	0
@@ -117577,7 +117577,7 @@ use_preset_vocabulary: false
 医疗个人史	yi liao ge ren shi	0
 医疗气功治疗	yi liao qi gong zhi liao	0
 医疗实践	yi liao shi jian	15
-医疗思想	yi liao si xiang	0
+医疗思想	yi liao si xiang	1
 医疗性流产失败	yi liao xing liu chan shi bai	0
 医疗性人工流产失败	yi liao xing ren gong liu chan shi bai	0
 医疗指导	yi liao zhi dao	4
@@ -117608,12 +117608,12 @@ use_preset_vocabulary: false
 疫苗接种后脑脊髓膜炎	yi miao jie zhong hou nao ji sui mo yan	0
 疫苗接种后脑炎	yi miao jie zhong hou nao yan	0
 疫苗接种角膜炎	yi miao jie zhong jiao mo yan	0
-疫苗接种史	yi miao jie zhong shi	4
+疫苗接种史	yi miao jie zhong shi	3
 疫苗进货	yi miao jin huo	0
 疫苗扩散	yi miao kuo san	1
 疫苗领发	yi miao ling fa	0
 疫苗领发记录	yi miao ling fa ji lu	0
-疫苗流通	yi miao liu tong	3
+疫苗流通	yi miao liu tong	2
 疫苗免疫效果	yi miao mian yi xiao guo	2
 疫苗免疫效果监测	yi miao mian yi xiao guo jian ce	0
 疫苗批号	yi miao pi hao	0
@@ -117633,7 +117633,7 @@ use_preset_vocabulary: false
 疫苗用量	yi miao yong liang	0
 疫苗预防接种	yi miao yu fang jie zhong	0
 疫苗运输	yi miao yun shu	0
-疫苗质量	yi miao zhi liang	0
+疫苗质量	yi miao zhi liang	1
 疫苗知识	yi miao zhi shi	0
 疫苗贮存	yi miao zhu cun	0
 衣膜强度	yi mo qiang du	0
@@ -117778,7 +117778,7 @@ use_preset_vocabulary: false
 翼外肌剥离术	yi wai ji bo li shu	0
 意外疗效	yi wai liao xiao	0
 意外妊娠	yi wai ren shen	0
-意外损伤	yi wai sun shang	16
+意外损伤	yi wai sun shang	17
 意外性低体温	yi wai xing di ti wen	0
 遗忘性综合征	yi wang xing zong he zheng	0
 遗忘虚构综合症	yi wang xu gou zong he zheng	0
@@ -118008,7 +118008,7 @@ use_preset_vocabulary: false
 癔症性舞蹈病	yi zheng xing wu dao bing	0
 癔症性肢体麻木	yi zheng xing zhi ti ma mu	0
 益智安神口服液	yi zhi an shen kou fu ye	0
-抑制病毒	yi zhi bing du	38
+抑制病毒	yi zhi bing du	37
 抑制呼吸	yi zhi hu xi	8
 抑制基因突变	yi zhi ji yin tu bian	0
 移植角膜排斥	yi zhi jiao mo pai chi	0
@@ -118654,7 +118654,7 @@ use_preset_vocabulary: false
 营养代谢	ying yang dai xie	33
 营养代谢性心脏病	ying yang dai xie xing xin zang bing	0
 营养动态论	ying yang dong tai lun	0
-营养过度	ying yang guo du	0
+营养过度	ying yang guo du	1
 营养过度后遗症	ying yang guo du hou yi zheng	0
 营养菌端	ying yang jun duan	0
 营养内囊	ying yang nei nang	0
@@ -118820,7 +118820,7 @@ use_preset_vocabulary: false
 优泌林混合型	you mi lin hun he xing	0
 优泌林中效	you mi lin zhong xiao	0
 右面神经减压术	you mian shen jing jian ya shu	0
-有内分泌功能	you nei fen mi gong neng	2
+有内分泌功能	you nei fen mi gong neng	1
 优尼灵	you ni ling	0
 尤尼普尔	you ni pu er	0
 幼年期白内障	you nian qi bai nei zhang	0
@@ -118989,7 +118989,7 @@ use_preset_vocabulary: false
 郁积综合征	yu ji zong he zheng	0
 鱼精蛋白生物检定法	yu jing dan bai sheng wu jian ding fa	0
 遇冷热刺激痛	yu leng re ci ji tong	0
-遇冷热酸	yu leng re suan	3
+遇冷热酸	yu leng re suan	2
 遇冷痛缓解	yu leng tong huan jie	0
 鱼鳞病样红皮病	yu lin bing yang hong pi bing	0
 鱼鳞病样红皮病异型	yu lin bing yang hong pi bing yi xing	0
@@ -119203,7 +119203,7 @@ use_preset_vocabulary: false
 运动性麻痹	yun dong xing ma bi	0
 运动性语言中枢	yun dong xing yu yan zhong shu	3
 运动诱发电位	yun dong you fa dian wei	0
-运动员心脏	yun dong yuan xin zang	4
+运动员心脏	yun dong yuan xin zang	3
 孕二烯酮	yun er xi tong	2
 孕二烯酮三相片	yun er xi tong san xiang pian	0
 孕妇金花	yun fu jin hua	0
@@ -119216,7 +119216,7 @@ use_preset_vocabulary: false
 云母尘肺	yun mu chen fei	0
 云南红药	yun nan hong yao	1
 云南花粉	yun nan hua fen	0
-云南沃森	yun nan wo sen	1
+云南沃森	yun nan wo sen	0
 孕期子宫内口缝合术	yun qi zi gong nei kou feng he shu	0
 云实感冒	yun shi gan mao	0
 云实感冒合剂	yun shi gan mao he ji	0
@@ -119329,7 +119329,7 @@ use_preset_vocabulary: false
 藻酸盐印模材	zao suan yan yin mo cai	0
 枣汤调服益脾神	zao tang diao fu yi pi shen	0
 造瞳术	zao tong shu	0
-造血干细胞	zao xue gan xi bao	265
+造血干细胞	zao xue gan xi bao	244
 造血干细胞计数	zao xue gan xi bao ji shu	0
 造血功能停滞	zao xue gong neng ting zhi	0
 造血及淋巴系统手术	zao xue ji lin ba xi tong shou shu	0
@@ -119487,7 +119487,7 @@ use_preset_vocabulary: false
 折光率测定法	zhe guang lv ce ding fa	0
 浙江天元	zhe jiang tian yuan	0
 浙江卫信	zhe jiang wei xin	0
-折射异常	zhe she yi chang	1
+折射异常	zhe she yi chang	0
 蔗糖磷酸化酶	zhe tang lin suan hua mei	0
 蔗糖酶缺乏	zhe tang mei que fa	0
 蔗糖密度梯度	zhe tang mi du ti du	0
@@ -119543,7 +119543,7 @@ use_preset_vocabulary: false
 针解篇第五十四	zhen jie pian di wu shi si	0
 镇静药物依赖综合症	zhen jing yao wu yi lai zong he zheng	0
 枕颈植骨融合术	zhen jing zhi gu rong he shu	0
-针灸治疗	zhen jiu zhi liao	55
+针灸治疗	zhen jiu zhi liao	56
 珍菊降压片薄膜衣	zhen ju jiang ya pian bo mo yi	0
 珍菊降压片吉东宁	zhen ju jiang ya pian ji dong ning	0
 真菌败血症	zhen jun bai xue zheng	0
@@ -119707,7 +119707,7 @@ use_preset_vocabulary: false
 直肠穿孔	zhi chang chuan kong	2
 直肠代膀胱术	zhi chang dai pang guang shu	0
 直肠恶性淋巴瘤	zhi chang e xing lin ba liu	0
-直肠恶性肿瘤	zhi chang e xing zhong liu	13
+直肠恶性肿瘤	zhi chang e xing zhong liu	2
 直肠恶性肿瘤史	zhi chang e xing zhong liu shi	0
 直肠肛疗	zhi chang gang liao	0
 直肠肛门手术	zhi chang gang men shou shu	0
@@ -119781,7 +119781,7 @@ use_preset_vocabulary: false
 直肠脱垂注射术	zhi chang tuo chui zhu she shu	0
 直肠吻合口瘢痕	zhi chang wen he kou ban hen	0
 直肠吻合术	zhi chang wen he shu	0
-直肠息肉	zhi chang xi rou	4
+直肠息肉	zhi chang xi rou	3
 直肠息肉切除术	zhi chang xi rou qie chu shu	0
 直肠息肉切除术电凝	zhi chang xi rou qie chu shu dian ning	0
 直肠狭窄扩张术	zhi chang xia zhai kuo zhang shu	0
@@ -120282,7 +120282,7 @@ use_preset_vocabulary: false
 职业性毛发改变	zhi ye xing mao fa gai bian	0
 职业性皮肤溃疡	zhi ye xing pi fu kui yang	0
 职业性神经官能症	zhi ye xing shen jing guan neng zheng	0
-职业性哮喘	zhi ye xing xiao chuan	0
+职业性哮喘	zhi ye xing xiao chuan	1
 职业性牙齿腐蚀	zhi ye xing ya chi fu shi	0
 职业性牙齿磨损	zhi ye xing ya chi mo sun	0
 职业性痒疹	zhi ye xing yang zhen	0
@@ -120458,16 +120458,16 @@ use_preset_vocabulary: false
 中立势能	zhong li shi neng	0
 重力性溃疡	zhong li xing kui yang	0
 重量百分率	zhong liang bai fen lv	0
-重量平均	zhong liang ping jun	2
+重量平均	zhong liang ping jun	1
 肿瘤标记抗原	zhong liu biao ji kang yuan	0
 肿瘤病毒	zhong liu bing du	0
-肿瘤疾病	zhong liu ji bing	20
+肿瘤疾病	zhong liu ji bing	17
 肿瘤破裂出血	zhong liu po lie chu xie	5
 肿瘤启动	zhong liu qi dong	1
 肿瘤起始因子	zhong liu qi shi yin zi	0
 重硫酸奎宁	zhong liu suan kui ning	0
 肿瘤退化	zhong liu tui hua	0
-肿瘤形成	zhong liu xing cheng	15
+肿瘤形成	zhong liu xing cheng	14
 肿瘤疫苗学	zhong liu yi miao xue	0
 肿瘤诱发物	zhong liu you fa wu	0
 中颅窝脑膜瘤	zhong lu wo nao mo liu	0
@@ -120518,7 +120518,7 @@ use_preset_vocabulary: false
 中枢延搁	zhong shu yan ge	0
 中外合资深圳广雅	zhong wai he zi shen zhen guang ya	0
 中外胚层	zhong wai pei ceng	0
-中晚期癌症	zhong wan qi ai zheng	11
+中晚期癌症	zhong wan qi ai zheng	10
 中位产钳生产	zhong wei chan qian sheng chan	0
 中位产钳术	zhong wei chan qian shu	0
 中位产钳助产	zhong wei chan qian zhu chan	0
@@ -120586,10 +120586,10 @@ use_preset_vocabulary: false
 种子杀菌剂	zhong zi sha jun ji	0
 种子卫生检查	zhong zi wei sheng jian cha	0
 种子消毒	zhong zi xiao du	0
-种子形成	zhong zi xing cheng	0
+种子形成	zhong zi xing cheng	1
 种子直感	zhong zi zhi gan	0
 种子植物类	zhong zi zhi wu lei	0
-种族差异	zhong zu cha yi	23
+种族差异	zhong zu cha yi	22
 中族山绿茶	zhong zu shan lv cha	0
 周痹第二十七	zhou bi di er shi qi	0
 肘部擦伤	zhou bu ca shang	0
@@ -120637,7 +120637,7 @@ use_preset_vocabulary: false
 周围神经炎	zhou wei shen jing yan	13
 周围型	zhou wei xing	0
 周围性癫痫	zhou wei xing dian xian	0
-周围血管病	zhou wei xue guan bing	10
+周围血管病	zhou wei xue guan bing	0
 周围血管疾病	zhou wei xue guan ji bing	4
 周围循环衰竭	zhou wei xun huan shuai jie	2
 肘窝囊肿	zhou wo nang zhong	0
@@ -120776,10 +120776,10 @@ use_preset_vocabulary: false
 注射反应	zhu she fan ying	0
 注射方法	zhu she fang fa	3
 注射后胰腺炎	zhu she hou yi xian yan	0
-注射技术	zhu she ji shu	0
+注射技术	zhu she ji shu	1
 注射溶媒	zhu she rong mei	0
 注射液尼麦角林	zhu she ye ni mai jiao lin	0
-注射疫苗	zhu she yi miao	124
+注射疫苗	zhu she yi miao	123
 注射用阿洛西林钠冻干	zhu she yong a luo xi lin na dong gan	0
 注射用阿奇霉素悉美	zhu she yong a qi mei su xi mei	0
 注射用阿曲库铵	zhu she yong a qu ku an	0
@@ -121262,7 +121262,7 @@ use_preset_vocabulary: false
 自发安眠	zi fa an mian	0
 自发凝结	zi fa ning jie	0
 自发性侧腹壁疝	zi fa xing ce fu bi shan	0
-自发性活动	zi fa xing huo dong	1
+自发性活动	zi fa xing huo dong	0
 自发性晶状体脱位	zi fa xing jing zhuang ti tuo wei	0
 自发性冷球蛋白血症	zi fa xing leng qiu dan bai xue zheng	0
 自发性屈肌腱破裂	zi fa xing qu ji jian po lie	0
@@ -121677,7 +121677,7 @@ use_preset_vocabulary: false
 纵轴型	zong zhou xing	0
 走川骨刺	zou chuan gu ci	0
 走马牙疳	zou ma ya gan	0
-组胺类	zu an lei	5
+组胺类	zu an lei	4
 组氨酸代谢紊乱	zu an suan dai xie wen luan	0
 足背动脉搏	zu bei dong mai bo	3
 足背动脉损伤	zu bei dong mai sun shang	0
@@ -121775,7 +121775,7 @@ use_preset_vocabulary: false
 组织多普勒显像	zu zhi duo pu le xian xiang	0
 组织构造学	zu zhi gou zao xue	0
 足趾关节成形术	zu zhi guan jie cheng xing shu	0
-组织呼吸	zu zhi hu xi	0
+组织呼吸	zu zhi hu xi	1
 足趾肌腱缝合术	zu zhi ji jian feng he shu	0
 足趾肌腱移位术	zu zhi ji jian yi wei shu	0
 足趾挤压伤	zu zhi ji ya shang	0
@@ -121783,7 +121783,7 @@ use_preset_vocabulary: false
 组织抗原病	zu zhi kang yuan bing	0
 足趾离断术	zu zhi li duan shu	0
 足趾扭伤和劳损	zu zhi niu shang he lao sun	0
-组织切片	zu zhi qie pian	20
+组织切片	zu zhi qie pian	17
 组织亲和性	zu zhi qin he xing	1
 组织提取液	zu zhi ti qu ye	0
 组织透明投影	zu zhi tou ming tou ying	0
@@ -121948,11 +121948,11 @@ use_preset_vocabulary: false
 去胀气	qu zhang qi	0
 润肺定喘	run fei ding chuan	0
 肾虚腰痛	shen xu yao tong	9
-四肢乏力	si zhi fa li	38
+四肢乏力	si zhi fa li	37
 体困神疲	ti kun shen pi	0
 体虚便稀	ti xu bian xi	0
 益脾润肠	yi pi run chang	0
-增强免疫力	zeng qiang mian yi li	228
+增强免疫力	zeng qiang mian yi li	227
 止痉挛	zhi jing luan	0
 滋补强身	zi bu qiang shen	5
 滋肝养肾	zi gan yang shen	0
@@ -122126,7 +122126,7 @@ use_preset_vocabulary: false
 唇病	chun bing	0
 唇干	chun gan	2
 大脑病	da nao bing	0
-大脑缺血	da nao que xie	20
+大脑缺血	da nao que xie	15
 胆道病	dan dao bing	0
 胆囊病	dan nang bing	1
 胆囊痛	dan nang tong	0
@@ -122137,7 +122137,7 @@ use_preset_vocabulary: false
 耳毒性	er du xing	11
 耳畸形	er ji xing	1
 肺充血	fei chong xue	0
-肺出血	fei chu xie	10
+肺出血	fei chu xie	9
 肺梗死	fei geng si	1
 肺畸形	fei ji xing	0
 肺浸润	fei jin run	0
@@ -122151,7 +122151,7 @@ use_preset_vocabulary: false
 感觉混乱	gan jue hun luan	0
 肝囊肿	gan nang zhong	14
 肝脾大	gan pi da	2
-肝肿瘤	gan zhong liu	11
+肝肿瘤	gan zhong liu	10
 肛痛	gang tong	0
 睾丸病	gao wan bing	0
 骨肥厚	gu fei hou	0
@@ -122170,7 +122170,7 @@ use_preset_vocabulary: false
 红斑狼疮综合征加重	hong ban lang chuang zong he zheng jia zhong	0
 红斑疹	hong ban zhen	0
 骺分离	hou fen li	0
-呼吸病	hu xi bing	9
+呼吸病	hu xi bing	8
 黄瘤病	huang liu bing	0
 回肠炎	hui chang yan	3
 肌出血	ji chu xie	0
@@ -122182,7 +122182,7 @@ use_preset_vocabulary: false
 畸形手	ji xing shou	0
 甲病	jia bing	2
 踺破裂	jian po lie	0
-交流障碍	jiao liu zhang ai	88
+交流障碍	jiao liu zhang ai	87
 角膜病	jiao mo bing	6
 静脉病	jing mai bing	3
 静脉痛	jing mai tong	0
@@ -122211,7 +122211,7 @@ use_preset_vocabulary: false
 脐畸形	qi ji xing	0
 荨麻疹	qian ma zhen	198
 前庭病	qian ting bing	0
-情绪不稳定	qing xu bu wen ding	217
+情绪不稳定	qing xu bu wen ding	216
 热潮红	re chao hong	0
 人免疫缺陷病毒试验阳性	ren mian yi que xian bing du shi yan yang xing	0
 认识病	ren shi bing	1
@@ -122246,7 +122246,7 @@ use_preset_vocabulary: false
 先天性肾上腺生殖综合征	xian tian xing shen shang xian sheng zhi zong he zheng	0
 小肠局部缺血	xiao chang ju bu que xie	0
 血块栓塞	xie kuai shuan sai	0
-心肌缺血	xin ji que xie	91
+心肌缺血	xin ji que xie	90
 欣快感	xin kuai gan	55
 心理缺陷	xin li que xian	17
 新生儿撤药性综合征	xin sheng er che yao xing zong he zheng	0
@@ -122284,7 +122284,7 @@ use_preset_vocabulary: false
 肢畸形	zhi ji xing	0
 肢体栓塞	zhi ti shuan sai	0
 重症肌无力样综合征	zhong zheng ji wu li yang zong he zheng	0
-状况恶化	zhuang kuang e hua	11
+状况恶化	zhuang kuang e hua	9
 自动症	zi dong zheng	6
 自发性血小板减少性紫癜	zi fa xing xue xiao ban jian shao xing zi dian	0
 子宫痉挛	zi gong jing luan	3
@@ -122297,7 +122297,7 @@ use_preset_vocabulary: false
 艾卷灸	ai juan jiu	0
 爱庐方案	ai lu fang an	0
 爱庐医案	ai lu yi an	0
-爱薛	ai xue	4
+爱薛	ai xue	3
 艾元英	ai yuan ying	0
 艾炷	ai zhu	0
 艾炷灸	ai zhu jiu	0
@@ -122492,7 +122492,7 @@ use_preset_vocabulary: false
 白气貍	bai qi li	0
 白牵牛散	bai qian niu san	0
 白前汤	bai qian tang	0
-白青	bai qing	46
+白青	bai qing	47
 白仁	bai ren	1
 白刃疔	bai ren ding	0
 白如枯骨	bai ru ku gu	0
@@ -122656,7 +122656,7 @@ use_preset_vocabulary: false
 包达日玛	bao da ri ma	0
 包公藤	bao gong teng	0
 包谷心	bao gu xin	0
-包会	bao hui	40
+包会	bao hui	39
 包煎	bao jian	2
 包玛沙	bao ma sha	0
 暴热	bao re	17
@@ -122671,7 +122671,7 @@ use_preset_vocabulary: false
 包珍珠	bao zhen zhu	0
 豹子药	bao zi yao	0
 北败酱	bei bai jiang	0
-被动动作	bei dong dong zuo	0
+被动动作	bei dong dong zuo	1
 北方常用中草药手册	bei fang chang yong zhong cao yao shou ce	0
 北方学派	bei fang xue pai	0
 北鹤虱	bei he shi	0
@@ -122768,7 +122768,7 @@ use_preset_vocabulary: false
 本事方释义	ben shi fang shi yi	2
 本事方续集	ben shi fang xu ji	0
 本输	ben shu	1
-本味	ben wei	230
+本味	ben wei	233
 本心斋疏食谱	ben xin zhai shu shi pu	0
 本虚标实	ben xu biao shi	8
 本药	ben yao	48
@@ -122818,7 +122818,7 @@ use_preset_vocabulary: false
 病禁	bing jin	0
 病理概论及各论	bing li gai lun ji ge lun	0
 病理约编	bing li yue bian	0
-病能	bing neng	7
+病能	bing neng	8
 病能论篇	bing neng lun pian	0
 病藕包	bing ou bao	0
 病气	bing qi	35
@@ -122849,7 +122849,7 @@ use_preset_vocabulary: false
 哺乳疳	bu ru gan	0
 补心	bu xin	24
 不月	bu yue	0
-布针	bu zhen	2
+布针	bu zhen	1
 布指	bu zhi	0
 蚕豆梗	can dou geng	0
 蚕豆壳	can dou ke	0
@@ -122951,7 +122951,7 @@ use_preset_vocabulary: false
 臭叶子	chou ye zi	0
 臭质草	chou zhi cao	0
 臭子	chou zi	2
-出白	chu bai	6
+出白	chu bai	5
 出瘄发热	chu cu fa re	0
 处方法	chu fang fa	0
 处方约编	chu fang yue bian	0
@@ -122964,7 +122964,7 @@ use_preset_vocabulary: false
 出爪亮翅	chu zhao liang chi	0
 出针	chu zhen	7
 出针法	chu zhen fa	0
-除中	chu zhong	2
+除中	chu zhong	0
 传化	chuan hua	10
 唇颤动	chun chan dong	0
 唇疮	chun chuang	0
@@ -123166,7 +123166,7 @@ use_preset_vocabulary: false
 发臂毒	fa bi du	0
 发表不远热	fa biao bu yuan re	0
 发表温经	fa biao wen jing	0
-发陈	fa chen	5
+发陈	fa chen	4
 发迟	fa chi	0
 发搐	fa chu	0
 发耳	fa er	1
@@ -123359,7 +123359,7 @@ use_preset_vocabulary: false
 高风雀目内障	gao feng que mu nei zhang	0
 高风障症	gao feng zhang zheng	0
 高福	gao fu	39
-高盖	gao gai	0
+高盖	gao gai	1
 高骨	gao gu	3
 高鼓峰	gao gu feng	0
 高汉峙	gao han zhi	0
@@ -123382,7 +123382,7 @@ use_preset_vocabulary: false
 高士亿	gao shi yi	0
 高士宗	gao shi zong	3
 高文庄	gao wen zhuang	0
-高武	gao wu	45
+高武	gao wu	44
 高消	gao xiao	7
 高学山	gao xue shan	2
 高阳生	gao yang sheng	0
@@ -123514,7 +123514,7 @@ use_preset_vocabulary: false
 瓜子眼药	gua zi yan yao	0
 莞草	guan cao	3
 桂丁香	gui ding xiang	0
-归法	gui fa	5
+归法	gui fa	4
 桂附八味丸	gui fu ba wei wan	0
 桂附散	gui fu san	0
 桂附汤	gui fu tang	0
@@ -123651,7 +123651,7 @@ use_preset_vocabulary: false
 海上名方	hai shang ming fang	0
 海上仙方	hai shang xian fang	0
 海上医宗心领全帙	hai shang yi zong xin ling quan zhi	0
-海石	hai shi	14
+海石	hai shi	13
 海薯藤	hai shu teng	0
 海松子	hai song zi	1
 海苔菜	hai tai cai	0
@@ -123706,7 +123706,7 @@ use_preset_vocabulary: false
 喉底	hou di	1
 候气	hou qi	6
 候时	hou shi	2
-候胎	hou tai	0
+候胎	hou tai	1
 候痫法	hou xian fa	0
 壶翁	hu weng	0
 桦皮	hua pi	2
@@ -123779,7 +123779,7 @@ use_preset_vocabulary: false
 积滞吐	ji zhi tu	0
 积滞泄泻	ji zhi xie xie	0
 脊柱侧凸症	ji zhu ce tu zheng	0
-脊柱骨	ji zhu gu	8
+脊柱骨	ji zhu gu	9
 脊柱旋转复位法	ji zhu xuan zhuan fu wei fa	0
 脊椎法	ji zhui fa	0
 痂病	jia bing	0
@@ -124073,7 +124073,7 @@ use_preset_vocabulary: false
 酒蒸	jiu zheng	7
 酒蒸黄连丸	jiu zheng huang lian wan	0
 酒癥丸	jiu zheng wan	0
-酒制	jiu zhi	3
+酒制	jiu zhi	2
 酒炙	jiu zhi	3
 酒痔	jiu zhi	0
 酒注	jiu zhu	2
@@ -124102,7 +124102,7 @@ use_preset_vocabulary: false
 恐伤	kong shang	2
 恐伤肾	kong shang shen	16
 恐郁	kong yu	0
-恐中	kong zhong	8
+恐中	kong zhong	7
 叩齿	kou chi	32
 叩法	kou fa	0
 胯腹痈	kua fu yong	0
@@ -124450,7 +124450,7 @@ use_preset_vocabulary: false
 目纲	mu gang	0
 目裹	mu guo	0
 目瞏	mu huan	0
-目黄	mu huang	1
+目黄	mu huang	2
 目昏昧	mu hun mei	0
 目见黑花飞蝇	mu jian hei hua fei ying	0
 目浸	mu jin	0
@@ -124534,14 +124534,14 @@ use_preset_vocabulary: false
 目中结骨症	mu zhong jie gu zheng	0
 目中胬肉	mu zhong nu rou	0
 目肿胀	mu zhong zhang	0
-目珠	mu zhu	0
+目珠	mu zhu	1
 目珠俱青	mu zhu ju qing	0
 目珠痛	mu zhu tong	0
 目珠子脱出	mu zhu zi tuo chu	0
 目转耳鸣	mu zhuan er ming	0
 目眦	mu zi	2
 目眦溃烂	mu zi kui lan	0
-拿法	na fa	34
+拿法	na fa	32
 奶参	nai can	0
 奶疳	nai gan	0
 奶孩儿	nai hai er	1
@@ -124705,11 +124705,11 @@ use_preset_vocabulary: false
 皮硝	pi xiao	0
 皮巡	pi xun	0
 铍针	pi zhen	0
-皮蒸	pi zheng	0
+皮蒸	pi zheng	1
 偏风	pian feng	7
 平安饼	ping an bing	0
 平安万应丸	ping an wan ying wan	0
-平补	ping bu	23
+平补	ping bu	20
 平补平泻	ping bu ping xie	0
 平补镇心丹	ping bu zhen xin dan	0
 平补枳术丸	ping bu zhi zhu wan	0
@@ -125038,7 +125038,7 @@ use_preset_vocabulary: false
 热则气泄	re ze qi xie	0
 热瘴	re zhang	0
 热者寒之	re zhe han zhi	3
-热中	re zhong	3
+热中	re zhong	4
 热胕	re zhou	0
 热灼肾阴	re zhuo shen yin	0
 容成	rong cheng	18
@@ -125420,7 +125420,7 @@ use_preset_vocabulary: false
 四末	si mo	2
 四磨饮	si mo yin	0
 司牧安骥集	si mu an ji ji	0
-四难	si nan	0
+四难	si nan	2
 司内揣外	si nei chuai wai	0
 四逆注射液	si ni zhu she ye	0
 四皮麻	si pi ma	0
@@ -125459,7 +125459,7 @@ use_preset_vocabulary: false
 四顺饮	si shun yin	0
 四顺饮子	si shun yin zi	0
 四损	si sun	0
-司天	si tian	30
+司天	si tian	31
 司天在泉	si tian zai quan	2
 司徒嘎玛俄拉	si tu ga ma e la	0
 司外揣内	si wai chuai nei	1
@@ -125534,7 +125534,7 @@ use_preset_vocabulary: false
 四肢实	si zhi shi	0
 四肢酸疼	si zhi suan teng	0
 四支疼痛	si zhi teng tong	0
-四肢疼痛	si zhi teng tong	8
+四肢疼痛	si zhi teng tong	7
 四肢为诸阳之本	si zhi wei zhu yang zhi ben	0
 四肢懈惰	si zhi xie duo	0
 四汁饮	si zhi yin	0
@@ -125748,7 +125748,7 @@ use_preset_vocabulary: false
 铁指甲	tie zhi jia	0
 铁烛台	tie zhu tai	0
 通隘散	tong ai san	0
-通鼻	tong bi	30
+通鼻	tong bi	28
 通痹散	tong bi san	0
 通鼻散	tong bi san	0
 通草膏	tong cao gao	0
@@ -125824,7 +125824,7 @@ use_preset_vocabulary: false
 通玄二八丹	tong xuan er ba dan	0
 通玄指要赋	tong xuan zhi yao fu	0
 通血丸	tong xue wan	0
-桐叶	tong ye	16
+桐叶	tong ye	15
 通因通用	tong yin tong yong	0
 通幽化浊汤	tong you hua zhuo tang	0
 桐油树根	tong you shu gen	0
@@ -125839,7 +125839,7 @@ use_preset_vocabulary: false
 桐子油	tong zi you	0
 通遵散	tong zun san	0
 透癍	tou ban	0
-透表	tou biao	11
+透表	tou biao	10
 头不生发	tou bu sheng fa	0
 头冲	tou chong	14
 透刺法	tou ci fa	0
@@ -125861,7 +125861,7 @@ use_preset_vocabulary: false
 头汗	tou han	0
 透肌散	tou ji san	0
 透镜灸	tou jing jiu	0
-头冷	tou leng	10
+头冷	tou leng	9
 头颅盖	tou lu gai	0
 头颅骨	tou lu gu	9
 头面疮	tou mian chuang	0
@@ -125959,7 +125959,7 @@ use_preset_vocabulary: false
 外候答问	wai hou da wen	0
 外喉痈	wai hou yong	0
 外踝疽	wai huai ju	0
-外火	wai huo	0
+外火	wai huo	2
 外科百效秘授经验奇方	wai ke bai xiao mi shou jing yan qi fang	0
 外科百效全书	wai ke bai xiao quan shu	0
 外科宝鉴	wai ke bao jian	0
@@ -126006,7 +126006,7 @@ use_preset_vocabulary: false
 外廉	wai lian	0
 外命	wai ming	3
 外取	wai qu	4
-外热	wai re	1
+外热	wai re	8
 外热内寒	wai re nei han	2
 外荣	wai rong	0
 外三合	wai san he	17
@@ -126067,7 +126067,7 @@ use_preset_vocabulary: false
 戊癸化火	wu gui hua huo	0
 戊己汤	wu ji tang	0
 五入	wu ru	14
-五心	wu xin	19
+五心	wu xin	15
 悟真篇	wu zhen pian	1
 务中药性	wu zhong yao xing	0
 五主	wu zhu	2
@@ -126364,7 +126364,7 @@ use_preset_vocabulary: false
 玄洲道人	xuan zhou dao ren	0
 穴会	xue hui	1
 穴空	xue kong	0
-血热	xue re	30
+血热	xue re	31
 血涩	xue se	0
 穴腧都数	xue shu dou shu	0
 穴位刺激结扎疗法	xue wei ci ji jie za liao fa	0
@@ -126475,7 +126475,7 @@ use_preset_vocabulary: false
 益气生肌	yi qi sheng ji	0
 益气疏风汤	yi qi shu feng tang	0
 益气丸	yi qi wan	0
-益气滋阴	yi qi zi yin	2
+益气滋阴	yi qi zi yin	1
 益荣汤	yi rong tang	0
 益瞳丸	yi tong wan	0
 益胃升阳汤	yi wei sheng yang tang	0
@@ -126796,7 +126796,7 @@ use_preset_vocabulary: false
 真元虚损疬	zhen yuan xu sun li	0
 真脏	zhen zang	19
 真脏色	zhen zang se	0
-真中	zhen zhong	30
+真中	zhen zhong	12
 真中风	zhen zhong feng	1
 振中汤	zhen zhong tang	0
 真珠	zhen zhu	46
@@ -126817,7 +126817,7 @@ use_preset_vocabulary: false
 正骨科	zheng gu ke	2
 正骨疗法	zheng gu liao fa	1
 正骨麻药方	zheng gu ma yao fang	0
-正骨手法	zheng gu shou fa	5
+正骨手法	zheng gu shou fa	2
 正骨手法略要	zheng gu shou fa lue yao	0
 正骨推拿	zheng gu tui na	15
 正骨心法要旨	zheng gu xin fa yao zhi	0
@@ -126838,7 +126838,7 @@ use_preset_vocabulary: false
 正头痛	zheng tou tong	1
 正邪分争	zheng xie fen zheng	0
 正心汤	zheng xin tang	0
-正性	zheng xing	71
+正性	zheng xing	73
 正虚邪恋	zheng xu xie lian	0
 正阳散	zheng yang san	0
 正一丹	zheng yi dan	0
@@ -126896,7 +126896,7 @@ use_preset_vocabulary: false
 朱砂拌茯神	zhu sha ban fu shen	0
 诸伤	zhu shang	0
 疰市	zhu shi	0
-术数	zhu shu	103
+术数	zhu shu	102
 逐水法	zhu shui fa	0
 逐水剂	zhu shui ji	0
 术汤	zhu tang	1
@@ -127162,7 +127162,7 @@ use_preset_vocabulary: false
 管道钳	guan dao qian	0
 光导食道镜	guang dao shi dao jing	0
 光源帽	guang yuan mao	0
-硅胶垫	gui jiao dian	61
+硅胶垫	gui jiao dian	62
 荷包钳	he bao qian	0
 颌窦吸引管	he dou xi yin guan	0
 黑把椎板咬骨钳	hei ba zhui ban yao gu qian	0
@@ -127531,7 +127531,7 @@ use_preset_vocabulary: false
 小刮匙	xiao gua chi	1
 小刮勺	xiao gua shao	1
 小硅胶垫	xiao gui jiao dian	0
-小剪刀	xiao jian dao	53
+小剪刀	xiao jian dao	52
 小精密器械盒	xiao jing mi qi xie he	0
 小拉钩	xiao la gou	0
 小棉球	xiao mian qiu	3
@@ -127637,7 +127637,7 @@ use_preset_vocabulary: false
 直刃骨剪	zhi ren gu jian	0
 植入镊	zhi ru nie	0
 直舌抓钳	zhi she zhua qian	0
-指示条	zhi shi tiao	13
+指示条	zhi shi tiao	12
 直髓核钳	zhi sui he qian	0
 直头吸引器	zhi tou xi yin qi	0
 直无齿卵圆钳	zhi wu chi luan yuan qian	0
@@ -128190,7 +128190,7 @@ use_preset_vocabulary: false
 天致	tian zhi	0
 委托生产	wei tuo sheng chan	6
 中药胶囊	zhong yao jiao nang	0
-百香	bai xiang	31
+百香	bai xiang	29
 百香御	bai xiang yu	0
 百香御湿	bai xiang yu shi	0
 百香御湿贴	bai xiang yu shi tie	0
@@ -128285,7 +128285,7 @@ use_preset_vocabulary: false
 三鞭乾	san bian qian	0
 三鞭乾元	san bian qian yuan	0
 三鞭乾元片	san bian qian yuan pian	0
-三花	san hua	79
+三花	san hua	81
 三花乾烈	san hua qian lie	0
 三花乾烈膏	san hua qian lie gao	0
 参茸乾阳	shen rong qian yang	0
@@ -128385,7 +128385,7 @@ use_preset_vocabulary: false
 亿康致高益骨贴	yi kang zhi gao yi gu tie	0
 御湿	yu shi	0
 御湿贴	yu shi tie	0
-致高	zhi gao	2
+致高	zhi gao	1
 致高益骨	zhi gao yi gu	0
 致高益骨贴	zhi gao yi gu tie	0
 知坤	zhi kun	0
@@ -128423,7 +128423,7 @@ use_preset_vocabulary: false
 奥琪	ao qi	0
 奥图	ao tu	23
 芭比布朗	ba bi bu lang	3
-疤痕修复	ba hen xiu fu	4
+疤痕修复	ba hen xiu fu	2
 白娣颜	bai di yan	0
 白金多元	bai jin duo yuan	0
 柏兰	bai lan	0
@@ -128550,7 +128550,7 @@ use_preset_vocabulary: false
 淡香精	dan xiang jing	4
 淡香水	dan xiang shui	37
 丹姿	dan zi	2
-当归根	dang gui gen	4
+当归根	dang gui gen	3
 导入式丰胸	dao ru shi feng xiong	0
 德国世家	de guo shi jia	4
 德国洋甘菊	de guo yang gan ju	0
@@ -128661,7 +128661,7 @@ use_preset_vocabulary: false
 海绵扑	hai mian pu	1
 海皙蓝	hai xi lan	0
 海洋娜拉	hai yang na la	0
-汉高	han gao	61
+汉高	han gao	60
 韩式三点	han shi san dian	41
 韩式隐形隆鼻	han shi yin xing long bi	0
 荷荷芭油	he he ba you	1
@@ -128674,13 +128674,13 @@ use_preset_vocabulary: false
 红褐	hong he	23
 红酒酵母精华	hong jiu jiao mu jing hua	0
 红橘	hong ju	23
-红绿色	hong lv se	39
+红绿色	hong lv se	41
 红没药醇	hong mei yao chun	36
 红色蜜露	hong se mi lu	5
 厚唇变薄	hou chun bian bao	0
 厚唇变薄术	hou chun bian bao shu	0
 侯舒卡博士	hou shu ka bo shi	0
-后调	hou tiao	280
+后调	hou tiao	274
 厚眼皮	hou yan pi	19
 护肤寓言	hu fu yu yan	0
 护肤中心	hu fu zhong xin	0
@@ -128703,7 +128703,7 @@ use_preset_vocabulary: false
 肌肤暗沉	ji fu an chen	3
 肌肤之匙	ji fu zhi chi	0
 激光美白	ji guang mei bai	4
-激光脱毛	ji guang tuo mao	107
+激光脱毛	ji guang tuo mao	106
 积姬仙奴	ji ji xian nu	0
 积架	ji jia	0
 寄情水	ji qing shui	7
@@ -128725,7 +128725,7 @@ use_preset_vocabulary: false
 甲缘	jia yuan	1
 睑部肌肉	jian bu ji rou	0
 减肥枪	jian fei qiang	0
-健康肤色	jian kang fu se	9
+健康肤色	jian kang fu se	8
 睑裂长度	jian lie chang du	3
 睑裂高度	jian lie gao du	4
 睑缘	jian yuan	27
@@ -128748,7 +128748,7 @@ use_preset_vocabulary: false
 金光粉红色	jin guang fen hong se	0
 金黄星辰	jin huang xing chen	0
 金属银灰	jin shu yin hui	1
-精华油	jing hua you	33
+精华油	jing hua you	30
 精露	jing lu	1
 经乳房下皱襞切口	jing ru fang xia zhou bi qie kou	0
 经乳晕切口	jing ru yun qie kou	0
@@ -128768,7 +128768,7 @@ use_preset_vocabulary: false
 锔油膏	ju you gao	1
 焗油膏	ju you gao	1
 焗油帽	ju you mao	0
-卷翘	juan qiao	21
+卷翘	juan qiao	18
 俊士	jun shi	1
 卡罗琳娜	ka luo lin na	4
 卡沃利	ka wo li	2
@@ -128780,7 +128780,7 @@ use_preset_vocabulary: false
 开内眦	kai nei zi	0
 开外眼角	kai wai yan jiao	29
 凯文克莱	kai wen ke lai	0
-开眼角	kai yan jiao	280
+开眼角	kai yan jiao	277
 凯伊黛	kai yi dai	0
 抗老防皱	kang lao fang zhou	1
 克丽缇娜	ke li ti na	0
@@ -128790,7 +128790,7 @@ use_preset_vocabulary: false
 可悠然	ke you ran	1
 口唇整形	kou chun zheng xing	0
 口红刷	kou hong shua	2
-口腔内	kou qiang nei	315
+口腔内	kou qiang nei	317
 苦橙叶	ku cheng ye	11
 快乐鼠尾草	kuai le shu wei cao	5
 眶隔脂肪	kuang ge zhi fang	30
@@ -128972,7 +128972,7 @@ use_preset_vocabulary: false
 普兰娜	pu lan na	0
 葡萄酒红	pu tao jiu hong	1
 倩美	qian mei	0
-前调	qian tiao	342
+前调	qian tiao	343
 乔伊纽约	qiao yi niu yue	0
 切开软化	qie kai ruan hua	0
 切开双眼皮	qie kai shuang yan pi	12
@@ -128994,7 +128994,7 @@ use_preset_vocabulary: false
 取出术	qu chu shu	4
 祛除眼袋	qu chu yan dai	2
 去甲油	qu jia you	1
-去眼袋	qu yan dai	18
+去眼袋	qu yan dai	17
 颧部填充术	quan bu tian chong shu	0
 颧骨整形	quan gu zheng xing	0
 颧骨整形美容手术	quan gu zheng xing mei rong shou shu	0
@@ -129056,15 +129056,15 @@ use_preset_vocabulary: false
 瘦脸整形	shou lian zheng xing	0
 瘦脸整形手术	shou lian zheng xing shou shu	0
 手术对比	shou shu dui bi	0
-手术前后	shou shu qian hou	45
+手术前后	shou shu qian hou	43
 手术前设计	shou shu qian she ji	0
-手术失败	shou shu shi bai	0
+手术失败	shou shu shi bai	73
 手术医生	shou shu yi sheng	0
 手术责任	shou shu ze ren	0
 手术照片	shou shu zhao pian	0
 手术中	shou shu zhong	0
 手足护理	shou zu hu li	1
-术后效果	shu hou xiao guo	0
+术后效果	shu hou xiao guo	65
 术后准备	shu hou zhun bei	0
 竖径	shu jing	0
 舒蕾	shu lei	12
@@ -129080,9 +129080,9 @@ use_preset_vocabulary: false
 双眼皮宽	shuang yan pi kuan	8
 双眼皮美学	shuang yan pi mei xue	1
 双眼皮切口	shuang yan pi qie kou	7
-双眼皮手术	shuang yan pi shou shu	380
+双眼皮手术	shuang yan pi shou shu	374
 双眼皮松弛	shuang yan pi song chi	0
-双眼皮修复	shuang yan pi xiu fu	40
+双眼皮修复	shuang yan pi xiu fu	39
 双眼皮修改	shuang yan pi xiu gai	0
 双眼皮窄	shuang yan pi zhai	1
 双眼皮整形手术	shuang yan pi zheng xing shou shu	1
@@ -129144,7 +129144,7 @@ use_preset_vocabulary: false
 外眦手术	wai zi shou shu	0
 外眦赘皮	wai zi zhui pi	0
 晚安面膜	wan an mian mo	1
-丸美	wan mei	4
+丸美	wan mei	5
 晚樱草	wan ying cao	1
 薇安琪	wei an qi	0
 微雕绣式光离子包皮整形	wei diao xiu shi guang li zi bao pi zheng xing	0
@@ -129160,10 +129160,10 @@ use_preset_vocabulary: false
 微小切口骨突切除术	wei xiao qie kou gu tu qie chu shu	0
 微小切口骨突切磨术	wei xiao qie kou gu tu qie mo shu	0
 微小切口关节成形术	wei xiao qie kou guan jie cheng xing shu	0
-微整形	wei zheng xing	35
+微整形	wei zheng xing	36
 温柔玫瑰	wen rou mei gui	0
 无患子精华	wu huan zi jing hua	0
-无酒精	wu jiu jing	83
+无酒精	wu jiu jing	80
 无毛症手术	wu mao zheng shou shu	0
 吾诺	wu nuo	2
 无着色	wu zhuo se	0
@@ -129273,7 +129273,7 @@ use_preset_vocabulary: false
 眼角纹	yan jiao wen	7
 眼睛距离	yan jing ju li	0
 眼睛美学	yan jing mei xue	0
-眼皮松弛	yan pi song chi	54
+眼皮松弛	yan pi song chi	47
 妍皙	yan xi	0
 眼影扫	yan ying sao	1
 眼影刷	yan ying shua	7
@@ -129291,7 +129291,7 @@ use_preset_vocabulary: false
 依兰依兰	yi lan yi lan	4
 伊丽莎白雅顿	yi li sha bai ya dun	32
 颐莲	yi lian	7
-医疗级	yi liao ji	0
+医疗级	yi liao ji	29
 依曼	yi man	0
 忆念美	yi nian mei	0
 伊诺姿	yi nuo zi	0
@@ -129347,7 +129347,7 @@ use_preset_vocabulary: false
 蒸馏法	zheng liu fa	42
 整容医生	zheng rong yi sheng	20
 整形患者	zheng xing huan zhe	0
-整形美容	zheng xing mei rong	41
+整形美容	zheng xing mei rong	39
 整形美容外科	zheng xing mei rong wai ke	9
 整形医生	zheng xing yi sheng	112
 睁眼乏力	zheng yan fa li	1
@@ -129359,7 +129359,7 @@ use_preset_vocabulary: false
 芝曼蒙黛	zhi man meng dai	0
 指托	zhi tuo	5
 植物工坊	zhi wu gong fang	0
-植物配方	zhi wu pei fang	14
+植物配方	zhi wu pei fang	12
 植物性玻尿酸	zhi wu xing bo niao suan	0
 重点化妆	zhong dian hua zhuang	0
 中调	zhong diao	328
@@ -129387,7 +129387,7 @@ use_preset_vocabulary: false
 自体脂肪注射	zi ti zhi fang zhu she	2
 咨询人员	zi xun ren yuan	0
 咨询医生	zi xun yi sheng	0
-咨询医师	zi xun yi shi	28
+咨询医师	zi xun yi shi	24
 自尊飞溅	zi zun fei jian	0
 自尊性感	zi zun xing gan	0
 棕榈精华	zong lv jing hua	0
@@ -129402,7 +129402,7 @@ use_preset_vocabulary: false
 眼底出血	yan di chu xue	33
 短暂性脑缺血	duan zan xing nao que xue	3
 直肠出血	zhi chang chu xue	8
-大脑缺血	da nao que xue	20
+大脑缺血	da nao que xue	15
 内脏出血	nei zang chu xue	26
 肋间神经	le jian shen jing	16
 肌少症	ji shao zheng	3
