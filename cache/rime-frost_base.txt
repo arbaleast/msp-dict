@@ -119088,7 +119088,6 @@ sort: by_weight
 会员版	hui yuan ban	20
 会员大会	hui yuan da hui	16
 会员单位	hui yuan dan wei	112
-会员登陆	hui yuan deng lu	3
 会员分级结算制度	hui yuan fen ji jie suan zhi du	1
 会员服务	hui yuan fu wu	247
 会员管理	hui yuan guan li	55
@@ -273235,7 +273234,6 @@ sort: by_weight
 网站搭建	wang zhan da jian	76
 网站导航	wang zhan dao hang	121
 网站登录	wang zhan deng lu	8
-网站登陆	wang zhan deng lu	2
 网站地图	wang zhan di tu	24
 网站地址	wang zhan di zhi	172
 网站发布	wang zhan fa bu	50
