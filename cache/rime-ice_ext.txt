@@ -16,7 +16,7 @@
 # - 简化字八股文 https://github.com/rime/rime-essay-simp
 ---
 name: ext
-version: "2026-04-18"
+version: "2026-05-01"
 sort: by_weight
 ...
 # +_+
@@ -8368,7 +8368,6 @@ sort: by_weight
 半晌无法挪开	ban shang wu fa nuo kai	100
 半晌无言	ban shang wu yan	100
 坂上走丸	ban shang zou wan	100
-阪上走丸	ban shang zou wan	100
 板烧堡	ban shao bao	100
 板烧鸡腿堡	ban shao ji tui bao	100
 半身长裙	ban shen chang qun	100
@@ -11161,6 +11160,7 @@ sort: by_weight
 被落实	bei luo shi	100
 倍率高	bei lv gao	100
 被绿了	bei lv le	100
+倍率色差	bei lv se cha	100
 北旅田园	bei lv tian yuan	100
 被旅行	bei lv xing	100
 倍率性能	bei lv xing neng	100
@@ -50780,7 +50780,6 @@ sort: by_weight
 但天意如此	dan tian yi ru ci	100
 单挑大王	dan tiao da wang	100
 单挑模式	dan tiao mo shi	100
-蛋筒冰激淋	dan tong bing ji lin	100
 蛋筒冰激凌	dan tong bing ji ling	100
 但同时又	dan tong shi you	100
 单头独颈	dan tou du jing	100
@@ -102029,8 +102028,6 @@ sort: by_weight
 何处是	he chu shi	100
 何处游青冥	he chu you qing ming	100
 合川马门溪龙	he chuan ma men xi long	100
-和传奇	he chuan qi	100
-鹤鹑蛋	he chun dan	100
 曷此其极	he ci qi ji	100
 合村并镇	he cun bing zhen	100
 喝大杯	he da bei	100
@@ -105014,6 +105011,7 @@ sort: by_weight
 横向卷轴	heng xiang juan zhou	100
 横向卷轴游戏	heng xiang juan zhou you xi	100
 横向宽度	heng xiang kuan du	100
+横向色差	heng xiang se cha	100
 横向生长	heng xiang sheng zhang	100
 横向拓展	heng xiang tuo zhan	100
 横箫短笛	heng xiao duan di	100
@@ -140322,6 +140320,7 @@ sort: by_weight
 空场地	kong chang di	100
 空场举行	kong chang ju xing	100
 空车子	kong che zi	100
+空车走坂	kong che zou ban	100
 空窗期	kong chuang qi	100
 孔丛子	kong cong zi	100
 孔大少	kong da shao	100
@@ -203246,6 +203245,7 @@ sort: by_weight
 乳突窦	ru tu dou	100
 如荼如火	ru tu ru huo	100
 入团仪式	ru tuan yi shi	100
+如丸走坂	ru wan zou ban	100
 如温度	ru wen du	100
 入我门来	ru wo men lai	100
 如我所言	ru wo suo yan	100
@@ -244251,6 +244251,7 @@ sort: by_weight
 通行环境	tong xing huan jing	100
 通行缓慢	tong xing huan man	100
 同型机	tong xing ji	100
+桶形畸变	tong xing ji bian	100
 通行记录	tong xing ji lu	100
 同性交友	tong xing jiao you	100
 同性交友中心	tong xing jiao you zhong xin	100
@@ -252635,6 +252636,7 @@ sort: by_weight
 为之奈何	wei zhi nai he	100
 遗之千金	wei zhi qian jin	100
 为之倾倒	wei zhi qing dao	100
+位置色差	wei zhi se cha	100
 未知数儿	wei zhi shu er	100
 位置调节	wei zhi tiao jie	100
 位置调整	wei zhi tiao zheng	100
@@ -268179,6 +268181,7 @@ sort: by_weight
 显身扬名	xian shen yang ming	100
 闲神野鬼	xian shen ye gui	100
 先生曾说	xian sheng ceng shuo	100
+现生动物	xian sheng dong wu	100
 先生对不起	xian sheng dui bu qi	100
 先升后降	xian sheng hou jiang	100
 先声后实	xian sheng hou shi	100
@@ -268189,8 +268192,10 @@ sort: by_weight
 先生请出山	xian sheng qing chu shan	100
 先生请上座	xian sheng qing shang zuo	100
 先生身边	xian sheng shen bian	100
+现生生物	xian sheng sheng wu	100
 显生宇	xian sheng yu	100
 先生之风	xian sheng zhi feng	100
+现生植物	xian sheng zhi wu	100
 显生宙	xian sheng zhou	100
 现世安稳	xian shi an wen	100
 显示板	xian shi ban	100
@@ -269142,6 +269147,7 @@ sort: by_weight
 向长期以来关心	xiang chang qi yi lai guan xin	100
 向长沙	xiang chang sha	100
 想长寿	xiang chang shou	100
+像场弯曲	xiang chang wan qu	100
 想长远	xiang chang yuan	100
 响彻云表	xiang che yun biao	100
 响彻云汉	xiang che yun han	100
@@ -318922,6 +318928,7 @@ sort: by_weight
 真心相信	zhen xin xiang xin	100
 侦心有礼	zhen xin you li	100
 真心值	zhen xin zhi	100
+枕形畸变	zhen xing ji bian	100
 阵性降水	zhen xing jiang shui	100
 振兴图强	zhen xing tu qiang	100
 针形叶	zhen xing ye	100
@@ -329491,6 +329498,7 @@ sort: by_weight
 轴线对称	zhou xian dui chen	100
 周县长	zhou xian zhang	100
 肘见踵决	zhou xian zhong jue	100
+轴向色差	zhou xiang se cha	100
 昼想夜梦	zhou xiang ye meng	100
 周晓涵	zhou xiao han	100
 周筱涵	zhou xiao han	100
@@ -335153,6 +335161,7 @@ sort: by_weight
 总线模块	zong xian mo kuai	100
 宗像草太	zong xiang cao tai	100
 总想撸	zong xiang lu	100
+纵向色差	zong xiang se cha	100
 总想睡觉	zong xiang shui jiao	100
 总想着钱	zong xiang zhe qian	100
 总想着钱财	zong xiang zhe qian cai	100
@@ -335615,6 +335624,7 @@ sort: by_weight
 走天涯	zou tian ya	100
 走投无路之际	zou tou wu lu zhi ji	100
 走歪了	zou wai le	100
+走丸逆坂	zou wan ni ban	100
 走味儿	zou wei er	100
 走为上	zou wei shang	100
 走为上着	zou wei shang zhao	100
