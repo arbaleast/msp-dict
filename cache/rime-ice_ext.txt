@@ -16,7 +16,7 @@
 # - 简化字八股文 https://github.com/rime/rime-essay-simp
 ---
 name: ext
-version: "2026-05-01"
+version: "2026-05-03"
 sort: by_weight
 ...
 # +_+
@@ -37254,8 +37254,6 @@ sort: by_weight
 重庆科技馆	chong qing ke ji guan	100
 重庆科技学院	chong qing ke ji xue yuan	100
 重庆科学城	chong qing ke xue cheng	100
-重庆快乐十分	chong qing kuai le shi fen	100
-重庆快三	chong qing kuai san	100
 重庆来福士	chong qing lai fu shi	100
 重庆来福士广场	chong qing lai fu shi guang chang	100
 重庆理工	chong qing li gong	100
@@ -37388,8 +37386,6 @@ sort: by_weight
 重庆市合川区	chong qing shi he chuan qu	100
 重庆市纪委监委	chong qing shi ji wei jian wei	100
 重庆市检察院	chong qing shi jian cha yuan	100
-重庆市江北	chong qing shi jiang bei	100
-重庆市江北区	chong qing shi jiang bei qu	100
 重庆市江津	chong qing shi jiang jin	100
 重庆市江津区	chong qing shi jiang jin qu	100
 重庆市交通局	chong qing shi jiao tong ju	100
@@ -44310,6 +44306,7 @@ sort: by_weight
 匆匆心动	cong cong xin dong	100
 匆匆又夏天	cong cong you xia tian	100
 葱葱郁郁	cong cong yu yu	100
+𫓩𫓩铮铮	cong cong zheng zheng	100
 从粗到细	cong cu dao xi	100
 匆促间	cong cu jian	100
 匆促之间	cong cu zhi jian	100
@@ -47645,7 +47642,6 @@ sort: by_weight
 大妹夫	da mei fu	100
 大湄公河次区域	da mei gong he ci qu yu	100
 大湄公河次区域合作	da mei gong he ci qu yu he zuo	100
-大美玲	da mei ling	100
 大美人儿	da mei ren er	100
 大媒体	da mei ti	100
 大美学工	da mei xue gong	100
@@ -48608,7 +48604,6 @@ sort: by_weight
 打信号	da xin hao	100
 打新收益率	da xin shou yi lv	100
 大信新都汇	da xin xin du hui	100
-大兴安岭地	da xing an ling di	100
 大兴安岭山脉	da xing an ling shan mai	100
 大行程	da xing cheng	100
 大刑伺候	da xing ci hou	100
@@ -56658,7 +56653,7 @@ sort: by_weight
 地区行署	di qu xing shu	100
 地区研究	di qu yan jiu	100
 地区优势	di qu you shi	100
-地区种植	di qu zhong zhi	100
+地区总部	di qu zong bu	100
 地圈梁	di quan liang	100
 低权重	di quan zhong	100
 的确当	di que dang	100
@@ -83749,6 +83744,7 @@ sort: by_weight
 高级管理人才	gao ji guan li ren cai	100
 高级黑	gao ji hei	100
 高级会所	gao ji hui suo	100
+高级货	gao ji huo	100
 高级技工学校	gao ji ji gong xue xiao	100
 高级技校	gao ji ji xiao	100
 高级驾驶辅助系统	gao ji jia shi fu zhu xi tong	100
@@ -85460,10 +85456,8 @@ sort: by_weight
 格里沙	ge li sha	100
 格力售后	ge li shou hou	100
 隔离天日	ge li tian ri	100
+隔离网	ge li wang	100
 隔离系统	ge li xi tong	100
-哥利亚	ge li ya	100
-歌利亚	ge li ya	100
-歌莉娅	ge li ya	100
 个理由	ge li you	100
 隔离制度	ge li zhi du	100
 格力中央空调	ge li zhong yang kong tiao	100
@@ -93042,7 +93036,6 @@ sort: by_weight
 广西海事	guang xi hai shi	100
 广西加油	guang xi jia you	100
 广西舰	guang xi jian	100
-广西快乐十分	guang xi kuai le shi fen	100
 广西快乐双彩	guang xi kuai le shuang cai	100
 广西乐业	guang xi le ye	100
 光系魔法	guang xi mo fa	100
@@ -103631,7 +103624,6 @@ sort: by_weight
 黑龙江等地	hei long jiang deng di	100
 黑龙江地区	hei long jiang di qu	100
 黑龙江河	hei long jiang he	100
-黑龙江快乐十分	hei long jiang kuai le shi fen	100
 黑龙江全省	hei long jiang quan sheng	100
 黑龙江三省	hei long jiang san sheng	100
 黑龙江省安达市	hei long jiang sheng an da shi	100
@@ -116054,7 +116046,6 @@ sort: by_weight
 极速幻境	ji su huan jing	100
 急速降温	ji su jiang wen	100
 寄宿考研	ji su kao yan	100
-极速快乐十分	ji su kuai le shi fen	100
 极速狂飙	ji su kuang biao	100
 激素类	ji su lei	100
 积素累旧	ji su lei jiu	100
@@ -117688,8 +117679,10 @@ sort: by_weight
 加了水	jia le shui	100
 加了糖	jia le tang	100
 加勒特	jia le te	100
+贾勒特	jia le te	100
 加了特效	jia le te xiao	100
 加勒万	jia le wan	100
+加勒万河	jia le wan he	100
 加勒万河谷	jia le wan he gu	100
 加勒万河谷冲突	jia le wan he gu chong tu	100
 加了微信	jia le wei xin	100
@@ -133296,6 +133289,7 @@ sort: by_weight
 巨人的肩膀	ju ren de jian bang	100
 巨人的肩膀上	ju ren de jian bang shang	100
 巨人的肩上	ju ren de jian shang	100
+巨人歌利亚	ju ren ge li ya	100
 巨人化	ju ren hua	100
 巨人化药剂	ju ren hua yao ji	100
 巨人们	ju ren men	100
@@ -141533,7 +141527,6 @@ sort: by_weight
 跨度较大	kua du jiao da	100
 跨度太大	kua du tai da	100
 跨度之大	kua du zhi da	100
-跨度综合	kua du zong he	100
 跨度走势	kua du zou shi	100
 跨度走势图	kua du zou shi tu	100
 跨度最长	kua du zui chang	100
@@ -141543,7 +141536,6 @@ sort: by_weight
 跨服费	kua fu fei	100
 跨服要塞	kua fu yao sai	100
 跨过长江	kua guo chang jiang	100
-跨国公司地区总部	kua guo gong si di qu zong bu	100
 跨过寒冬	kua guo han dong	100
 跨国旅行	kua guo lv xing	100
 跨过去了	kua guo qu le	100
@@ -144638,7 +144630,6 @@ sort: by_weight
 郎窑红	lang yao hong	100
 廊一刀	lang yi dao	100
 浪一下	lang yi xia	100
-狼友基地	lang you ji di	100
 狼真的来了	lang zhen de lai le	100
 郎指导	lang zhi dao	100
 狼之噩梦	lang zhi e meng	100
@@ -208597,7 +208588,6 @@ sort: by_weight
 山东省科协	shan dong sheng ke xie	100
 山东省科学技术厅	shan dong sheng ke xue ji shu ting	100
 山东省科学院	shan dong sheng ke xue yuan	100
-山东省莱芜市	shan dong sheng lai wu shi	100
 山东省莱西市	shan dong sheng lai xi shi	100
 山东省莱州市	shan dong sheng lai zhou shi	100
 山东省立三院	shan dong sheng li san yuan	100
@@ -235035,9 +235025,6 @@ sort: by_weight
 他尝试	ta chang shi	100
 他尝试着	ta chang shi zhe	100
 它抄你的家	ta chao ni de jia	100
-塔城地	ta cheng di	100
-塔城地区北部	ta cheng di qu bei bu	100
-塔城地区南部	ta cheng di qu nan bu	100
 他成长	ta cheng zhang	100
 他重生了	ta chong sheng le	100
 踏出第一步	ta chu di yi bu	100
@@ -240533,7 +240520,6 @@ sort: by_weight
 天津积分落户	tian jin ji fen luo hu	100
 天津交响乐团	tian jin jiao xiang yue tuan	100
 天津金城银行	tian jin jin cheng yin hang	100
-天津快乐十分	tian jin kuai le shi fen	100
 天津老大爷	tian jin lao da ye	100
 天津落户	tian jin luo hu	100
 天津麻将	tian jin ma jiang	100
@@ -257930,7 +257916,6 @@ sort: by_weight
 我在看电视啊	wo zai kan dian shi a	100
 我在看电影	wo zai kan dian ying	100
 我在看电影啊	wo zai kan dian ying a	100
-我在看开端	wo zai kan kai duan	100
 我在看淘宝	wo zai kan tao bao	100
 我再来一个	wo zai lai yi ge	100
 我在老家	wo zai lao jia	100
@@ -265730,17 +265715,13 @@ sort: by_weight
 西藏教育	xi zang jiao yu	100
 西藏经济	xi zang jing ji	100
 西藏境内	xi zang jing nei	100
-西藏景源	xi zang jing yuan	100
 西藏军区	xi zang jun qu	100
-西藏快三	xi zang kuai san	100
 西藏矿业	xi zang kuang ye	100
 西藏喇嘛	xi zang la ma	100
 西藏拉萨市	xi zang la sa shi	100
 西藏历史	xi zang li shi	100
 西藏林芝	xi zang lin zhi	100
-西藏林芝地区	xi zang lin zhi di qu	100
 西藏林芝市	xi zang lin zhi shi	100
-西藏流亡政府	xi zang liu wang zheng fu	100
 西藏旅行	xi zang lv xing	100
 西藏毛腿沙鸡	xi zang mao tui sha ji	100
 西藏冒险王	xi zang mao xian wang	100
@@ -265750,7 +265731,6 @@ sort: by_weight
 西藏民族学院	xi zang min zu xue yuan	100
 西藏墨脱	xi zang mo tuo	100
 西藏那曲	xi zang na qu	100
-西藏那曲地区	xi zang na qu di qu	100
 西藏那曲市	xi zang na qu shi	100
 西藏南部	xi zang nan bu	100
 西藏南路站	xi zang nan lu zhan	100
@@ -265761,7 +265741,6 @@ sort: by_weight
 西藏日喀则	xi zang ri ka ze	100
 西藏日喀则市	xi zang ri ka ze shi	100
 西藏山南	xi zang shan nan	100
-西藏山南地区	xi zang shan nan di qu	100
 西藏山南市	xi zang shan nan shi	100
 西藏商报	xi zang shang bao	100
 西藏省	xi zang sheng	100
@@ -272442,7 +272421,6 @@ sort: by_weight
 小脾气	xiao pi qi	100
 小篇幅	xiao pian fu	100
 削片机	xiao pian ji	100
-小片片说大片片	xiao pian pian shuo da pian pian	100
 小偏宜	xiao pian yi	100
 小骗子	xiao pian zi	100
 笑贫不笑娼	xiao pin bu xiao chang	100
@@ -281675,15 +281653,14 @@ sort: by_weight
 雪山剑法	xue shan jian fa	100
 雪山奇迹	xue shan qi ji	100
 雪山山脉	xue shan shan mai	100
-雪山狮子	xue shan shi zi	100
 雪山狮子旗	xue shan shi zi qi	100
 雪山太子	xue shan tai zi	100
 雪山折剑山庄	xue shan zhe jian shan zhuang	100
 雪上技巧	xue shang ji qiao	100
 学什么的	xue shen me de	100
 学什么好	xue shen me hao	100
+学什么技术	xue shen me ji shu	100
 学什么技术好	xue shen me ji shu hao	100
-学什么技术有前途	xue shen me ji shu you qian tu	100
 学什么专业好	xue shen me zhuan ye hao	100
 学生不返校	xue sheng bu fan xiao	100
 学生参观	xue sheng can guan	100
@@ -290525,7 +290502,6 @@ sort: by_weight
 以分计算	yi fen ji suan	100
 一份口供	yi fen kou gong	100
 一份快乐	yi fen kuai le	100
-一分快乐十分	yi fen kuai le shi fen	100
 一分米	yi fen mi	100
 一份钱两份货	yi fen qian liang fen huo	100
 一分钱没花	yi fen qian mei hua	100
@@ -301326,7 +301302,7 @@ sort: by_weight
 勇气糖	yong qi tang	100
 勇气勋章	yong qi xun zhang	100
 用情用力	yong qing yong li	100
-涌泉蜜桔	yong quan mi ju	100
+涌泉蜜橘	yong quan mi ju	100
 涌泉以报	yong quan yi bao	100
 泳圈鼬	yong quan you	100
 用人经费	yong ren jing fei	100
@@ -301336,7 +301312,6 @@ sort: by_weight
 雍容文雅	yong rong wen ya	100
 雍容闲雅	yong rong xian ya	100
 雍容雅步	yong rong ya bu	100
-用肉棒	yong rou bang	100
 用嗓过度	yong sang guo du	100
 用啥都行	yong sha dou xing	100
 用啥发电	yong sha fa dian	100
@@ -308988,7 +308963,6 @@ sort: by_weight
 云南地震	yun nan di zhen	100
 云南高校	yun nan gao xiao	100
 云南黄馨	yun nan huang xin	100
-云南快乐十分	yun nan kuai le shi fen	100
 云南旅行	yun nan lv xing	100
 云南弥勒	yun nan mi le	100
 云南全省	yun nan quan sheng	100
