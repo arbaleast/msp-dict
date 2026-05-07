@@ -16,7 +16,7 @@
 # - 简化字八股文 https://github.com/rime/rime-essay-simp
 ---
 name: ext
-version: "2026-05-03"
+version: "2026-05-05"
 sort: by_weight
 ...
 # +_+
@@ -380,8 +380,6 @@ sort: by_weight
 阿米巴经营模式	a mi ba jing ying mo shi	100
 阿米巴模式	a mi ba mo shi	100
 阿米巴原虫	a mi ba yuan chong	100
-阿米棒	a mi bang	100
-阿米狗	a mi gou	100
 阿米纳达布	a mi na da bu	100
 阿米什人	a mi shi ren	100
 阿弥陀经	a mi tuo jing	100
@@ -978,7 +976,6 @@ sort: by_weight
 挨了揍	ai le zou	100
 艾雷诺	ai lei nuo	100
 挨雷劈	ai lei pi	100
-爱丽棒	ai li bang	100
 哀梨并剪	ai li bing jian	100
 爱理不理啊	ai li bu li a	100
 爱理不理吧	ai li bu li ba	100
@@ -48488,7 +48485,6 @@ sort: by_weight
 打西边来了个	da xi bian lai le ge	100
 打西边来了一个	da xi bian lai le yi ge	100
 大喜大悲	da xi da bei	100
-大希地	da xi di	100
 大溪地黑珍珠	da xi di hei zhen zhu	100
 大溪豆干	da xi dou gan	100
 大溪港	da xi gang	100
@@ -56645,7 +56641,6 @@ sort: by_weight
 地区生产总值	di qu sheng chan zong zhi	100
 地区首家	di qu shou jia	100
 地区水分	di qu shui fen	100
-地区水泥	di qu shui ni	100
 地区司	di qu si	100
 地区所有	di qu suo you	100
 地区物流	di qu wu liu	100
@@ -142281,7 +142276,6 @@ sort: by_weight
 快乐生活一点通	kuai le sheng huo yi dian tong	100
 快乐升级	kuai le sheng ji	100
 快乐事	kuai le shi	100
-快乐十	kuai le shi	100
 快乐时	kuai le shi	100
 快乐是	kuai le shi	100
 快乐十分	kuai le shi fen	100
@@ -204028,7 +204022,6 @@ sort: by_weight
 三八八五年	san ba ba wu nian	100
 三八八一	san ba ba yi	100
 三八八一年	san ba ba yi nian	100
-三八大卖	san ba da mai	100
 三八二八	san ba er ba	100
 三八二八年	san ba er ba nian	100
 三八二二	san ba er er	100
@@ -235421,6 +235414,8 @@ sort: by_weight
 她为什么	ta wei shen me	100
 他吻我	ta wen wo	100
 她熄掉晚灯	ta xi diao wan deng	100
+塔希提	ta xi ti	100
+塔希提岛	ta xi ti dao	100
 踏下来	ta xia lai	100
 他夏了夏天	ta xia le xia tian	100
 塌下去	ta xia qu	100
@@ -260732,7 +260727,6 @@ sort: by_weight
 诬蔑性	wu mie xing	100
 吴敏霞	wu min xia	100
 无名村庄	wu ming cun zhuang	100
-无名大卖	wu ming da mai	100
 无名发	wu ming fa	100
 无名分	wu ming fen	100
 无名高地	wu ming gao di	100
@@ -264360,12 +264354,10 @@ sort: by_weight
 洗马潭	xi ma tan	100
 洗马桶	xi ma tong	100
 洗马镇	xi ma zhen	100
-西梅大卖	xi mei da mai	100
 奚美丽	xi mei li	100
 喜眉梢	xi mei shao	100
 洗眉刷目	xi mei shua mu	100
 喜眉笑脸	xi mei xiao lian	100
-西门德孟福尔	xi men de meng fu er	100
 西门国小	xi men guo xiao	100
 席门蓬巷	xi men peng xiang	100
 席门穷巷	xi men qiong xiang	100
@@ -264382,6 +264374,7 @@ sort: by_weight
 西门子系统	xi men zi xi tong	100
 西门子直流调速	xi men zi zhi liu tiao su	100
 西门子直流调速器	xi men zi zhi liu tiao su qi	100
+西蒙·德孟福尔	xi meng de meng fu er	100
 西孟加拉邦	xi meng jia la bang	100
 戏梦空间	xi meng kong jian	100
 细蒙蒙	xi meng meng	100
@@ -277282,6 +277275,7 @@ sort: by_weight
 刑法学家	xing fa xue jia	100
 刑罚制度	xing fa zhi du	100
 星饭团	xing fan tuan	100
+性反转	xing fan zhuan	100
 兴废存亡	xing fei cun wang	100
 兴废荣枯	xing fei rong ku	100
 兴废盛衰	xing fei sheng shuai	100
@@ -278272,6 +278266,7 @@ sort: by_weight
 姓谢的	xing xie de	100
 星新一	xing xin yi	100
 醒醒啊	xing xing a	100
+行星伴月	xing xing ban yue	100
 行星炒锅	xing xing chao guo	100
 行星齿轮传动	xing xing chi lun chuan dong	100
 行星齿轮减速机	xing xing chi lun jian su ji	100
