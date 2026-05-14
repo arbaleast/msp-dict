@@ -1,1 +1,1 @@
-Failed to fetch gaboolic/rime-frost@master from GitHub.
+Package size exceeded the configured limit of 50 MB. Try https://github.com/gaboolic/rime-frost/tree/master/cn_dicts_cell/game.dict.yaml instead.
