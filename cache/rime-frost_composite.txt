@@ -1,1 +1,1 @@
-Package size exceeded the configured limit of 50 MB. Try https://github.com/gaboolic/rime-frost/tree/master/cn_dicts_cell/composite.dict.yaml instead.
+File size exceeded the configured limit of 20 MB.
