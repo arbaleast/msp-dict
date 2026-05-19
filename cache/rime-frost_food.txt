@@ -9137,6 +9137,7 @@ use_preset_vocabulary: false
 保定驴	bao ding lv	0
 保定驴肉	bao ding lv rou	0
 保定驴肉张	bao ding lv rou zhang	0
+马肉火烧	ma rou huo shao	1
 保定食	bao ding shi	0
 保定时	bao ding shi	0
 保定时代	bao ding shi dai	0
@@ -108527,7 +108528,6 @@ use_preset_vocabulary: false
 文家小盘	wen jia xiao pan	0
 文家小盘鸡	wen jia xiao pan ji	0
 文家鱼	wen jia yu	0
-文建里	wen jian li	0
 文锦	wen jin	13
 文锦阁	wen jin ge	0
 文锦桂	wen jin gui	0

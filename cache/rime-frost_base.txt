@@ -12382,6 +12382,7 @@ sort: by_weight
 北端	bei duan	89
 背对	bei dui	281
 被怼	bei dui	265
+被㨃	bei dui	265
 背对背	bei dui bei	57
 被对方	bei dui fang	910
 被对手	bei dui shou	636
@@ -13695,7 +13696,7 @@ sort: by_weight
 悲啼	bei ti	9
 背题	bei ti	152
 被提	bei ti	31
-北体	bei ti	801
+北体	bei ti	80
 被提拔	bei ti ba	312
 被提出	bei ti chu	233
 北体大	bei ti da	119
@@ -46380,6 +46381,7 @@ sort: by_weight
 打不得	da bu de	30
 大部地区	da bu di qu	41
 打补丁	da bu ding	281
+打不对	da bu dui	5
 大部队	da bu dui	634
 大部分	da bu fen	73150
 大部分的	da bu fen de	6907
@@ -54695,6 +54697,7 @@ sort: by_weight
 蹈袭	dao xi	3
 倒西	dao xi	5
 倒下	dao xia	2585
+导下	dao xia	3
 刀下	dao xia	109
 到下	dao xia	0
 道狭草木长	dao xia cao mu zhang	1
@@ -55876,6 +55879,7 @@ sort: by_weight
 登录时	deng lu shi	47
 登录时间	deng lu shi jian	14
 登陆时间	deng lu shi jian	14
+登录态	deng lu tai	1
 登陆艇	deng lu ting	44
 登录网站	deng lu wang zhan	45
 登录文件	deng lu wen jian	1
@@ -67149,6 +67153,7 @@ sort: by_weight
 对党员	dui dang yuan	7
 堆得	dui de	92
 怼得	dui de	123
+㨃得	dui de	123
 对的	dui de	0
 堆得比	dui de bi	1
 对得起	dui de qi	1909
@@ -67313,6 +67318,7 @@ sort: by_weight
 对接中	dui jie zhong	20
 对劲	dui jin	130
 怼进	dui jin	17
+㨃进	dui jin	17
 对进	dui jin	4
 对襟	dui jin	45
 对进口的	dui jin kou de	6
@@ -67451,6 +67457,7 @@ sort: by_weight
 对全民	dui quan min	10
 对人	dui ren	3520
 怼人	dui ren	470
+㨃人	dui ren	470
 对人对事	dui ren dui shi	60
 对人民	dui ren min	195
 对人生	dui ren sheng	726
@@ -77991,6 +77998,7 @@ sort: by_weight
 分布表	fen bu biao	15
 分布不均	fen bu bu jun	90
 分不出	fen bu chu	256
+分不出来	fen bu chu lai	1
 分不到	fen bu dao	194
 分不低	fen bu di	11
 分布电容	fen bu dian rong	24
@@ -112213,6 +112221,7 @@ sort: by_weight
 护犊子	hu du zi	126
 护短	hu duan	131
 互怼	hu dui	357
+互㨃	hu dui	357
 护盾	hu dun	652
 忽多忽少	hu duo hu shao	2
 护额	hu e	32
@@ -117848,6 +117857,7 @@ sort: by_weight
 回短信	hui duan xin	20
 会对	hui dui	7453
 回怼	hui dui	304
+回㨃	hui dui	304
 汇兑	hui dui	177
 汇兑业务	hui dui ye wu	4
 会多	hui duo	334
@@ -193958,6 +193968,7 @@ sort: by_weight
 怒道	nu dao	131
 怒瞪着	nu deng zhe	4
 怒怼	nu dui	158
+怒㨃	nu dui	158
 驽钝	nu dun	27
 努尔	nu er	71
 奴尔干都司	nu er gan du si	3
@@ -208033,6 +208044,7 @@ sort: by_weight
 侨界	qiao jie	4
 巧解	qiao jie	15
 桥接模式	qiao jie mo shi	27
+桥接层	qiao jie ceng	1
 巧劲	qiao jin	101
 敲进	qiao jin	15
 巧劲儿	qiao jin er	13
@@ -245229,6 +245241,7 @@ sort: by_weight
 爽吗	shuang ma	74
 双马	shuang ma	109
 双马餐厅	shuang ma can ting	1
+双马尾	shuang ma wei	163
 双麻酥饼	shuang ma su bing	2
 双盲	shuang mang	474
 双盲试验	shuang mang shi yan	69
