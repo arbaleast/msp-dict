@@ -1,10 +1,10 @@
-# 更新日期: 2026-05-19
+# 更新日期: 2026-05-20
 
 ## 词库统计
-- 去重后总词条: 2,449,810
-- 词频≥100: 1,693,511
-- 词频≥500: 282,907
-- DAT 总词条: 3,424,014
+- 去重后总词条: 2,451,246
+- 词频≥100: 1,693,556
+- 词频≥500: 286,961
+- DAT 总词条: 3,546,729
 
 ## 来源版本
 - rime-ice_base.txt: 542,482 条
@@ -13,7 +13,7 @@
 - rime-ice_8105.txt: 8,607 条
 - rime-ice_others.txt: 610 条
 - rime-frost_base.txt: 365,743 条
-- rime-frost_ext.txt: 0 条
+- rime-frost_ext.txt: 235,580 条
 - rime-frost_8105.txt: 8,529 条
 - rime-frost_others.txt: 568 条
 - rime-frost_food.txt: 144,441 条
