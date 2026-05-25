@@ -70,10 +70,10 @@ jobs:
           curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/luna_pinyin.dict.yaml" -o cache/rime-frost_luna_pinyin.txt
           echo "rime-frost done"
 
-      - name: Merge and convert
+      - name: Merge RIME sources
         run: |
           cat << 'PYEOF' > merge.py
-          import os, struct
+          import os, datetime
 
           def parse_rime(content):
               """解析 Rime 格式：词\t拼音\t词频"""
@@ -87,7 +87,7 @@ jobs:
                   parts = line.split('\t')
                   if len(parts) >= 3:
                       word = parts[0].strip()
-                      pinyin = parts[1].strip()  # 保留拼音
+                      pinyin = parts[1].strip()
                       try:
                           freq = int(parts[-1].strip())
                       except ValueError:
@@ -98,10 +98,8 @@ jobs:
                       # 可能是 luna_pinyin 的 词\t拼音 格式（无词频）
                       word = parts[0].strip()
                       pinyin_candidate = parts[1].strip()
-                      # 判断第二列是拼音还是词频：拼音不含数字，词频是纯数字
+                      # 判断第二列是拼音还是词频：拼音不含数字
                       if pinyin_candidate and not any(c.isdigit() for c in pinyin_candidate):
-                          # 拼音格式（luna_pinyin: 〇\ting, ㄓ\tzhi 等）
-                          # 只保留CJK字符作为词（过滤掉注音符号如ㄓㄔ）
                           if word and ord(word[0]) >= 0x4E00:  # CJK统一汉字
                               entries.append((word, pinyin_candidate, 1))
                       else:
@@ -125,86 +123,6 @@ jobs:
                       else:
                           word_data[word] = (pinyin, freq)
               return sorted(word_data.items(), key=lambda x: x[1][1], reverse=True)
-
-          def normalize_pinyin(p):
-              """规范化拼音：移除空格，转小写，保留完整拼音"""
-              return p.replace(' ', '').lower()
-
-          def has_rare_char(word):
-              """检查是否含生僻字（CJK扩展区）"""
-              for c in word:
-                  if ord(c) < 128:
-                      continue
-                  code = ord(c)
-                  if 0x20000 <= code <= 0x2FA1F or 0xF900 <= code <= 0xFAFF:
-                      return True
-              return False
-
-          # ========== 生成 Win10 DAT ==========
-          # 格式来自 imewlconverter Win10MsPinyin.cs
-          # Entry: magic(0x00100010) + hanzi_offset + rank + 0x06 + unknown(0) + unknown(0xE679CD20) + pinyin + split + word + term
-
-          def build_win10_dat(words_with_pinyin, output_path):
-              """生成微软拼音 Win10 用户词库 (.dat)"""
-              HEADER_SIZE = 0x40
-              phrase_offset_start = HEADER_SIZE
-              phrase_count = len(words_with_pinyin)
-
-              # Entry fixed header: magic(4) + hanzi_off(2) + rank(1) + marker(1) + unknown1(4) + unknown2(4) = 16 bytes
-              # Entry size = 16 + pinyin_utf16_bytes + split(2) + word_utf16_bytes + term(2)
-              #            = 20 + pinyin_utf16_bytes + word_utf16_bytes
-              # hanzi_offset = 16(fixed) + pinyin_utf16_bytes + 2(split) = 18 + pinyin_utf16_bytes
-
-              # 计算偏移和大小
-              phrase_offsets = []
-              current_offset = 0
-              for word, pinyin_str, rank in words_with_pinyin:
-                  pinyin_utf16_len = len(pinyin_str) * 2
-                  word_utf16_len = len(word) * 2
-                  entry_size = 20 + pinyin_utf16_len + word_utf16_len
-                  phrase_offsets.append(current_offset)
-                  current_offset += entry_size
-
-              phrase_start = phrase_offset_start + phrase_count * 4
-              phrase_end = phrase_start + current_offset
-
-              # 构建 header
-              header = bytearray(HEADER_SIZE)
-              header[0:8] = b'mschxudp'
-              struct.pack_into('<I', header, 8, 0x00600002)
-              struct.pack_into('<I', header, 12, 1)
-              struct.pack_into('<I', header, 16, phrase_offset_start)
-              struct.pack_into('<I', header, 20, phrase_start)
-              struct.pack_into('<I', header, 24, phrase_end)
-              struct.pack_into('<I', header, 28, phrase_count)
-              struct.pack_into('<Q', header, 32, 0)
-
-              # 构建 offset 表
-              offset_table = b''.join(struct.pack('<I', off) for off in phrase_offsets)
-
-              # 构建词条
-              phrase_parts = []
-              for word, pinyin_str, rank in words_with_pinyin:
-                  pinyin_utf16 = pinyin_str.lower().encode('utf-16-le')
-                  word_utf16 = word.encode('utf-16-le')
-                  # hanzi_offset = 18 + pinyin_utf16_len
-                  hanzi_offset = 18 + len(pinyin_utf16)
-
-                  entry  = struct.pack('<I', 0x00100010)
-                  entry += struct.pack('<H', hanzi_offset)
-                  entry += bytes([rank & 0xFF, 0x06])
-                  entry += struct.pack('<I', 0x00000000)   # unknown1 (4 bytes)
-                  entry += struct.pack('<I', 0xE679CD20)
-                  entry += pinyin_utf16
-                  entry += struct.pack('<H', 0)             # split
-                  entry += word_utf16
-                  entry += struct.pack('<H', 0)             # terminator
-                  phrase_parts.append(entry)
-
-              data = bytes(header) + offset_table + b''.join(phrase_parts)
-              with open(output_path, 'wb') as f:
-                  f.write(data)
-              print(f'已生成 {output_path}: {len(words_with_pinyin):,} 词条, {len(data)/1024/1024:.1f} MB')
 
           files = [
               'rime-ice_base.txt', 'rime-ice_ext.txt', 'rime-ice_tencent.txt',
@@ -238,28 +156,27 @@ jobs:
           merged = merge(all_entries)
           print(f'\n去重后: {len(merged):,} 条')
 
-          # 生成所有版本 Win10 DAT（2-6字符，有拼音，无生僻字）
-          print('\n=== 生成 Win10 DAT ===')
-          total_dat_words = 0
+          # 生成各词频等级文本文件
           for min_freq, suffix in [(1,'full'), (10,'freq10'), (50,'freq50'), (100,'freq100'), (500,'freq500')]:
-              dat_words = [(w, normalize_pinyin(p), min(f//200, 255)) 
-                          for w, (p, f) in merged 
-                          if len(w) >= 2 and len(w) <= 6 and f >= min_freq and p and not has_rare_char(w)]
-              total_dat_words += len(dat_words)
-              out = f'msp_{suffix}.dat'
-              build_win10_dat(dat_words, out)
-              print(f'{out}: {len(dat_words):,} 词条')
-          print(f'DAT 总词条: {total_dat_words:,}')
+              out = f'msp_{suffix}.txt'
+              count = 0
+              with open(out, 'w', encoding='utf-8') as f:
+                  for word_data in merged:
+                      word = word_data[0]
+                      pinyin, freq = word_data[1]
+                      if freq >= min_freq:
+                          f.write(f'{word}\t{pinyin}\t{freq}\n')
+                          count += 1
+              print(f'已生成 {out}: {count:,} 条')
 
           # 生成 changelog
-          today = __import__('datetime').date.today().isoformat()
+          today = datetime.date.today().isoformat()
           with open('CHANGELOG.md', 'w') as f:
               f.write(f'# 更新日期: {today}\n\n')
               f.write(f'## 词库统计\n')
               f.write(f'- 去重后总词条: {len(merged):,}\n')
               f.write(f'- 词频≥100: {sum(1 for _,(_,f) in merged if f>=100):,}\n')
               f.write(f'- 词频≥500: {sum(1 for _,(_,f) in merged if f>=500):,}\n')
-              f.write(f'- DAT 总词条: {total_dat_words:,}\n')
               f.write(f'\n## 来源版本\n')
               for fn in files:
                   path = os.path.join('cache', fn)
@@ -271,13 +188,23 @@ jobs:
           PYEOF
           python3 merge.py
 
+      - name: Build DAT files (mschxudp format)
+        run: |
+          echo "=== 使用 mschxudp 格式构建 DAT 文件 ==="
+          python3 -m src.cli build msp_full.txt -o msp_full.dat
+          python3 -m src.cli build msp_freq10.txt -o msp_freq10.dat
+          python3 -m src.cli build msp_freq50.txt -o msp_freq50.dat
+          python3 -m src.cli build msp_freq100.txt -o msp_freq100.dat
+          python3 -m src.cli build msp_freq500.txt -o msp_freq500.dat
+          echo "=== 所有 DAT 文件构建完成 ==="
+
       - name: Commit and push
         run: |
           TODAY=$(date +%Y-%m-%d)
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git add msp_*.dat CHANGELOG.md cache/
+          git add msp_*.txt msp_*.dat CHANGELOG.md cache/
           if git diff --cached --quiet; then
             echo "没有更新，跳过提交"
           else

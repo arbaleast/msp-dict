@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.coverage
+.coverage.*
+
+# 构建产物 - MSPinyin DAT 词库文件
+*.dat
+
+# 抓取器下载缓存（CI 运行时自动下载）
+cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 调试临时文件
+_debug_*
+_test_*

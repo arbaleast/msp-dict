@@ -51,10 +51,11 @@ jobs:
           curl -sL "https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/geography.dict.yaml" -o cache/rime-frost_geography.txt
           echo "rime-frost done"
 
-      - name: Fetch hot words from crawler
+      - name: Fetch hot words from crawler (5 data sources)
         run: |
-          echo "=== Fetching hot words ==="
-          python3 -m crawler.cli fetch --all -o cache/hot_words.txt
+          echo "=== Fetching hot words from 5 sources ==="
+          echo "Sources: github, wikipedia, bilibili, moegirl, wikidata"
+          python3 -m crawler.cli fetch --all --limit 200 -o cache/hot_words.txt
           echo "Hot words fetched: $(wc -l < cache/hot_words.txt)"
 
       - name: Merge and convert
@@ -156,49 +157,7 @@ jobs:
                           count += 1
               print(f'已生成 {out}: {count:,} 条')
 
-          # 生成 DAT 文件
-          print('\n=== 生成 DAT 文件 ===')
-          import struct
-          
-          ENTRY_SIZE = 60
-          HEADER_SIZE = 0x400
-          DATA_START = 0x13fc
-          HEADER_MAGIC = bytes.fromhex('55aa88800200600055aa55aa00200000')
-          
-          def build_dat(words, out_path):
-              header = bytearray(HEADER_SIZE)
-              header[0:16] = HEADER_MAGIC
-              data = bytearray()
-              skipped = 0
-              for word, freq in words:
-                  text_bytes = word.encode('utf-16-le')
-                  text_len = len(word)
-                  # 跳过超长词条（辅助平面字符占4字节）
-                  if len(text_bytes) // 2 > 22:
-                      skipped += 1
-                      continue
-                  entry = bytearray(ENTRY_SIZE)
-                  struct.pack_into('<I', entry, 0, 0)
-                  struct.pack_into('<I', entry, 4, text_len)
-                  entry[8:16] = b'\x00' * 8
-                  # 文本 + null terminator
-                  entry[16:16 + len(text_bytes)] = text_bytes
-                  entry[16 + len(text_bytes):16 + len(text_bytes) + 2] = b'\x00\x00'
-                  data += bytes(entry)
-              padding = DATA_START - HEADER_SIZE
-              result = bytes(header) + b'\x00' * padding + bytes(data)
-              with open(out_path, 'wb') as f:
-                  f.write(result)
-              print(f'已生成 {out_path} (跳过 {skipped} 条超长词)')
-          
-          # 为每个版本生成 DAT
-          for min_freq, suffix in [(10,'freq10'), (50,'freq50'), (100,'freq100'), (500,'freq500')]:
-              txt_file = f'msp_{suffix}.txt'
-              dat_file = f'msp_{suffix}.dat'
-              words = [(w, f) for w, f in merged if f >= min_freq]
-              build_dat(words, dat_file)
-          
-          # 生成优化版 DAT (freq>=200, 2-6字符, 无生僻字)
+          # 生成优化版词条 (freq>=200, 2-6字符, 无生僻字)
           print('\n=== 生成优化版 ===')
           def has_rare_char(word):
               for c in word:
@@ -209,11 +168,14 @@ jobs:
                       return True
               return False
           
-          optimized = [(w, p, f) for w, p, f in 
-                        ((word, data[0], data[1]) for word, data in merged)
-                        if len(w) >= 2 and len(w) <= 6 and data[1] >= 200 and not has_rare_char(w)]
-          print(f'优化版词条数: {len(optimized):,}')
-          build_dat(optimized, 'msp_optimized.dat', with_pinyin=True)
+          optimized = [(word, pinyin, freq) for word, (pinyin, freq) in merged
+                        if len(word) >= 2 and len(word) <= 6 and freq >= 200 and not has_rare_char(word)]
+          count = 0
+          with open('msp_optimized.txt', 'w', encoding='utf-8') as f:
+              for word, pinyin, freq in optimized:
+                  f.write(f'{word}\t{pinyin}\t{freq}\n')
+                  count += 1
+          print(f'已生成 msp_optimized.txt: {count:,} 条')
 
           # 生成 changelog
           today = datetime.date.today().isoformat()
@@ -234,6 +196,17 @@ jobs:
           print('CHANGELOG.md 已生成')
           PYEOF
           python3 merge.py
+
+      - name: Build DAT files (mschxudp format)
+        run: |
+          echo "=== 使用 mschxudp 格式构建 DAT 文件 ==="
+          python3 -m src.cli build msp_full.txt -o msp_full.dat
+          python3 -m src.cli build msp_freq10.txt -o msp_freq10.dat
+          python3 -m src.cli build msp_freq50.txt -o msp_freq50.dat
+          python3 -m src.cli build msp_freq100.txt -o msp_freq100.dat
+          python3 -m src.cli build msp_freq500.txt -o msp_freq500.dat
+          python3 -m src.cli build msp_optimized.txt -o msp_optimized.dat
+          echo "=== 所有 DAT 文件构建完成 ==="
 
       - name: Commit and push
         run: |

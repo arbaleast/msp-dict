@@ -62,7 +62,9 @@ class WikipediaFetcher:
         Returns:
             词条标题列表
         """
-        url = f"{self.API_URL}?action=opensearch&search={topic}&limit={limit}&namespace=0&format=json"
+        from urllib.parse import quote
+        encoded_topic = quote(topic, safe='')
+        url = f"{self.API_URL}?action=opensearch&search={encoded_topic}&limit={limit}&namespace=0&format=json"
         
         try:
             result = subprocess.run(
