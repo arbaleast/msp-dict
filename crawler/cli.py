@@ -26,11 +26,11 @@ sys.path.insert(0, str(project_root))
 
 from crawler.fetchers import (
     GitHubFetcher, WikipediaFetcher, BilibiliFetcher,
-    MoegirlFetcher, WikidataFetcher,
+    MoegirlFetcher, WikidataFetcher, ZhihuFetcher,
 )
 from crawler.pipeline import Pipeline, save_words, load_existing_words
 
-TOTAL_SOURCES = 5
+TOTAL_SOURCES = 6
 
 
 def cmd_fetch(args):
@@ -87,6 +87,16 @@ def cmd_fetch(args):
         print(f"      Got {len(labels)} entity labels")
         index += 1
 
+    # Zhihu
+    if args.zhihu or args.all:
+        print(f"\n[{index}/{TOTAL_SOURCES}] Fetching Zhihu Hot Keywords...")
+        fetcher = ZhihuFetcher(proxy=args.proxy)
+        keywords = fetcher.fetch(limit=args.limit)
+        search_hot = fetcher.fetch_search_hot()
+        sources['zhihu'] = list(set(keywords + search_hot))
+        print(f"      Got {len(sources['zhihu'])} keywords")
+        index += 1
+
     if not sources:
         print("[CLI] No data source selected. Use --all or specify sources.")
         return 1
@@ -128,6 +138,7 @@ def cmd_update(args):
         bilibili = args.bilibili or args.all
         moegirl = args.moegirl or args.all
         wikidata = args.wikidata or args.all
+        zhihu = args.zhihu or args.all
         all = args.all
         proxy = args.proxy
         limit = args.limit
@@ -236,6 +247,17 @@ def cmd_stats(args):
         print(f"  Current count: {len(labels)}")
         stats_info.append(('Wikidata', len(labels)))
 
+    # Zhihu
+    if args.zhihu or args.all:
+        print("\n[Zhihu Hot Keywords]")
+        print("  APIs: topstory/hot-lists, explore/guest/top-search")
+        fetcher = ZhihuFetcher(proxy=args.proxy)
+        keywords = fetcher.fetch(limit=100)
+        search_hot = fetcher.fetch_search_hot()
+        total = len(set(keywords + search_hot))
+        print(f"  Current count: {total}")
+        stats_info.append(('Zhihu', total))
+
     if not stats_info:
         print("\nNo data source selected.")
         return 1
@@ -280,6 +302,7 @@ Examples:
     fetch_parser.add_argument('--bilibili', action='store_true', help='抓取B站热词')
     fetch_parser.add_argument('--moegirl', action='store_true', help='抓取萌娘百科词条')
     fetch_parser.add_argument('--wikidata', action='store_true', help='抓取 Wikidata 中文标签')
+    fetch_parser.add_argument('--zhihu', action='store_true', help='抓取知乎热词')
     fetch_parser.add_argument('--proxy', default='', help='代理地址（需要时设置）')
     fetch_parser.add_argument('--limit', type=int, default=100, help='每个数据源抓取数量')
     fetch_parser.add_argument('--existing', help='已有词库文件（用于去重）')
@@ -293,6 +316,7 @@ Examples:
     update_parser.add_argument('--bilibili', action='store_true', help='抓取B站热词')
     update_parser.add_argument('--moegirl', action='store_true', help='抓取萌娘百科词条')
     update_parser.add_argument('--wikidata', action='store_true', help='抓取 Wikidata 中文标签')
+    update_parser.add_argument('--zhihu', action='store_true', help='抓取知乎热词')
     update_parser.add_argument('--proxy', default='', help='代理地址（需要时设置）')
     update_parser.add_argument('--limit', type=int, default=100, help='每个数据源抓取数量')
     update_parser.add_argument('--mspinyin', required=True, help='微软拼音词库文件路径')
@@ -306,6 +330,7 @@ Examples:
     stats_parser.add_argument('--bilibili', action='store_true', help='B站热词')
     stats_parser.add_argument('--moegirl', action='store_true', help='萌娘百科词条')
     stats_parser.add_argument('--wikidata', action='store_true', help='Wikidata 中文标签')
+    stats_parser.add_argument('--zhihu', action='store_true', help='知乎热词')
     stats_parser.add_argument('--proxy', default='', help='代理地址（需要时设置）')
 
     args = parser.parse_args()
