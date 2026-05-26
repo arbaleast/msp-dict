@@ -1,8 +1,9 @@
-name: Daily Build
+name: Biweekly Build
 
 on:
   schedule:
-    - cron: '30 3 * * *'  # 每天 03:30 UTC = 11:30 CST
+    # 每月 1 日和 15 日 03:30 UTC = 11:30 CST
+    - cron: '30 3 1,15 * *'
   workflow_dispatch:  # 也可手动触发
 
 jobs:
@@ -169,21 +170,49 @@ jobs:
                           count += 1
               print(f'已生成 {out}: {count:,} 条')
 
-          # 生成 changelog
+          # 生成 release notes
           today = datetime.date.today().isoformat()
+          freq100_count = sum(1 for _, (_, f) in merged if f >= 100)
+          freq500_count = sum(1 for _, (_, f) in merged if f >= 500)
+
+          # 分类统计来源
+          rime_ice_files = [f for f in files if f.startswith('rime-ice')]
+          rime_frost_files = [f for f in files if f.startswith('rime-frost')]
+          source_counts = {}
+          for fn in files:
+              path = os.path.join('cache', fn)
+              if os.path.exists(path):
+                  with open(path, encoding='utf-8') as cf:
+                      source_counts[fn] = len(parse_rime(cf.read()))
+
+          def src_total(file_list):
+              return sum(source_counts.get(f, 0) for f in file_list)
+
           with open('CHANGELOG.md', 'w') as f:
-              f.write(f'# 更新日期: {today}\n\n')
-              f.write(f'## 词库统计\n')
-              f.write(f'- 去重后总词条: {len(merged):,}\n')
-              f.write(f'- 词频≥100: {sum(1 for _,(_,f) in merged if f>=100):,}\n')
-              f.write(f'- 词频≥500: {sum(1 for _,(_,f) in merged if f>=500):,}\n')
-              f.write(f'\n## 来源版本\n')
-              for fn in files:
-                  path = os.path.join('cache', fn)
-                  if os.path.exists(path):
-                      with open(path, encoding='utf-8') as cf:
-                          count = len(parse_rime(cf.read()))
-                          f.write(f'- {fn}: {count:,} 条\n')
+              f.write(f'## 词库统计\n\n')
+              f.write(f'| 指标 | 数值 |\n')
+              f.write(f'|------|------|\n')
+              f.write(f'| 去重后总词条 | {len(merged):,} |\n')
+              f.write(f'| 词频 ≥ 100 | {freq100_count:,} |\n')
+              f.write(f'| 词频 ≥ 500 | {freq500_count:,} |\n')
+              f.write(f'\n## 数据来源\n\n')
+              f.write(f'- **rime-ice** (雾凇拼音) — {src_total(rime_ice_files):,} 条\n')
+              for fn in rime_ice_files:
+                  if fn in source_counts:
+                      f.write(f'  - {fn}: {source_counts[fn]:,} 条\n')
+              f.write(f'\n- **rime-frost** (白霜拼音) — {src_total(rime_frost_files):,} 条\n')
+              # 简化输出，只列出有内容的文件
+              for fn in rime_frost_files:
+                  if fn in source_counts and source_counts[fn] > 0:
+                      # 去掉 rime-frost_ 前缀让列表更简洁
+                      short_name = fn.replace('rime-frost_', '')
+                      f.write(f'  - {short_name}: {source_counts[fn]:,} 条\n')
+              f.write(f'\n## 下载文件\n\n')
+              f.write(f'- `msp_full.dat` — 完整版\n')
+              f.write(f'- `msp_freq10.dat` — 词频 ≥ 10\n')
+              f.write(f'- `msp_freq50.dat` — 词频 ≥ 50\n')
+              f.write(f'- `msp_freq100.dat` — 词频 ≥ 100\n')
+              f.write(f'- `msp_freq500.dat` — 词频 ≥ 500\n')
           print('CHANGELOG.md 已生成')
           PYEOF
           python3 merge.py
@@ -218,7 +247,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TODAY=$(date +%Y-%m-%d)
-          TAG="v1.2-$TODAY"
+          TAG="v$(date +%Y.%m.%d)"
           
           # 读取 CHANGELOG.md 作为 release body
           BODY=$(cat CHANGELOG.md)
