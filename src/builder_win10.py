@@ -52,8 +52,10 @@ class Win10MSPinyinBuilder:
     ENTRY_UNK1 = 0x00000000         # 词条内偏移 0x08 处的未知字段, 固定为 0
     ENTRY_UNK2 = 0xE679CD20         # 词条内偏移 0x0C 处的未知字段, 固定魔数 (来源: imewlconverter)
     ENTRY_FLAG = 0x06               # rank 后的固定标志字节
-    ENTRY_HEAD_BASE = 18            # 固定头大小 = 4(magic) + 2(hanzi_offset) + 1(rank) + 1(flag) + 4(unk1) + 4(unk2)
+    ENTRY_HEAD_BASE = 16            # 固定头大小 = 4(magic) + 2(hanzi_offset) + 1(rank) + 1(flag) + 4(unk1) + 4(unk2)
     ENTRY_SPLIT = 0                 # 拼音与汉字之间的 null 分隔符值
+    # hanzi_offset = 固定头(16) + pinyin_bytes + split(2) = 18 + pinyin_bytes
+    ENTRY_HANZI_OFFSET_BASE = 18
 
     def __init__(self, timestamp: int = 0):
         """初始化构建器
@@ -65,26 +67,34 @@ class Win10MSPinyinBuilder:
         self.timestamp = timestamp
 
     def add_word(self, word: str, pinyin_str: str, rank: int = 1):
-        """添加词条（pinyin_str 为无空格字符串）"""
-        self.words.append((word, pinyin_str, rank))
+        """添加词条（pinyin_str 为无空格字符串）
+        
+        注意: word 和 pinyin_str 需要先转换为 UTF-16LE 字节来获取准确的字节长度
+        """
+        # 转换为 UTF-16LE 以正确处理 surrogate pairs (如生僻字)
+        word_utf16 = word.encode('utf-16-le')
+        pinyin_utf16 = pinyin_str.encode('utf-16-le')
+        self.words.append((word, pinyin_str, rank, word_utf16, pinyin_utf16))
 
     def build(self) -> bytes:
         """构建二进制数据"""
         phrase_count = len(self.words)
 
-        # 计算每个词条的大小和累积偏移
+        # 计算每个词条的大小和累积偏移（使用 UTF-16LE 字节长度）
         phrase_offsets = []
         current_offset = 0
-        for word, pinyin_str, rank in self.words:
-            pinyin_char_len = len(pinyin_str)  # 字符数，不是字节数
-            word_char_len = len(word)
+        for word, pinyin_str, rank, word_utf16, pinyin_utf16 in self.words:
+            pinyin_byte_len = len(pinyin_utf16)  # UTF-16LE 字节长度
+            word_byte_len = len(word_utf16)      # UTF-16LE 字节长度
 
-            # hanzi_offset = 8(magic+hanoff) + 8(unknown) + pinyin_bytes + 2(split)
-            # = 18 + pinyin_char_len * 2
-            hanzi_offset = self.ENTRY_HEAD_BASE + pinyin_char_len * 2
+            # hanzi_offset = 固定头(16) + pinyin_bytes + split(2) = 18 + pinyin_bytes
+            # Windows 用 hanzi_offset 来定位汉字起始位置
+            hanzi_offset = self.ENTRY_HANZI_OFFSET_BASE + pinyin_byte_len
 
-            # 词条大小 = 4(magic) + 2(hanoff) + 1(rank) + 1(x06) + 4(unknown) + 4(unknown2) + pinyin_bytes + 2(split) + word_bytes + 2(term)
-            entry_size = 4 + 2 + 1 + 1 + 4 + 4 + pinyin_char_len * 2 + 2 + word_char_len * 2 + 2
+            # 词条大小 = 固定头(16) + pinyin_bytes + split(2) + word_bytes + term(2)
+            entry_size = self.ENTRY_HEAD_BASE + pinyin_byte_len + 2 + word_byte_len + 2
+            
+            # 存储当前偏移（词条相对于 phrase_start 的位置）
             phrase_offsets.append(current_offset)
             current_offset += entry_size
 
@@ -107,12 +117,9 @@ class Win10MSPinyinBuilder:
 
         # 构建词条（用 list 最后 join，避免 phrases += entry 的 O(n²) 问题）
         phrase_parts = []
-        for word, pinyin_str, rank in self.words:
-            pinyin_char_len = len(pinyin_str)
-            word_char_len = len(word)
-            pinyin_utf16 = pinyin_str.encode('utf-16-le')
-            word_utf16 = word.encode('utf-16-le')
-            hanzi_offset = self.ENTRY_HEAD_BASE + pinyin_char_len * 2
+        for word, pinyin_str, rank, word_utf16, pinyin_utf16 in self.words:
+            pinyin_byte_len = len(pinyin_utf16)
+            hanzi_offset = self.ENTRY_HANZI_OFFSET_BASE + pinyin_byte_len
 
             entry  = struct.pack('<I', self.ENTRY_MAGIC)   # 词条魔数
             entry += struct.pack('<H', hanzi_offset)
@@ -166,6 +173,7 @@ class Win10MSPinyinParser:
         for i in range(phrase_count):
             off = struct.unpack('<I', data[phrase_offset_start + i * 4:phrase_offset_start + i * 4 + 4])[0]
             offsets.append(off)
+        # 最后一个 offset = phrase_end 相对于 phrase_start 的偏移
         offsets.append(phrase_end - phrase_start)
 
         # 读取词条
@@ -185,10 +193,10 @@ class Win10MSPinyinParser:
         hanzi_offset = struct.unpack('<H', data[start + 4:start + 6])[0]
         rank = data[start + 6]
 
-        # pinyin 字符数 = (hanzi_offset - 18) / 2
-        # 18 = 固定头大小: 4(magic) + 2(hanzi_offset) + 1(rank) + 1(flag=0x06) + 4(unk1) + 4(unk2)
-        pinyin_char_len = (hanzi_offset - Win10MSPinyinBuilder.ENTRY_HEAD_BASE) // 2
-        pinyin_byte_len = pinyin_char_len * 2
+        # hanzi_offset = 18 + pinyin_byte_len (指向汉字起始位置，跳过 split)
+        # 所以 pinyin_byte_len = hanzi_offset - 18
+        pinyin_byte_len = hanzi_offset - Win10MSPinyinBuilder.ENTRY_HANZI_OFFSET_BASE
+        pinyin_char_len = pinyin_byte_len // 2
 
         # pinyin 从 start + 16 开始
         # 16 = 4(magic) + 2(hanzi_offset) + 1(rank) + 1(flag) + 4(unk1) + 4(unk2)
