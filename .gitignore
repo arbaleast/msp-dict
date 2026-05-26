@@ -8,11 +8,20 @@ build/
 .coverage
 .coverage.*
 
+# 代码覆盖率报告（coverage.py）
+output/htmlcov/
+output/coverage.xml
+
 # 构建产物 - MSPinyin DAT 词库文件
 *.dat
 
 # 抓取器下载缓存（CI 运行时自动下载）
-cache/
+.cache/
+
+# 运行时输出
+output/
+new_words*.txt
+crawl_output.txt
 
 # IDE
 .vscode/
@@ -23,3 +32,4 @@ cache/
 # 调试临时文件
 _debug_*
 _test_*
+_tmp/
