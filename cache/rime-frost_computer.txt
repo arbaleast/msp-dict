@@ -1,0 +1,27 @@
+# Rime dictionary
+# encoding: utf-8
+# 计算机 互联网相关
+#
+---
+name: computer
+version: "2024-07-19"
+sort: by_weight
+...
+入参	ru can	50
+出参	chu can	10
+强依赖	qiang yi lai	26
+弱依赖	ruo yi lai	4
+发版	fa ban	109
+竞业	jing ye	191
+父级目录	fu ji mu lu	0
+会邀	hui yao	0
+主域名	zhu yu ming	21
+训练集	xun lian ji	1
+测试集	ce shi ji	1
+特判	te pan	4
+限频	xian pin	7
+系统会话	xi tong hui hua	1
+编程计划	bian cheng ji hua	1
+项目级	xiang mu ji	1
+议价文件	yi jia wen jian	1
+废标	fei biao	15

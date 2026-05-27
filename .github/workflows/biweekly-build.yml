@@ -227,13 +227,19 @@ jobs:
           python3 -m src.cli build msp_freq500.txt -o msp_freq500.dat
           echo "=== 所有 DAT 文件构建完成 ==="
 
+      - name: Update README stats
+        run: |
+          echo "=== 更新 README.md 统计信息 ==="
+          python3 scripts/update_readme.py
+          echo "=== README 更新完成 ==="
+
       - name: Commit and push
         run: |
           TODAY=$(date +%Y-%m-%d)
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git add msp_*.txt msp_*.dat CHANGELOG.md cache/
+          git add msp_*.txt msp_*.dat CHANGELOG.md README.md cache/
           if git diff --cached --quiet; then
             echo "没有更新，跳过提交"
           else

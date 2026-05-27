@@ -8,8 +8,9 @@ from .bilibili import BilibiliFetcher
 from .moegirl import MoegirlFetcher
 from .wikidata import WikidataFetcher
 from .zhihu import ZhihuFetcher
+from .sogou import SogouFetcher
 
 __all__ = [
     'GitHubFetcher', 'WikipediaFetcher', 'BilibiliFetcher',
-    'MoegirlFetcher', 'WikidataFetcher', 'ZhihuFetcher',
+    'MoegirlFetcher', 'WikidataFetcher', 'ZhihuFetcher', 'SogouFetcher',
 ]

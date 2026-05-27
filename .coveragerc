@@ -1,0 +1,8 @@
+[run]  
+data_file = output/.coverage  
+  
+[html]  
+directory = output/htmlcov/  
+  
+[xml]  
+output = output/coverage.xml 

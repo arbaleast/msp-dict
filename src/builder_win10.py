@@ -80,10 +80,15 @@ class Win10MSPinyinBuilder:
         """构建二进制数据"""
         phrase_count = len(self.words)
 
+        # 按拼音字母顺序排序（Windows IME 可能需要此排序）
+        # 排序键: (空拼音排最后, 拼音小写, 词长, 词本身)
+        # 使用 (0 if x[1] else 1, ...) 让空拼音排到最后
+        sorted_words = sorted(self.words, key=lambda x: (0 if x[1] else 1, x[1].lower(), len(x[0]), x[0]))
+
         # 计算每个词条的大小和累积偏移（使用 UTF-16LE 字节长度）
         phrase_offsets = []
         current_offset = 0
-        for word, pinyin_str, rank, word_utf16, pinyin_utf16 in self.words:
+        for word, pinyin_str, rank, word_utf16, pinyin_utf16 in sorted_words:
             pinyin_byte_len = len(pinyin_utf16)  # UTF-16LE 字节长度
             word_byte_len = len(word_utf16)      # UTF-16LE 字节长度
 
@@ -117,7 +122,7 @@ class Win10MSPinyinBuilder:
 
         # 构建词条（用 list 最后 join，避免 phrases += entry 的 O(n²) 问题）
         phrase_parts = []
-        for word, pinyin_str, rank, word_utf16, pinyin_utf16 in self.words:
+        for word, pinyin_str, rank, word_utf16, pinyin_utf16 in sorted_words:
             pinyin_byte_len = len(pinyin_utf16)
             hanzi_offset = self.ENTRY_HANZI_OFFSET_BASE + pinyin_byte_len
 

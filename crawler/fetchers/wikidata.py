@@ -44,18 +44,16 @@ class WikidataFetcher:
         "动物", "植物", "物种", "鸟类", "鱼类",
     ]
 
-    def __init__(self, proxy: str = "http://localhost:7893"):
+    def __init__(self, proxy: str = ""):
         """
         Args:
-            proxy: 代理地址（Wikidata 可能需要代理才能访问）
+            proxy: 代理地址（留空则不使用代理）
         """
         self.proxy = proxy
+        self.curl_cmd = ['curl', '-s', '--max-time', '20',
+                         '-H', 'User-Agent: Mozilla/5.0 (compatible; msp-dict/1.0; +https://github.com/arbaleast/msp-dict)']
         if proxy:
-            self.curl_cmd = ['curl', '-s', '--proxy', proxy,
-                             '-H', 'User-Agent: Mozilla/5.0']
-        else:
-            self.curl_cmd = ['curl', '-s',
-                             '-H', 'User-Agent: Mozilla/5.0']
+            self.curl_cmd.extend(['--proxy', proxy])
         # 请求间隔（秒），避免触发限流
         self.request_delay = 0.8
 

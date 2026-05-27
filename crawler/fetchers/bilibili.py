@@ -16,9 +16,11 @@ class BilibiliFetcher:
     # B站搜索热词 API
     API_URL = "https://api.bilibili.com/x/v2/search/hot"
     
-    def __init__(self, proxy: str = "http://localhost:7893"):
+    def __init__(self, proxy: str = ""):
         self.proxy = proxy
-        self.curl_cmd = ['curl', '-s', '--proxy', proxy]
+        self.curl_cmd = ['curl', '-s', '--max-time', '20']
+        if proxy:
+            self.curl_cmd.extend(['--proxy', proxy])
         self.headers = [
             '--header', 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
             '--header', 'Referer: https://www.bilibili.com/'
