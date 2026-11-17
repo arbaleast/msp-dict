@@ -24,8 +24,8 @@ Windows 10/11 的微软拼音在打开 **设置 → 用户自定义短语** 时�
 | 文件 | 词条数 | 大小 | 适用场景 |
 |:---|---:|---:|:---|
 | **msp_lite.dat** | 19,992 | 869 KB | Windows 10/11 直接导入（推荐） |
-| msp_standard.dat | 49,199 | ~2 MB | 进阶用户；管理页会明显卡顿 |
-| msp_full.dat | 1,013,978 | ~52 MB | 存档 / 转 Rime 等，Windows 无法完整导入 |
+| msp_standard.dat | 49,202 | ~2 MB | 进阶用户；管理页会明显卡顿 |
+| msp_full.dat | 1,015,384 | ~52 MB | 存档 / 转 Rime 等，Windows 无法完整导入 |
 | msp_win10.dat | 19,992 | 869 KB | 兼容旧链接（= msp_lite.dat） |
 <!-- STATS:END -->
 
