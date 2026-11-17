@@ -149,12 +149,13 @@ jobs:
           # 读取 CHANGELOG.md 作为 release body
           BODY=$(cat CHANGELOG.md)
           
-          # 优先创建，如果 TAG 已存在则跳过（每天只保留一个 release）
+          ASSETS="msp_lite.dat msp_standard.dat msp_full.dat msp_win10.dat msp_lite_canary.dat msp_lite_canary.json"
+          # 优先创建；如果 TAG 已存在则覆盖同名资产（同一天重跑也要能更新产物）
           if gh release view "$TAG" --repo ${{ github.repository }} > /dev/null 2>&1; then
-            echo "Release $TAG 已存在，跳过"
+            echo "Release $TAG 已存在，覆盖同名资产"
+            gh release upload "$TAG" $ASSETS --clobber --repo ${{ github.repository }}
           else
-            gh release create "$TAG" msp_lite.dat msp_standard.dat msp_full.dat msp_win10.dat \
-              msp_lite_canary.dat msp_lite_canary.json \
+            gh release create "$TAG" $ASSETS \
               --repo ${{ github.repository }} \
               --title "微软拼音词库 $TAG" \
               --notes "$BODY"
