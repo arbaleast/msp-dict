@@ -30,6 +30,8 @@ FILES = [
     # ---- rime-frost ----
     # rime-frost tencent.dict.yaml 约 29MB，超过 GitHub 25MB 限制且未配置 LFS，跳过
     # （rime-ice tencent 已包含约 98 万腾讯词条）
+    # rime-frost composite.dict.yaml 超过 jsDelivr 单文件 20MB 限制（HTTP 403），
+    # 任何镜像都取不到，已从清单移除（scripts/merge.py 里有同名可选源标记）
     ('rime-frost_base.txt', 'https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/base.dict.yaml'),
     ('rime-frost_ext.txt', 'https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/ext.dict.yaml'),
     ('rime-frost_8105.txt', 'https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts/8105.dict.yaml'),
@@ -48,7 +50,6 @@ FILES = [
     ('rime-frost_animal.txt', 'https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/animal.dict.yaml'),
     ('rime-frost_chess.txt', 'https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/chess.dict.yaml'),
     ('rime-frost_chess2.txt', 'https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/chess2.dict.yaml'),
-    ('rime-frost_composite.txt', 'https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/composite.dict.yaml'),
     ('rime-frost_industry_product.txt', 'https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/industry_product.dict.yaml'),
     ('rime-frost_inputmethod.txt', 'https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/inputmethod.dict.yaml'),
     ('rime-frost_literature.txt', 'https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/literature.dict.yaml'),

@@ -40,6 +40,10 @@ FILES = [
     'rime-frost_luna_pinyin.txt',
 ]
 
+# 上游文件超过 jsDelivr 单文件 20MB 限制（HTTP 403），任何镜像都拿不到；
+# 缺失时只告警，不让整条流水线失败。其余文件缺失一律报错退出。
+OPTIONAL_FILES = {'rime-frost_composite.txt'}
+
 
 def parse_rime(content: str):
     """解析 Rime 文本，返回 [(词, 拼音, 词频), ...]。
@@ -177,11 +181,17 @@ def main() -> int:
     all_entries = []
     source_counts = {}
     missing = []
+    missing_optional = []
     for fn in FILES:
         path = cache_dir / fn
-        if not path.exists():
-            missing.append(fn)
-            print(f'{fn}: MISSING')
+        # 0 字节文件视为缺失：下载失败（curl -f / 403）可能留下空文件
+        if not path.exists() or path.stat().st_size == 0:
+            if fn in OPTIONAL_FILES:
+                missing_optional.append(fn)
+                print(f'{fn}: MISSING（可选源，上游超过 20MB 限制，跳过）')
+            else:
+                missing.append(fn)
+                print(f'{fn}: MISSING')
             continue
         with open(path, encoding='utf-8') as f:
             entries = parse_rime(f.read())
@@ -194,6 +204,8 @@ def main() -> int:
         print(f'\n错误: 缺少 {len(missing)} 个源文件，合并结果会严重不完整。', file=sys.stderr)
         print('先执行: python scripts/download_frost.py', file=sys.stderr)
         return 1
+    if missing_optional:
+        print(f'ℹ️  跳过 {len(missing_optional)} 个可选源: {", ".join(missing_optional)}')
     if not all_entries:
         print('错误: 没有可用的源文件，拒绝产出空词库。', file=sys.stderr)
         return 1
