@@ -212,3 +212,47 @@ class TestCleaning:
         ])
 
         assert [r['code'] for r in iter_records(data)] == ["beijing", "shanghai", "zhongguo"]
+
+
+class TestRankModes:
+    def test_position_mode_preserves_given_positions(self):
+        builder = Win10MSPinyinBuilder(timestamp=1600000000, rank_mode='position')
+        builder.add_word("阿", "a", 5)
+        builder.add_word("啊", "a", 3)
+        builder.add_word("吖", "a", 9)
+        records = iter_records(builder.build())
+
+        assert [r['word'] for r in records] == ["啊", "阿", "吖"]
+        assert [r['position'] for r in records] == [3, 5, 9]
+
+    def test_position_mode_rejects_out_of_range(self):
+        builder = Win10MSPinyinBuilder(timestamp=1600000000, rank_mode='position')
+        builder.add_word("零", "a", 0)
+        builder.add_word("超", "a", 10)
+        builder.add_word("好", "a", 1)
+        records = iter_records(builder.build())
+
+        assert [r['word'] for r in records] == ["好"]
+        assert builder.stats.reasons['invalid_position'] == 1
+        assert builder.stats.reasons['candidate_overflow'] == 1
+
+    def test_position_mode_rejects_duplicate_position_for_same_code(self):
+        builder = Win10MSPinyinBuilder(timestamp=1600000000, rank_mode='position')
+        builder.add_word("甲", "a", 2)
+        builder.add_word("乙", "a", 2)
+        records = iter_records(builder.build())
+
+        assert [r['word'] for r in records] == ["甲"]
+        assert builder.stats.reasons['duplicate_position'] == 1
+
+
+class TestFrequencyToPositionMapping:
+    def test_high_frequency_never_wraps_to_zero(self):
+        builder = Win10MSPinyinBuilder(timestamp=1600000000)
+        builder.add_word("甲", "a", 256)     # 256 & 0xFF == 0 的旧 bug
+        builder.add_word("乙", "a", 65536)   # 65536 & 0xFF == 0
+        builder.add_word("丙", "a", 999999999)
+        records = iter_records(builder.build())
+
+        assert [r['position'] for r in records] == [1, 2, 3]
+        assert [r['word'] for r in records] == ["丙", "乙", "甲"]

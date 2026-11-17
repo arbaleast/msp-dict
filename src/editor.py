@@ -12,6 +12,7 @@ from typing import Dict, List
 from datetime import datetime
 from .parser import MSPinyinParser, DictEntry
 from .builder_win10 import Win10MSPinyinBuilder
+from .format_spec import normalize_pinyin
 
 logger = logging.getLogger(__name__)
 
@@ -114,13 +115,32 @@ class MSPinyinEditor(MSPinyinParser):
     def _build_data(self) -> bytes:
         """构建 mschxudp 格式的完整二进制数据
 
-        完全委托给 Win10MSPinyinBuilder 进行构建,
-        消除与 builder_win10.py 之间所有重复的序列化逻辑。
+        编辑器里的 rank 是文件中的候选位（1~9），不是词频：保存时按拼音分组、
+        按原候选位排序后重新编号，再以 position 模式交给构建器。
+        否则构建器会按「词频降序」重排，把同音候选顺序整个反转。
         """
-        entries = self._collect_entries()
-        builder = Win10MSPinyinBuilder(timestamp=int(datetime.now().timestamp()))
-        for e in entries:
-            builder.add_word(e.text, e.pinyin, e.rank)
+        builder = Win10MSPinyinBuilder(
+            timestamp=int(datetime.now().timestamp()), rank_mode='position')
+
+        committed = [e for e in self.entries if e.text not in self._pending_remove]
+        groups: Dict[str, List[DictEntry]] = {}
+        for entry in committed:
+            groups.setdefault(normalize_pinyin(entry.pinyin), []).append(entry)
+
+        used: Dict[str, int] = {}
+        for code, group in groups.items():
+            group.sort(key=lambda item: (item.rank, item.text))
+            for position, entry in enumerate(group, 1):
+                builder.add_word(entry.text, entry.pinyin, position)
+            used[code] = len(group)
+
+        # 新增词条排在同一拼音已有候选之后；超过 9 个由构建器计数拦截
+        for entry in self._pending_add.values():
+            code = normalize_pinyin(entry.pinyin)
+            position = used.get(code, 0) + 1
+            builder.add_word(entry.text, entry.pinyin, position)
+            used[code] = position
+
         data = builder.build()
         self.last_build_stats = builder.stats
         return data

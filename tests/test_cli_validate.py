@@ -127,3 +127,19 @@ class TestBuildCommand:
         data = output.read_bytes()
         assert struct.unpack_from('<Q', data, 32)[0] == 1600000000
         assert struct.unpack_from('<I', data, 28)[0] == 1
+
+
+class TestRankMode:
+    def test_position_mode_keeps_given_positions(self, tmp_path):
+        source = tmp_path / "input.txt"
+        source.write_text("阿\ta\t5\n啊\ta\t3\n", encoding='utf-8')
+        output = tmp_path / "out.dat"
+
+        result = run_cli('build', str(source), '-o', str(output),
+                         '--profile', 'full', '--rank-mode', 'position',
+                         '--timestamp', '1600000000')
+
+        assert result.returncode == 0
+        parser = MSPinyinParser()
+        assert parser.load(str(output)) == 2
+        assert [(e.text, e.rank) for e in parser.entries] == [("啊", 3), ("阿", 5)]

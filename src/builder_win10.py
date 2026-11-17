@@ -61,6 +61,8 @@ REASON_LABELS = {
     'unpaired_surrogate': '孤立 UTF-16 代理项',
     'duplicate': '重复(拼音+词)',
     'candidate_overflow': '同音候选超过 9 个',
+    'invalid_position': '候选位不在 1~9',
+    'duplicate_position': '同拼音候选位重复',
 }
 
 
@@ -124,24 +126,30 @@ class Win10MSPinyinBuilder:
 
     MAX_CANDIDATE_POSITION = MAX_CANDIDATE_POSITION
 
-    def __init__(self, timestamp: int = 0):
+    def __init__(self, timestamp: int = 0, rank_mode: str = 'frequency'):
         """初始化构建器
 
         Args:
             timestamp: 写入文件头的 Unix 时间戳（秒）。为 0 时使用当前时间；
                 记录内的 2000 纪元时间戳由它推导。
+            rank_mode:
+                - ``frequency``（默认）：`rank` 是来源词频，同拼音内按词频降序
+                  重新分配候选位 1~9；
+                - ``position``：`rank` 已经是 1~9 的候选位，原样保留、按位排序，
+                  越界/重复会被拦截（供编辑器与手工 1~9 输入使用）。
         """
-        self.words: List[Tuple[str, str, int]] = []  # (word, pinyin_str, freq)
+        if rank_mode not in ('frequency', 'position'):
+            raise ValueError(f"未知 rank_mode: {rank_mode!r}")
+        self.words: List[Tuple[str, str, int]] = []  # (word, pinyin_str, rank)
         self.timestamp = timestamp
+        self.rank_mode = rank_mode
         self.stats = BuildStats()
 
     def add_word(self, word: str, pinyin_str: str, rank: int = 1):
         """添加词条（pinyin_str 为无空格字符串）。
 
-        `rank` 是来源词频，仅用于：
-          1. 同一拼音下决定候选顺序（词频高者排前面）；
-          2. 三档词库的筛选。
-        它不会被写进文件的候选序号字段。
+        `rank` 的含义由 `rank_mode` 决定：默认是来源词频（只用于同音排序与
+        三档筛选，不会写进候选序号字段）；`position` 模式下则是 1~9 的候选位。
         """
         self.words.append((word, pinyin_str, rank))
 
@@ -200,9 +208,9 @@ class Win10MSPinyinBuilder:
     # 清洗 / 排序 / 候选序号分配
     # ------------------------------------------------------------------
     def _prepare_entries(self) -> List[Tuple[str, str, int, bytes, bytes, int]]:
-        """清洗、去重、排序，返回 (word, code, freq, word_utf16, code_utf16, position)。"""
+        """清洗、去重、排序，返回 (word, code, rank, word_utf16, code_utf16, position)。"""
         stats = BuildStats()
-        # (code, word) -> 最高词频；同一词保留词频更高的一条
+        # (code, word) -> rank；frequency 模式保留最高词频，position 模式保留首个候选位
         best: Dict[Tuple[str, str], int] = {}
         for word, pinyin, rank in self.words:
             word = (word or '').strip()
@@ -233,18 +241,32 @@ class Win10MSPinyinBuilder:
             key = (code, word)
             if key in best:
                 stats.note('duplicate')
-                if rank > best[key]:
+                if self.rank_mode == 'frequency' and rank > best[key]:
                     best[key] = rank
                 continue
             best[key] = rank
 
-        # 按拼音聚簇；同拼音内词频高者在前（决定候选序号）
+        if self.rank_mode == 'position':
+            result = self._assign_explicit_positions(best, stats)
+        else:
+            result = self._assign_frequency_positions(best, stats)
+
+        stats.accepted = len(result)
+        self.stats = stats
+        return result
+
+    @staticmethod
+    def _encode_entry(code: str, word: str, rank: int,
+                      position: int) -> Tuple[str, str, int, bytes, bytes, int]:
+        return (word, code, rank, word.encode('utf-16-le'), code.encode('utf-16-le'), position)
+
+    def _assign_frequency_positions(self, best, stats):
+        """按拼音聚簇，同拼音内词频高者在前，依次分配 1~9。"""
         prepared = sorted(
             ((code, word, freq) for (code, word), freq in best.items()),
             key=lambda item: (item[0], -item[2], len(item[1]), item[1]),
         )
-
-        result: List[Tuple[str, str, int, bytes, bytes, int]] = []
+        result = []
         current_code = None
         position = 0
         for code, word, freq in prepared:
@@ -255,14 +277,32 @@ class Win10MSPinyinBuilder:
             if position > MAX_CANDIDATE_POSITION:
                 stats.note('candidate_overflow')
                 continue
-
-            word_utf16 = word.encode('utf-16-le')
-            code_utf16 = code.encode('utf-16-le')
-            result.append((word, code, freq, word_utf16, code_utf16, position))
-
-        stats.accepted = len(result)
-        self.stats = stats
+            result.append(self._encode_entry(code, word, freq, position))
         return result
+
+    def _assign_explicit_positions(self, best, stats):
+        """候选位已由调用方给出（1~9），原样保留并按位排序。
+
+        同一 (拼音, 候选位) 冲突时保留先加入的词条（`best` 保持插入顺序）。
+        """
+        accepted = []
+        used = set()
+        for (code, word), position in best.items():
+            if position < 1:
+                stats.note('invalid_position')
+                continue
+            if position > MAX_CANDIDATE_POSITION:
+                stats.note('candidate_overflow')
+                continue
+            if (code, position) in used:
+                stats.note('duplicate_position')
+                continue
+            used.add((code, position))
+            accepted.append((code, word, position))
+
+        accepted.sort(key=lambda item: (item[0], item[2], len(item[1]), item[1]))
+        return [self._encode_entry(code, word, position, position)
+                for code, word, position in accepted]
 
     # ------------------------------------------------------------------
     # 序列化

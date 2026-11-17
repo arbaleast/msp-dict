@@ -222,7 +222,8 @@ def cmd_build(args):
     else:
         exclude_single = profile.exclude_single if profile else False
 
-    builder = Win10MSPinyinBuilder(timestamp=args.timestamp or 0)
+    builder = Win10MSPinyinBuilder(timestamp=args.timestamp or 0,
+                                   rank_mode=args.rank_mode)
     selected = builder.add_from_text_file(
         args.input,
         min_freq=min_freq,
@@ -343,6 +344,10 @@ def main():
                          help='剔除单字词（微软拼音自带单字）')
     p_build.add_argument('--timestamp', type=int,
                          help='写入文件头的 Unix 时间戳（用于可复现构建）')
+    p_build.add_argument('--rank-mode', choices=('frequency', 'position'),
+                         default='frequency',
+                         help='第三列语义：frequency=来源词频（默认，同音按词频重排 1~9）；'
+                              'position=已是 1~9 候选位，原样保留')
 
     # validate 命令
     p_validate = subparsers.add_parser('validate', help='校验 .dat 是否可被 Windows 导入')
