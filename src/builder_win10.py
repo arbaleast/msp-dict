@@ -1,140 +1,314 @@
 """
-微软拼音 Win10 用户词库格式 (mschxudp)
+微软拼音 Win10 用户词库格式 (mschxudp) 构建器
 
-格式来自 imewlconverter Win10MsPinyin.cs:
+格式说明见 src/format_spec.py（常量与字段布局的唯一事实来源）。
 
-Header (0x40 bytes):
-  0x00: proto 'mschxudp' (8 bytes)
-  0x08: unknown 0x00600002 (4 bytes)
-  0x0C: version 1 (4 bytes)
-  0x10: phrase_offset_start = 0x40 (4 bytes)
-  0x14: phrase_start = 0x40 + phrase_count * 4 (4 bytes)
-  0x18: phrase_end (4 bytes, filled after build)
-  0x1C: phrase_count (4 bytes)
-  0x20: timestamp (8 bytes)
-  0x28: reserved 0 (24 bytes)
-
-Phrase entry:
-  magic (4 bytes, 0x00100010)
-  hanzi_offset (2 bytes) = 18 + pinyin_char_len * 2
-  rank (1 byte)
-  0x06 (1 byte)
-  unknown (4 bytes, 0x00000000)
-  unknown (4 bytes, 0xE679CD20)
-  pinyin (pinyin_char_len * 2 bytes UTF-16LE)
-  split (2 bytes, 0x0000)
-  word (word_char_len * 2 bytes UTF-16LE)
-  terminator (2 bytes, 0x0000)
+与旧实现的关键差异（Issue #3）:
+  * 记录 +0x06 是「同一编码下的候选序号」，从 1 起，微软拼音 UI 只展示 1~9；
+    旧实现写的是原始词频 `rank & 0xFF`，会产生 0 或 >9 的非法值，Windows 拒绝导入
+    或让短语管理界面异常。
+  * 记录 +0x0C 是 2000-01-01 纪元秒，不再是固定的 0xE679CD20。
+  * 构建前统一清洗：空拼音、非法拼音字符、超长编码/词条、孤立代理项、
+    控制字符、重复 (编码, 词) 全部拦截并计数，不再写出畸形记录。
 """
 
-import struct
-import os
 import logging
-from typing import List, Tuple
+import os
+import struct
+import time
+from dataclasses import dataclass, field
+from typing import Dict, List, Tuple
+
+from .format_spec import (
+    ENTRY_FLAG,
+    ENTRY_HANZI_OFFSET_BASE,
+    ENTRY_HEAD_BASE,
+    ENTRY_MAGIC,
+    ENTRY_SPLIT,
+    EPOCH_2000_UNIX,
+    HEADER_FLAG,
+    HEADER_SIZE,
+    HEADER_VERSION,
+    MAX_CANDIDATE_POSITION,
+    MAX_CODE_UNITS,
+    MAX_IMPORT_ENTRIES,
+    MAX_WORD_UNITS,
+    OFF_FLAG,
+    OFF_PHRASE_COUNT,
+    OFF_PHRASE_END,
+    OFF_PHRASE_OFFSET_START,
+    OFF_PHRASE_START,
+    OFF_TIMESTAMP,
+    OFF_VERSION,
+    PHRASE_OFFSET_START,
+    has_forbidden_char,
+    has_unpaired_surrogate,
+    is_valid_pinyin,
+    normalize_pinyin,
+    utf16_units,
+)
 
 logger = logging.getLogger(__name__)
+
+# 跳过原因 -> 中文说明（用于 CLI/CI 输出）
+REASON_LABELS = {
+    'empty_word': '空词条',
+    'empty_pinyin': '空拼音',
+    'invalid_pinyin': '非法拼音字符',
+    'code_too_long': '拼音超长(>32)',
+    'word_too_long': '词条超长(>64)',
+    'illegal_char': '含控制字符/NUL',
+    'unpaired_surrogate': '孤立 UTF-16 代理项',
+    'duplicate': '重复(拼音+词)',
+    'candidate_overflow': '同音候选超过 9 个',
+}
+
+
+@dataclass
+class BuildStats:
+    """构建统计：`skipped` 为因格式/内容问题被拦截的词条数。"""
+
+    accepted: int = 0
+    skipped: int = 0
+    truncated: int = 0
+    reasons: Dict[str, int] = field(default_factory=dict)
+
+    def note(self, reason: str, count: int = 1) -> None:
+        self.reasons[reason] = self.reasons.get(reason, 0) + count
+        if reason != 'duplicate':
+            self.skipped += count
+
+    def merge(self, other: 'BuildStats') -> None:
+        self.accepted += other.accepted
+        self.skipped += other.skipped
+        self.truncated += other.truncated
+        for key, value in other.reasons.items():
+            self.reasons[key] = self.reasons.get(key, 0) + value
+
+    def summary(self) -> str:
+        parts = [f"接收 {self.accepted:,} 条"]
+        if self.skipped:
+            parts.append(f"拦截 {self.skipped:,} 条")
+        if self.truncated:
+            parts.append(f"超出上限 {self.truncated:,} 条")
+        for reason, count in sorted(self.reasons.items(), key=lambda kv: -kv[1]):
+            label = REASON_LABELS.get(reason, reason)
+            parts.append(f"{label}={count:,}")
+        return '，'.join(parts)
+
+    def to_dict(self) -> dict:
+        return {
+            'accepted': self.accepted,
+            'skipped': self.skipped,
+            'truncated': self.truncated,
+            'reasons': dict(self.reasons),
+        }
 
 
 class Win10MSPinyinBuilder:
     """构建 Win10 微软拼音词库二进制数据 (mschxudp 格式)
 
-    格式参考: imewlconverter Win10MsPinyin.cs
+    格式参考: imewlconverter Win10MsPinyin.cs / MsChxUdpExporterBase.cs
     """
 
-    # ---- 文件头常量 ----
-    HEADER_SIZE = 0x40              # 文件头固定大小 (64 字节)
-    HEADER_FLAG = 0x00600002        # 文件头偏移 0x08 处的固定标志 (来源: imewlconverter)
-    HEADER_VERSION = 1              # 版本号 (偏移 0x0C)
-    PHRASE_OFFSET_START = 0x40      # 偏移表起始位置 = 头部大小
+    HEADER_SIZE = HEADER_SIZE
+    HEADER_FLAG = HEADER_FLAG
+    HEADER_VERSION = HEADER_VERSION
+    PHRASE_OFFSET_START = PHRASE_OFFSET_START
 
-    # ---- 词条内部常量 ----
-    ENTRY_MAGIC = 0x00100010        # 词条魔数 (来源: mschxudp 格式规范)
-    ENTRY_UNK1 = 0x00000000         # 词条内偏移 0x08 处的未知字段, 固定为 0
-    ENTRY_UNK2 = 0xE679CD20         # 词条内偏移 0x0C 处的未知字段, 固定魔数 (来源: imewlconverter)
-    ENTRY_FLAG = 0x06               # rank 后的固定标志字节
-    ENTRY_HEAD_BASE = 16            # 固定头大小 = 4(magic) + 2(hanzi_offset) + 1(rank) + 1(flag) + 4(unk1) + 4(unk2)
-    ENTRY_SPLIT = 0                 # 拼音与汉字之间的 null 分隔符值
-    # hanzi_offset = 固定头(16) + pinyin_bytes + split(2) = 18 + pinyin_bytes
-    ENTRY_HANZI_OFFSET_BASE = 18
+    ENTRY_MAGIC = ENTRY_MAGIC
+    ENTRY_FLAG = ENTRY_FLAG
+    ENTRY_HEAD_BASE = ENTRY_HEAD_BASE
+    ENTRY_HANZI_OFFSET_BASE = ENTRY_HANZI_OFFSET_BASE
+    ENTRY_SPLIT = ENTRY_SPLIT
+
+    MAX_CANDIDATE_POSITION = MAX_CANDIDATE_POSITION
 
     def __init__(self, timestamp: int = 0):
         """初始化构建器
 
         Args:
-            timestamp: 文件头中的 Unix 时间戳 (8 字节), 默认 0
+            timestamp: 写入文件头的 Unix 时间戳（秒）。为 0 时使用当前时间；
+                记录内的 2000 纪元时间戳由它推导。
         """
-        self.words: List[Tuple[str, str, int]] = []  # (word, pinyin_str, rank)
+        self.words: List[Tuple[str, str, int]] = []  # (word, pinyin_str, freq)
         self.timestamp = timestamp
+        self.stats = BuildStats()
 
     def add_word(self, word: str, pinyin_str: str, rank: int = 1):
-        """添加词条（pinyin_str 为无空格字符串）
-        
-        注意: word 和 pinyin_str 需要先转换为 UTF-16LE 字节来获取准确的字节长度
+        """添加词条（pinyin_str 为无空格字符串）。
+
+        `rank` 是来源词频，仅用于：
+          1. 同一拼音下决定候选顺序（词频高者排前面）；
+          2. 三档词库的筛选。
+        它不会被写进文件的候选序号字段。
         """
-        # 转换为 UTF-16LE 以正确处理 surrogate pairs (如生僻字)
-        word_utf16 = word.encode('utf-16-le')
-        pinyin_utf16 = pinyin_str.encode('utf-16-le')
-        self.words.append((word, pinyin_str, rank, word_utf16, pinyin_utf16))
+        self.words.append((word, pinyin_str, rank))
 
+    def add_from_text_file(self, filepath: str, min_freq: int = None,
+                           exclude_single: bool = False,
+                           max_word_units: int = None,
+                           limit: int = None) -> int:
+        """从 TSV 文本批量添加词条，格式 `词条\\t拼音\\t词频`（词频可省略）。
+
+        文件按词频降序排列时，`limit` 即「取词频最高的前 N 条」。这里的筛选是
+        选词策略（不算违规），格式清洗仍统一在 build() 中执行。
+
+        Args:
+            filepath: 输入文件路径
+            min_freq: 只接收词频不低于该值的词条
+            exclude_single: 剔除单字词
+            max_word_units: 词条最大 UTF-16 单元数
+            limit: 最多接收多少条
+
+        Returns:
+            实际加入的词条数
+        """
+        added = 0
+        with open(filepath, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.rstrip('\n\r')
+                if not line or line.startswith('#'):
+                    continue
+                parts = line.split('\t')
+                word = parts[0].strip()
+                if not word:
+                    continue
+                pinyin = parts[1].strip().replace(' ', '') if len(parts) >= 2 else ''
+                freq = 1
+                if len(parts) >= 3:
+                    try:
+                        freq = int(parts[2])
+                    except ValueError:
+                        freq = 1
+
+                if min_freq is not None and freq < min_freq:
+                    continue
+                units = utf16_units(word)
+                if exclude_single and units < 2:
+                    continue
+                if max_word_units is not None and units > max_word_units:
+                    continue
+
+                self.add_word(word, pinyin, freq)
+                added += 1
+                if limit is not None and added >= limit:
+                    break
+        return added
+
+    # ------------------------------------------------------------------
+    # 清洗 / 排序 / 候选序号分配
+    # ------------------------------------------------------------------
+    def _prepare_entries(self) -> List[Tuple[str, str, int, bytes, bytes, int]]:
+        """清洗、去重、排序，返回 (word, code, freq, word_utf16, code_utf16, position)。"""
+        stats = BuildStats()
+        # (code, word) -> 最高词频；同一词保留词频更高的一条
+        best: Dict[Tuple[str, str], int] = {}
+        for word, pinyin, rank in self.words:
+            word = (word or '').strip()
+            code = normalize_pinyin(pinyin)
+
+            if not word:
+                stats.note('empty_word')
+                continue
+            if not code:
+                stats.note('empty_pinyin')
+                continue
+            if has_unpaired_surrogate(word) or has_unpaired_surrogate(code):
+                stats.note('unpaired_surrogate')
+                continue
+            if has_forbidden_char(word) or has_forbidden_char(code):
+                stats.note('illegal_char')
+                continue
+            if not is_valid_pinyin(code):
+                stats.note('invalid_pinyin')
+                continue
+            if utf16_units(code) > MAX_CODE_UNITS:
+                stats.note('code_too_long')
+                continue
+            if utf16_units(word) > MAX_WORD_UNITS:
+                stats.note('word_too_long')
+                continue
+
+            key = (code, word)
+            if key in best:
+                stats.note('duplicate')
+                if rank > best[key]:
+                    best[key] = rank
+                continue
+            best[key] = rank
+
+        # 按拼音聚簇；同拼音内词频高者在前（决定候选序号）
+        prepared = sorted(
+            ((code, word, freq) for (code, word), freq in best.items()),
+            key=lambda item: (item[0], -item[2], len(item[1]), item[1]),
+        )
+
+        result: List[Tuple[str, str, int, bytes, bytes, int]] = []
+        current_code = None
+        position = 0
+        for code, word, freq in prepared:
+            if code != current_code:
+                current_code = code
+                position = 0
+            position += 1
+            if position > MAX_CANDIDATE_POSITION:
+                stats.note('candidate_overflow')
+                continue
+
+            word_utf16 = word.encode('utf-16-le')
+            code_utf16 = code.encode('utf-16-le')
+            result.append((word, code, freq, word_utf16, code_utf16, position))
+
+        stats.accepted = len(result)
+        self.stats = stats
+        return result
+
+    # ------------------------------------------------------------------
+    # 序列化
+    # ------------------------------------------------------------------
     def build(self) -> bytes:
-        """构建二进制数据"""
-        phrase_count = len(self.words)
+        """构建二进制数据；`self.stats` 记录接收/拦截统计。"""
+        entries = self._prepare_entries()
+        phrase_count = len(entries)
 
-        # 按拼音字母顺序排序（Windows IME 可能需要此排序）
-        # 排序键: (空拼音排最后, 拼音小写, 词长, 词本身)
-        # 使用 (0 if x[1] else 1, ...) 让空拼音排到最后
-        sorted_words = sorted(self.words, key=lambda x: (0 if x[1] else 1, x[1].lower(), len(x[0]), x[0]))
+        file_timestamp = self.timestamp or int(time.time())
+        record_timestamp = max(0, file_timestamp - EPOCH_2000_UNIX) & 0xFFFFFFFF
 
-        # 计算每个词条的大小和累积偏移（使用 UTF-16LE 字节长度）
-        phrase_offsets = []
+        offsets: List[int] = []
         current_offset = 0
-        for word, pinyin_str, rank, word_utf16, pinyin_utf16 in sorted_words:
-            pinyin_byte_len = len(pinyin_utf16)  # UTF-16LE 字节长度
-            word_byte_len = len(word_utf16)      # UTF-16LE 字节长度
+        for _, _, _, word_utf16, code_utf16, _ in entries:
+            offsets.append(current_offset)
+            current_offset += ENTRY_HEAD_BASE + len(code_utf16) + 2 + len(word_utf16) + 2
 
-            # hanzi_offset = 固定头(16) + pinyin_bytes + split(2) = 18 + pinyin_bytes
-            # Windows 用 hanzi_offset 来定位汉字起始位置
-            hanzi_offset = self.ENTRY_HANZI_OFFSET_BASE + pinyin_byte_len
-
-            # 词条大小 = 固定头(16) + pinyin_bytes + split(2) + word_bytes + term(2)
-            entry_size = self.ENTRY_HEAD_BASE + pinyin_byte_len + 2 + word_byte_len + 2
-            
-            # 存储当前偏移（词条相对于 phrase_start 的位置）
-            phrase_offsets.append(current_offset)
-            current_offset += entry_size
-
-        phrase_start = self.PHRASE_OFFSET_START + phrase_count * 4
+        phrase_start = PHRASE_OFFSET_START + phrase_count * 4
         phrase_end = phrase_start + current_offset
 
-        # 构建 header (0x40 bytes)
-        header = bytearray(self.HEADER_SIZE)
+        header = bytearray(HEADER_SIZE)
         header[0:8] = b'mschxudp'
-        struct.pack_into('<I', header, 8,  self.HEADER_FLAG)     # 固定标志 (来源: imewlconverter)
-        struct.pack_into('<I', header, 12, self.HEADER_VERSION)   # 版本号固定为 1
-        struct.pack_into('<I', header, 16, self.PHRASE_OFFSET_START)  # phrase_offset_start
-        struct.pack_into('<I', header, 20, phrase_start)                # phrase_start
-        struct.pack_into('<I', header, 24, phrase_end)                   # phrase_end
-        struct.pack_into('<I', header, 28, phrase_count)                 # phrase_count
-        struct.pack_into('<Q', header, 32, self.timestamp)  # timestamp
+        struct.pack_into('<I', header, OFF_FLAG, HEADER_FLAG)
+        struct.pack_into('<I', header, OFF_VERSION, HEADER_VERSION)
+        struct.pack_into('<I', header, OFF_PHRASE_OFFSET_START, PHRASE_OFFSET_START)
+        struct.pack_into('<I', header, OFF_PHRASE_START, phrase_start)
+        struct.pack_into('<I', header, OFF_PHRASE_END, phrase_end)
+        struct.pack_into('<I', header, OFF_PHRASE_COUNT, phrase_count)
+        struct.pack_into('<Q', header, OFF_TIMESTAMP, file_timestamp)
 
-        # 构建 offset 表
-        offset_table = b''.join(struct.pack('<I', off) for off in phrase_offsets)
+        offset_table = b''.join(struct.pack('<I', off) for off in offsets)
 
-        # 构建词条（用 list 最后 join，避免 phrases += entry 的 O(n²) 问题）
         phrase_parts = []
-        for word, pinyin_str, rank, word_utf16, pinyin_utf16 in sorted_words:
-            pinyin_byte_len = len(pinyin_utf16)
-            hanzi_offset = self.ENTRY_HANZI_OFFSET_BASE + pinyin_byte_len
+        for _, _, _, word_utf16, code_utf16, position in entries:
+            hanzi_offset = ENTRY_HANZI_OFFSET_BASE + len(code_utf16)
 
-            entry  = struct.pack('<I', self.ENTRY_MAGIC)   # 词条魔数
+            entry = struct.pack('<I', ENTRY_MAGIC)
             entry += struct.pack('<H', hanzi_offset)
-            entry += bytes([rank & 0xFF, self.ENTRY_FLAG])  # rank + 固定标志字节
-            entry += struct.pack('<I', self.ENTRY_UNK1)     # 未知字段 (固定为 0)
-            entry += struct.pack('<I', self.ENTRY_UNK2)     # 未知字段 (固定魔数)
-            entry += pinyin_utf16
-            entry += struct.pack('<H', self.ENTRY_SPLIT)     # null 分隔符
+            entry += bytes([position, ENTRY_FLAG])
+            entry += struct.pack('<I', 0)                 # +0x08 固定 0
+            entry += struct.pack('<I', record_timestamp)  # +0x0C 2000 纪元秒
+            entry += code_utf16
+            entry += struct.pack('<H', ENTRY_SPLIT)
             entry += word_utf16
-            entry += struct.pack('<H', self.ENTRY_SPLIT)     # null terminator
+            entry += struct.pack('<H', ENTRY_SPLIT)
             phrase_parts.append(entry)
 
         return bytes(header) + offset_table + b''.join(phrase_parts)
@@ -146,98 +320,38 @@ class Win10MSPinyinBuilder:
             f.write(data)
 
         size = os.path.getsize(filepath)
-        logger.info("已保存: %s (%d 词条, %.1f MB)", filepath, len(self.words), size / 1024 / 1024)
+        logger.info("已保存: %s (%d 词条, %.1f MB)", filepath, self.stats.accepted, size / 1024 / 1024)
+        if self.stats.accepted > MAX_IMPORT_ENTRIES:
+            logger.warning(
+                "词条数 %d 超过微软拼音 %d 条上限，Windows 无法完整导入（可作为存档或转其他输入法）",
+                self.stats.accepted, MAX_IMPORT_ENTRIES,
+            )
 
 
 class Win10MSPinyinParser:
-    """解析 Win10 微软拼音词库"""
+    """兼容旧接口：委托给 src.parser.MSPinyinParser。"""
 
     def __init__(self):
-        self.words: List[Tuple[str, str, int]] = []  # (word, pinyin_str, rank)
+        self.words: List[Tuple[str, str, int]] = []
 
     def load(self, filepath: str) -> int:
-        """加载词库，返回词条数"""
-        with open(filepath, 'rb') as f:
-            data = f.read()
+        from .parser import MSPinyinParser
 
-        # 检查 proto
-        proto = data[0:8]
-        if proto != b'mschxudp':
-            raise ValueError(f"Invalid proto: {proto}")
-
-        # 读取 header
-        phrase_offset_start = struct.unpack('<I', data[16:20])[0]
-        phrase_start = struct.unpack('<I', data[20:24])[0]
-        phrase_end = struct.unpack('<I', data[24:28])[0]
-        phrase_count = struct.unpack('<I', data[28:32])[0]
-
-        logger.info("Proto: mschxudp, Phrases: %d, Start: 0x%x, End: 0x%x", phrase_count, phrase_start, phrase_end)
-
-        # 读取 offset 表
-        offsets = []
-        for i in range(phrase_count):
-            off = struct.unpack('<I', data[phrase_offset_start + i * 4:phrase_offset_start + i * 4 + 4])[0]
-            offsets.append(off)
-        # 最后一个 offset = phrase_end 相对于 phrase_start 的偏移
-        offsets.append(phrase_end - phrase_start)
-
-        # 读取词条
-        self.words = []
-        for i in range(phrase_count):
-            pos = phrase_start + offsets[i]
-            next_pos = phrase_start + offsets[i + 1]
-
-            word, pinyin_str, rank = self._read_phrase(data, pos, next_pos)
-            self.words.append((word, pinyin_str, rank))
-
-        return phrase_count
-
-    def _read_phrase(self, data: bytes, start: int, end: int) -> Tuple[str, str, int]:
-        """读取单个词条，返回 (word, pinyin, rank)"""
-        magic = struct.unpack('<I', data[start:start + 4])[0]
-        hanzi_offset = struct.unpack('<H', data[start + 4:start + 6])[0]
-        rank = data[start + 6]
-
-        # hanzi_offset = 18 + pinyin_byte_len (指向汉字起始位置，跳过 split)
-        # 所以 pinyin_byte_len = hanzi_offset - 18
-        pinyin_byte_len = hanzi_offset - Win10MSPinyinBuilder.ENTRY_HANZI_OFFSET_BASE
-        pinyin_char_len = pinyin_byte_len // 2
-
-        # pinyin 从 start + 16 开始
-        # 16 = 4(magic) + 2(hanzi_offset) + 1(rank) + 1(flag) + 4(unk1) + 4(unk2)
-        pinyin_start = start + 16
-        pinyin_bytes = data[pinyin_start:pinyin_start + pinyin_byte_len]
-        pinyin_str = pinyin_bytes.decode('utf-16-le', errors='ignore')
-
-        # word 从 pinyin_start + pinyin_byte_len + 2 (split) 开始
-        word_start = pinyin_start + pinyin_byte_len + 2
-        word_len = end - word_start - 2  # -2 减去末尾 null terminator
-        word_bytes = data[word_start:word_start + word_len]
-        word = word_bytes.decode('utf-16-le', errors='ignore')
-
-        return word, pinyin_str, rank
+        parser = MSPinyinParser()
+        count = parser.load(filepath)
+        self.words = [(e.text, e.pinyin, e.rank) for e in parser.entries]
+        return count
 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     builder = Win10MSPinyinBuilder()
-
-    # 测试数据
-    test_words = [
-        ("中国", "zhongguo"),
-        ("北京", "beijing"),
-        ("上海", "shanghai"),
-    ]
-
-    for word, py in test_words:
+    for word, py in [("中国", "zhongguo"), ("北京", "beijing"), ("上海", "shanghai")]:
         builder.add_word(word, py, rank=1)
 
-    # 保存测试
     builder.save('/tmp/test_win10_fixed.dat')
-
-    # 验证解析
     parser = Win10MSPinyinParser()
     count = parser.load('/tmp/test_win10_fixed.dat')
     print(f"\n解析结果: {count} 词条")
     for word, py, rank in parser.words:
-        print(f"  {word}: {py} (rank={rank})")
+        print(f"  {word}: {py} (候选位={rank})")

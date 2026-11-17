@@ -46,9 +46,11 @@ class TestExporterEdgeCases:
             data = json.load(f)
 
         assert len(data) == 3
-        assert data[0]['text'] == '中国'
-        assert data[0]['pinyin'] == 'zhongguo'
-        assert data[0]['rank'] == 1
+        # 构建器按拼音排序写出，导出顺序随文件顺序
+        assert [d['text'] for d in data] == ['北京', '上海', '中国']
+        by_text = {d['text']: d for d in data}
+        assert by_text['中国']['pinyin'] == 'zhongguo'
+        assert by_text['中国']['rank'] == 1
 
         os.remove(output)
 

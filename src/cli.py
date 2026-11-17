@@ -13,19 +13,24 @@ Commands:
     add         添加单个词条
     remove      删除单个词条
     stats       显示统计信息
-    build       从文本构建 mschxudp 格式词库
+    build       从文本构建 mschxudp 格式词库（支持 lite/standard/full 三档）
+    validate    校验 DAT 文件是否可被 Windows 微软拼音导入
 """
 
 import argparse
-import sys
+import json
 import os
+import sys
 
 from .parser import MSPinyinParser
 from .editor import MSPinyinEditor
 from .exporter import Exporter
 from .importer import BatchImporter, RimeConverter
 from .converter import BidirectionalConverter
-from .builder_win10 import Win10MSPinyinBuilder
+from .builder_win10 import REASON_LABELS, Win10MSPinyinBuilder
+from .format_spec import MAX_IMPORT_ENTRIES
+from .profiles import PROFILES, get_profile
+from .validator import DatValidator
 
 
 def cmd_parse(args):
@@ -40,6 +45,10 @@ def cmd_parse(args):
     print(f"文件: {args.file}")
     print(f"文件大小: {parser.get_file_size()} 字节")
     print(f"词条数量: {count}")
+    if parser.invalid_entries:
+        print(f"⚠️  无法解析的词条: {parser.invalid_entries}")
+    for warning in parser.warnings[:5]:
+        print(f"⚠️  {warning}")
 
     if args.verbose:
         lengths = [len(e.text) for e in parser.entries]
@@ -137,7 +146,13 @@ def cmd_add(args):
 
     if editor.add_entry(args.text, args.pinyin, args.rank):
         editor.save(args.file)
-        print(f"添加词条: {args.text}  [{args.pinyin}] (rank={args.rank})")
+        stats = editor.last_build_stats
+        if stats and stats.skipped:
+            reasons = '，'.join(f"{REASON_LABELS.get(k, k)}={v}"
+                                for k, v in stats.reasons.items() if k != 'duplicate')
+            print(f"未写入: {args.text}（{reasons}）")
+        else:
+            print(f"添加词条: {args.text}  [{args.pinyin}] (候选位由构建器分配)")
     else:
         print(f"添加失败: {args.text} (可能已存在)")
 
@@ -191,56 +206,81 @@ def cmd_build(args):
     """从文本构建 mschxudp 格式词库
 
     输入格式: 每行一个词条，使用制表符分隔
-        词条\t拼音\trank（可选）
+        词条\t拼音\t词频（可选）
 
     示例:
-        中国\tzhongguo\t1
+        中国\tzhongguo\t31450
         北京\tbeijing
     """
-    builder = Win10MSPinyinBuilder()
-    count = 0
-    error_count = 0
+    profile = get_profile(args.profile) if args.profile else None
+    limit = args.limit if args.limit is not None else (profile.limit if profile else None)
+    min_freq = args.min_freq if args.min_freq is not None else (profile.min_freq if profile else 0)
+    max_word_chars = (args.max_word_chars if args.max_word_chars is not None
+                      else (profile.max_word_units if profile else None))
+    if args.exclude_single is not None:
+        exclude_single = args.exclude_single
+    else:
+        exclude_single = profile.exclude_single if profile else False
 
-    with open(args.input, 'r', encoding='utf-8') as f:
-        for line_num, line in enumerate(f, 1):
-            line = line.strip()
-            if not line or line.startswith('#'):
-                continue
-
-            parts = line.split('\t')
-            word = parts[0].strip()
-            if not word:
-                continue
-
-            # 拼音: 移除空格
-            pinyin = ''
-            rank = 1
-            if len(parts) >= 2:
-                pinyin = parts[1].strip().replace(' ', '')
-            if len(parts) >= 3:
-                try:
-                    rank = int(parts[2])
-                except ValueError:
-                    rank = 1
-
-            try:
-                builder.add_word(word, pinyin, rank)
-                count += 1
-            except Exception as e:
-                print(f"第 {line_num} 行错误: {e}")
-                error_count += 1
-
-    # 保存
-    output = args.output or (
-        os.path.splitext(args.input)[0] + '.dat'
+    builder = Win10MSPinyinBuilder(timestamp=args.timestamp or 0)
+    selected = builder.add_from_text_file(
+        args.input,
+        min_freq=min_freq,
+        exclude_single=exclude_single,
+        max_word_units=max_word_chars,
+        limit=limit,
     )
-    builder.save(output)
 
-    print(f"\n构建完成:")
+    output = args.output or (os.path.splitext(args.input)[0] + '.dat')
+    data = builder.build()
+    with open(output, 'wb') as f:
+        f.write(data)
+
+    stats = builder.stats
+    size_mb = os.path.getsize(output) / 1024 / 1024
+
+    print("构建完成:")
     print(f"  输入文件: {args.input}")
-    print(f"  输出文件: {output}")
-    print(f"  成功词条: {count}")
-    print(f"  错误行: {error_count}")
+    print(f"  输出文件: {output} ({size_mb:.2f} MB)")
+    if profile:
+        print(f"  策略: {profile.describe()}")
+    print(f"  读取词条: {selected:,}")
+    print(f"  写入词条: {stats.accepted:,}")
+    print(f"  清洗统计: {stats.summary()}")
+    if stats.accepted > MAX_IMPORT_ENTRIES:
+        print(f"  ⚠️  词条数超过微软拼音约 {MAX_IMPORT_ENTRIES:,} 条上限："
+              f"Windows 无法完整导入，请改用 lite 档（--profile lite）或转其他输入法")
+    return 0
+
+
+def cmd_validate(args):
+    """校验 DAT 文件，分类报告格式错误/文件损坏/内容违规/容量警告"""
+    report = DatValidator().validate(args.file)
+    if args.json:
+        payload = {
+            'path': report.path,
+            'file_size': report.file_size,
+            'phrase_count': report.phrase_count,
+            'parsed_entries': report.parsed_entries,
+            'exit_code': report.exit_code,
+            'verdict': report.verdict,
+            'stats': report.stats,
+            'issues': [
+                {
+                    'category': issue.category,
+                    'severity': issue.severity,
+                    'code': issue.code,
+                    'message': issue.message,
+                    'count': issue.count,
+                    'samples': issue.samples,
+                }
+                for issue in report.issues
+            ],
+        }
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+    else:
+        print(report.format_text(max_samples=args.samples))
+    return report.exit_code
 
 
 def main():
@@ -294,6 +334,22 @@ def main():
     p_build = subparsers.add_parser('build', help='从文本构建 mschxudp 词库')
     p_build.add_argument('input', help='输入文本文件')
     p_build.add_argument('-o', '--output', help='输出 .dat 文件')
+    p_build.add_argument('--profile', choices=sorted(PROFILES),
+                         help='三档发布策略（lite 精简推荐 / standard / full 存档）')
+    p_build.add_argument('--limit', type=int, help='最多写入多少条（按输入顺序取前 N 条）')
+    p_build.add_argument('--min-freq', type=int, help='最低词频')
+    p_build.add_argument('--max-word-chars', type=int, help='词条最大字数（UTF-16 单元）')
+    p_build.add_argument('--exclude-single', action=argparse.BooleanOptionalAction,
+                         help='剔除单字词（微软拼音自带单字）')
+    p_build.add_argument('--timestamp', type=int,
+                         help='写入文件头的 Unix 时间戳（用于可复现构建）')
+
+    # validate 命令
+    p_validate = subparsers.add_parser('validate', help='校验 .dat 是否可被 Windows 导入')
+    p_validate.add_argument('file', help='词库文件路径')
+    p_validate.add_argument('--json', action='store_true', help='输出 JSON 报告')
+    p_validate.add_argument('-n', '--samples', type=int, default=5,
+                            help='每类问题展示的样本条数')
 
     args = parser.parse_args()
 
@@ -306,11 +362,14 @@ def main():
         'remove': cmd_remove,
         'stats': cmd_stats,
         'build': cmd_build,
+        'validate': cmd_validate,
     }
 
     cmd = commands.get(args.command)
     if cmd:
-        cmd(args)
+        rc = cmd(args)
+        if isinstance(rc, int):
+            sys.exit(rc)
     else:
         parser.print_help()
 

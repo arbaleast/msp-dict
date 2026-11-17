@@ -7,11 +7,13 @@
      该格式已被验证为错误的。此文件为 mschxudp 格式的重新实现。
 """
 
-import struct
+import logging
 from typing import List, Tuple
 from datetime import datetime
 from .parser import MSPinyinParser, DictEntry
 from .builder_win10 import Win10MSPinyinBuilder
+
+logger = logging.getLogger(__name__)
 
 
 class MSPinyinEditor(MSPinyinParser):
@@ -25,6 +27,8 @@ class MSPinyinEditor(MSPinyinParser):
         self._pending_add: List[Tuple[str, str, int]] = []
         # 待删除的词条文本
         self._pending_remove: set = set()
+        # 最近一次保存时的构建统计（可用于提示被清洗拦截的词条）
+        self.last_build_stats = None
 
     def add_entry(self, text: str, pinyin: str = '', rank: int = 1) -> bool:
         """添加新词条（标记待添加，保存时重建）
@@ -94,6 +98,11 @@ class MSPinyinEditor(MSPinyinParser):
         # 重新解析以保持一致
         self._reload_entries()
 
+        if self.last_build_stats and self.last_build_stats.skipped:
+            logger.warning("保存时拦截 %d 条不合规词条: %s",
+                           self.last_build_stats.skipped,
+                           self.last_build_stats.summary())
+
     def _collect_entries(self) -> List[DictEntry]:
         """收集最终词条列表：过滤已删除 + 合并新增"""
         merged = [e for e in self.entries if e.text not in self._pending_remove]
@@ -115,36 +124,15 @@ class MSPinyinEditor(MSPinyinParser):
         builder = Win10MSPinyinBuilder(timestamp=int(datetime.now().timestamp()))
         for e in entries:
             builder.add_word(e.text, e.pinyin, e.rank)
-        return builder.build()
+        data = builder.build()
+        self.last_build_stats = builder.stats
+        return data
 
     def _reload_entries(self) -> None:
-        """从 self.raw_data 重新构建 self.entries"""
+        """从 self.raw_data 重新构建 self.entries（复用 parser 的解析逻辑）"""
         self.entries = []
-        data = self.raw_data
-        if len(data) < self.HEADER_SIZE:
-            return
-
-        # 复用与 MSPinyinParser.load 相同的解析逻辑
-        phrase_start = struct.unpack('<I', data[20:24])[0]
-        phrase_end = struct.unpack('<I', data[24:28])[0]
-        phrase_count = struct.unpack('<I', data[28:32])[0]
-
-        offset_base = struct.unpack('<I', data[16:20])[0]
-        offsets = []
-        for i in range(phrase_count):
-            off = struct.unpack(
-                '<I',
-                data[offset_base + i * 4: offset_base + i * 4 + 4]
-            )[0]
-            offsets.append(off)
-        offsets.append(phrase_end - phrase_start)
-
-        for i in range(phrase_count):
-            pos = phrase_start + offsets[i]
-            size = offsets[i + 1] - offsets[i]
-            entry = self._read_phrase(data, pos, size)
-            if entry is not None:
-                self.entries.append(entry)
+        if self.raw_data:
+            self.parse_bytes(self.raw_data)
 
     def get_stats(self) -> dict:
         """获取词库统计信息"""

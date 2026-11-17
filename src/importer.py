@@ -9,55 +9,29 @@
 
 import csv
 import re
+
+from .format_spec import TONE_MAP, is_valid_pinyin, normalize_pinyin
 from typing import List, Tuple, Optional, Dict
 from pathlib import Path
 
 
 class PinyinConverter:
-    """拼音转换器 - 处理拼音字符串的规范化"""
+    """拼音转换器 - 处理拼音字符串的规范化
 
-    # 声调字符映射表
-    TONE_MAP = {
-        'ā': 'a', 'á': 'a', 'ǎ': 'a', 'à': 'a',
-        'ē': 'e', 'é': 'e', 'ě': 'e', 'è': 'e',
-        'ī': 'i', 'í': 'i', 'ǐ': 'i', 'ì': 'i',
-        'ō': 'o', 'ó': 'o', 'ǒ': 'o', 'ò': 'o',
-        'ū': 'u', 'ú': 'u', 'ǔ': 'u', 'ù': 'u',
-        'ǖ': 'ü', 'ǘ': 'ü', 'ǚ': 'ü', 'ǜ': 'ü',
-        'Ā': 'a', 'Á': 'a', 'Ǎ': 'a', 'À': 'a',
-        'Ē': 'e', 'É': 'e', 'Ě': 'e', 'È': 'e',
-        'Ī': 'i', 'Í': 'i', 'Ǐ': 'i', 'Ì': 'i',
-        'Ō': 'o', 'Ó': 'o', 'Ǒ': 'o', 'Ò': 'o',
-        'Ū': 'u', 'Ú': 'u', 'Ǔ': 'u', 'Ù': 'u',
-        'Ǖ': 'ü', 'Ǘ': 'ü', 'Ǚ': 'ü', 'Ǜ': 'ü',
-    }
+    具体规则统一在 src/format_spec.py 中实现，避免与构建器漂移。
+    """
+
+    TONE_MAP = TONE_MAP
 
     @staticmethod
     def normalize_pinyin(pinyin: str) -> str:
-        """规范化拼音字符串:
-        - 去除空格
-        - 转换为小写
-        - 移除声调标记 (ā → a, á → a, ...)
-
-        Args:
-            pinyin: 原始拼音字符串
-
-        Returns:
-            规范化后的无空格拼音字符串
-        """
-        # 先去掉空格
-        pinyin = pinyin.replace(' ', '').lower()
-
-        # 移除声调标记
-        for k, v in PinyinConverter.TONE_MAP.items():
-            pinyin = pinyin.replace(k.lower(), v)
-
-        return pinyin
+        """规范化拼音：去空格、转小写、去声调、ü -> v。"""
+        return normalize_pinyin(pinyin)
 
     @staticmethod
     def is_valid_pinyin(pinyin: str) -> bool:
-        """检查拼音字符串是否有效（仅含字母）"""
-        return bool(re.match(r'^[a-z]+$', pinyin))
+        """检查拼音字符串是否有效（仅小写字母与音节分隔符 '）。"""
+        return is_valid_pinyin(pinyin)
 
 
 class BatchImporter:
@@ -80,9 +54,13 @@ class BatchImporter:
         Returns:
             是否添加成功
         """
-        # 规范化拼音
-        if pinyin_str:
-            pinyin_str = PinyinConverter.normalize_pinyin(pinyin_str)
+        # 规范化拼音：去空格/声调/ü -> v
+        pinyin_str = PinyinConverter.normalize_pinyin(pinyin_str)
+
+        # mschxudp 记录必须有合法拼音；无拼音或非法字符直接跳过，
+        # 避免保存时被构建器静默丢弃导致统计失真
+        if not PinyinConverter.is_valid_pinyin(pinyin_str):
+            return False
 
         # 调用 editor 的 add_entry (text, pinyin, rank)
         return self.editor.add_entry(text, pinyin_str, rank)

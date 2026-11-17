@@ -1,80 +1,96 @@
 # 🎯 微软拼音增强词库
 
-> 让你的输入法更懂你——200万+ 词条，半月自动更新，开箱即用
+> 让你的输入法更懂你——101万+ 条有效词条，三档可选，半月自动更新
 
-[![Daily Build](https://github.com/arbaleast/msp-dict/actions/workflows/biweekly-build.yml/badge.svg)](https://github.com/arbaleast/msp-dict/actions)
+[![Biweekly Build](https://github.com/arbaleast/msp-dict/actions/workflows/biweekly-build.yml/badge.svg)](https://github.com/arbaleast/msp-dict/actions)
 [![Release](https://img.shields.io/github/v/release/arbaleast/msp-dict?color=blue)](https://github.com/arbaleast/msp-dict/releases/latest)
-[![词条数](https://img.shields.io/badge/词条-200万+-blue)](https://github.com/arbaleast/msp-dict/releases)
+[![词条数](https://img.shields.io/badge/词条-101万+-blue)](https://github.com/arbaleast/msp-dict/releases)
 
 ---
 
-## ✨ 特性一览
+## ⚠️ 先读这一段：微软拼音不适合「越大越好」
 
-| 🚀 超大海量词库 | 🔄 半月自动更新 | 📦 多版本可选 | 🎯 即插即用 |
-|:---:|:---:|:---:|:---:|
-| 200万+ 词条 | 每月 1/15 日构建 | 完整/标准/高频 | 下载即用 |
+Windows 10/11 的微软拼音在打开 **设置 → 用户自定义短语** 时会一次性加载全部词条来构建列表：
+
+| 词条规模 | 实际表现 |
+|---:|---|
+| ≤ 2 万 | 正常，管理页响应流畅 |
+| 2 万 ~ 5 万 | 管理页明显卡顿；参考实现（深蓝词库转换）超过 2 万条会直接截断 |
+| 5 万 ~ 10 万+ | 列表转圈/假死，甚至无法点击「清除」 |
+
+因此本项目不再推荐单一的「超大完整版」，而是发布三档：
+
+<!-- STATS:START -->
+| 文件 | 词条数 | 大小 | 适用场景 |
+|:---|---:|---:|:---|
+| **msp_lite.dat** | 19,992 | 869 KB | Windows 10/11 直接导入（推荐） |
+| msp_standard.dat | 49,199 | ~2 MB | 进阶用户；管理页会明显卡顿 |
+| msp_full.dat | 1,013,978 | ~52 MB | 存档 / 转 Rime 等，Windows 无法完整导入 |
+| msp_win10.dat | 19,992 | 869 KB | 兼容旧链接（= msp_lite.dat） |
+<!-- STATS:END -->
+
+> [!IMPORTANT]
+> 直接导入请选 **`msp_lite.dat`**（或旧的 `msp_win10.dat`，内容相同）。
+> `msp_standard.dat` / `msp_full.dat` 超过 Windows 管理界面的舒适区，导入后可能卡死且无法清除，
+> 只建议存档或配合深蓝词库转换器转到 Rime / 小狼毫等输入法。
 
 ---
 
 ## 📥 快速下载
 
-### ⭐ 推荐版本（Windows 10/11 直接导入）
-
-| 📄 文件 | 📊 词条数 | 📝 说明 | 📏 大小 |
-|:---|:---:|:---|---:|
-| [**msp_win10.dat**](https://github.com/arbaleast/msp-dict/releases/latest) ⭐ | ~27万 | **Win10 DAT 推荐下载** | - |
-
-> [!TIP]
-> 直接导入 Windows 微软拼音，无需任何配置！
-
-### 📚 其他版本
-
-| 📄 文件 | 📝 说明 | 📏 大小 |
-|:---|:---|---:|
-| [msp_full.dat](https://github.com/arbaleast/msp-dict/releases/latest) | 完整版（最全） | ~67 MB |
-| [msp_freq10.dat](https://github.com/arbaleast/msp-dict/releases/latest) | 词频 ≥ 10 | - |
-| [msp_freq50.dat](https://github.com/arbaleast/msp-dict/releases/latest) | 词频 ≥ 50 | - |
-| [msp_freq100.dat](https://github.com/arbaleast/msp-dict/releases/latest) | 词频 ≥ 100 | - |
-| [msp_freq500.dat](https://github.com/arbaleast/msp-dict/releases/latest) | 词频 ≥ 500 | - |
-
-> [!NOTE]
-> 点击 Release 页面 **Assets** 展开下载所有版本
+[**前往最新 Release 下载**](https://github.com/arbaleast/msp-dict/releases/latest) — Assets 中展开即可看到全部文件。
 
 ---
 
-## 🚀 快速上手
+## 🚀 快速上手（Windows 10/11）
 
-### Windows 10/11 导入 DAT 文件
-
-1. 下载 `msp_win10.dat`
-2. 打开 **设置** → **时间和语言** → **语言和区域**
-3. 找到 **微软拼音** → **词典** → **导入词典**
-4. 选择下载的 `msp_win10.dat` 文件
+1. 下载 `msp_lite.dat`
+2. 打开 **设置** → **时间和语言** → **语言和区域** → 中文(简体) 的 **语言选项**
+3. 找到 **微软拼音** → **词典** / **用户自定义短语** → **导入**
+4. 选择 `msp_lite.dat`
 
 > [!TIP]
-> 💡 导入后无需重启，立即生效！
+> 导入后无需重启。若提示「文件格式错误或文件已损坏」，请先用下面的 `validate`
+> 命令确认文件本身是否合法（Release 产物在发布前都会跑一遍校验）。
+
+### 出问题先自检
+
+```bash
+python -m src.cli validate msp_lite.dat
+```
+
+校验器会把问题分成四类，而不是笼统的「格式错误」：
+
+- **文件格式错误**：签名/协议头/版本不对（根本不是 mschxudp）
+- **文件已损坏**：截断、偏移表越界/非递增、UTF-16LE 未对齐、分隔符缺失
+- **候选位置/内容违规**：候选序号不在 1~9、拼音非法、词条超长、重复词条
+- **Windows 容量警告**：词条数超过 2 万 / 5 万，导入会失败或让管理页假死
+
+退出码：`0` 通过（可能含警告）、`2` 格式错误、`3` 文件损坏、`4` 内容违规。
 
 ---
 
 ## 📊 词库格式
 
-### Win10 DAT (推荐) ✅
+### Win10 DAT（mschxudp）
 
 ```
-mschxudp 二进制格式
-├── Header: 64 字节
-├── 词条偏移表
-└── 词条数据 (UTF-16LE)
+Header: 64 字节（mschxudp + 版本 + 偏移表位置 + 词条数 + 时间戳）
+词条偏移表: 4 字节 × 词条数
+词条记录: magic | hanzi_offset | 候选序号(1~9) | 0x06 | 0 | 2000纪元秒
+          | 拼音 UTF-16LE | 0x0000 | 词条 UTF-16LE | 0x0000
 ```
 
-### TXT 格式
+- 拼音只允许小写 `a-z`（与音节分隔符 `'`），最多 32 个 UTF-16 单元
+- 词条最多 64 个 UTF-16 单元
+- 候选序号是「同一拼音下的第几个候选」，从 1 起、最多 9
+
+### TXT（源数据）
 
 ```
 词语    拼音    词频
 人工智能    zhong ren gong neng    31450
 机器学习    ji qi xue xi    20106
-神经网络    shen jing wang luo    15620
-深度学习    shen du xue xi    7020
 ```
 
 ---
@@ -87,7 +103,7 @@ mschxudp 二进制格式
 |:---|:---|
 | base.dict.yaml | 基础词库 |
 | ext.dict.yaml | 扩展词库 |
-| tencent.dict.yaml | 腾讯词库 |
+| tencent.dict.yaml | 腾讯词频表（仅词频，无拼音，无法写入 DAT，会剔除） |
 | 8105.dict.yaml | 8105 常用字 |
 | others.dict.yaml | 其他词库 |
 
@@ -100,23 +116,22 @@ mschxudp 二进制格式
 | medication / computer / sport | 医药 / 计算机 / 体育 |
 | geography / exthot / game | 地理 / 热搜 / 游戏 |
 | music / media / animal | 音乐 / 媒体 / 动物 |
-| chess / composite / industry_product | 棋类 / 复合 / 工业 |
-| inputmethod / literature / name | 输入法 / 文学 / 姓名 |
-| name2 / place / shulihua | 姓名2 / 地名 / 数量词 |
-| luna_pinyin | 朙月拼音 |
+| chess / chess2 / composite / industry_product | 棋类 / 复合 / 工业 |
+| inputmethod / literature / name / name2 | 输入法 / 文学 / 姓名 |
+| place / shulihua / luna_pinyin | 地名 / 数量词 / 朙月拼音 |
 
 ---
 
 ## ⚙️ 自动化流程
 
-每月 **1 日和 15 日 03:30 UTC** (北京时间 **11:30**) 自动运行：
+每月 **1 日和 15 日 03:30 UTC**（北京时间 **11:30**）自动运行：
 
 ```
 ✅ 下载 rime-ice + rime-frost 最新词库（30+ 个文件）
-✅ 合并去重，保留最高词频
-✅ 生成 5 个版本的 DAT 文件
-✅ 更新 README 统计信息
-✅ 创建新 release（格式：v1.2-YYYY.MM.DD）
+✅ 合并去重，保留最高词频；剔除无拼音的纯词频表
+✅ 构建 lite / standard / full 三档 DAT，并生成 msp_win10.dat 兼容副本
+✅ 对每个产物运行 validate，校验失败则阻断发布
+✅ 更新 README 统计信息，创建新 release（格式：v2026.11.17）
 ```
 
 ---
@@ -126,25 +141,25 @@ mschxudp 二进制格式
 ```
 msp-dict/
 ├── .github/workflows/
-│   ├── biweekly-build.yml     # 半月自动构建
-│   └── weekly-build.yml       # 周构建（可选）
+│   └── biweekly-build.yml     # 半月自动构建
 ├── src/
-│   ├── parser.py              # mschxudp 格式解析器
-│   ├── builder_win10.py       # Win10 DAT 格式构建器
-│   ├── converter.py          # 格式转换器
+│   ├── format_spec.py         # mschxudp 规范常量与字段校验（唯一事实来源）
+│   ├── parser.py              # mschxudp 解析器（支持 strict 模式）
+│   ├── builder_win10.py       # Win10 DAT 构建器（清洗 + 候选序号 + 时间戳）
+│   ├── validator.py           # 四类问题分类校验器
+│   ├── profiles.py            # lite / standard / full 三档策略
+│   ├── converter.py           # 格式转换器
 │   ├── editor.py              # 词库编辑器
 │   ├── exporter.py            # 导出器
 │   ├── importer.py            # 导入器
 │   └── cli.py                 # 命令行入口
-├── crawler/
-│   ├── pipeline.py           # 词条处理管道
-│   ├── schedule.py           # 定时任务
-│   ├── scel_downloader.py    # 搜狗词库下载器
-│   ├── scel_parser.py         # scel 格式解析器
-│   └── fetchers/              # 词库采集器
+├── crawler/                   # 词条采集（可选）
 ├── scripts/
-│   └── update_readme.py      # CI 自动更新 README 统计
-├── tests/                     # 单元测试
+│   ├── merge.py               # 合并 Rime 源 -> msp_full.txt
+│   ├── build_releases.py      # 三档 DAT + 兼容副本 + 构建摘要
+│   ├── make_scale_samples.py  # 1w/3w/5w/10w 梯度测试包
+│   └── update_readme.py       # CI 自动更新 README 统计
+├── tests/                     # 单元测试（pytest）
 └── README.md
 ```
 
@@ -153,29 +168,47 @@ msp-dict/
 ## 🛠️ 本地构建
 
 ```bash
-# 克隆项目
 git clone https://github.com/arbaleast/msp-dict.git
 cd msp-dict
+pip install pytest          # 构建本身只用标准库
 
-# 安装依赖
-pip install requests
+# 1) 合并已有缓存词库 -> msp_full.txt
+python scripts/merge.py
 
-# 构建词库
-python -m src.cli build -i cache/rime-ice_base.txt -o output.dat
+# 2) 三档构建（含 msp_win10.dat 兼容副本与 build_summary.json）
+python scripts/build_releases.py --input msp_full.txt
 
-# 解析现有词库
-python -m src.parser your_dict.dat
+# 3) 校验
+python -m src.cli validate msp_lite.dat
+
+# 单文件构建（自定义筛选）
+python -m src.cli build cache/rime-ice_base.txt -o output.dat --profile lite
+python -m src.cli build msp_full.txt -o output.dat --profile standard --limit 40000
+
+# 测试
+python -m pytest tests -q
 ```
 
 ---
 
-<!-- BUILD_DATE: 2026-05-26 -->
+## 🩺 Issue #3 修复说明
+
+此前版本导入失败/卡死的三个独立原因（详见 [docs/ISSUE3_DIAGNOSIS.md](docs/ISSUE3_DIAGNOSIS.md)）：
+
+1. **候选序号写成了词频 `rank & 0xFF`**：95% 的记录候选位是 0 或 >9，Windows 拒绝导入；
+   现在按「同一拼音内 1~9」重新编号。
+2. **无拼音词条（腾讯纯词频表）被写成 0 长度编码记录**：完整版里占 47%，Windows 解析即失败；
+   现在合并阶段剔除。
+3. **词库规模远超 Windows 上限**：旧推荐档约 27 万条，设置页必然假死；
+   现在默认发布 ≤2 万条的 `msp_lite.dat`。
+
+---
+
+<!-- BUILD_DATE: 2026-11-17 -->
 
 ⭐ **喜欢这个项目？给个 Star 吧！**
 
 ## 🙏 致谢
-
-基于以下优秀项目构建：
 
 - [Rime](https://github.com/rime) - 中州韵输入法引擎
 - [Rime-Ice](https://github.com/iDvel/rime-ice) - 雾凇拼音

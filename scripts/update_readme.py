@@ -1,173 +1,151 @@
 #!/usr/bin/env python3
 """
-自动更新 README.md 统计信息
+自动更新 README.md 的构建统计（CI 在 build_releases.py 之后运行）。
 
-在 CI 构建完成后运行，解析生成的 DAT 文件并更新 README 中的词条数和文件大小。
+数据来源:
+  1. build_summary.json（首选，由 scripts/build_releases.py 生成）
+  2. 退回直接解析 msp_*.dat
+
+更新内容:
+  * <!-- STATS:START --> ... <!-- STATS:END --> 之间的三档下载表
+  * hero 文案与徽章里的「万条」数字
+  * <!-- BUILD_DATE: YYYY-MM-DD -->
 """
 
+import json
 import os
 import re
 import sys
+from datetime import date
 from pathlib import Path
 
-# 添加项目根目录到 path，以便导入 src.parser
-sys.path.insert(0, str(Path(__file__).parent.parent))
+ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(ROOT))
 
 try:
     from src.parser import MSPinyinParser
-except ImportError:
+except ImportError:  # pragma: no cover
     MSPinyinParser = None
+
+STATS_START = '<!-- STATS:START -->'
+STATS_END = '<!-- STATS:END -->'
+
+SCENES = {
+    'msp_lite.dat': 'Windows 10/11 直接导入（推荐）',
+    'msp_standard.dat': '进阶用户；管理页会明显卡顿',
+    'msp_full.dat': '存档 / 转 Rime 等，Windows 无法完整导入',
+    'msp_win10.dat': '兼容旧链接（= msp_lite.dat）',
+}
 
 
 def format_size(size_bytes: int) -> str:
-    """将字节数转换为人类可读的大小格式"""
     if size_bytes < 1024:
         return f"{size_bytes} B"
-    elif size_bytes < 1024 * 1024:
-        return f"{size_bytes / 1024:.1f} KB"
-    else:
-        return f"~{size_bytes / (1024 * 1024):.0f} MB"
+    if size_bytes < 1024 * 1024:
+        return f"{size_bytes / 1024:.0f} KB"
+    return f"~{size_bytes / (1024 * 1024):.0f} MB"
 
 
-def get_dat_stats(filepath: str) -> dict:
-    """获取 DAT 文件的统计信息"""
-    if not os.path.exists(filepath):
-        return {"exists": False, "count": None, "size": None, "size_str": "-"}
+def load_stats(root: Path) -> dict:
+    """返回 {文件名: {'count': int, 'size': int}}。"""
+    summary_path = root / 'build_summary.json'
+    stats = {}
+    if summary_path.exists():
+        summary = json.loads(summary_path.read_text(encoding='utf-8'))
+        for item in summary.get('profiles', []):
+            stats[item['file']] = {'count': item['entries'], 'size': item['size_bytes']}
+        if 'msp_lite.dat' in stats:
+            stats['msp_win10.dat'] = dict(stats['msp_lite.dat'])
+        return stats
 
-    size = os.path.getsize(filepath)
-    size_str = format_size(size)
-
-    count = None
-    if MSPinyinParser:
-        try:
-            parser = MSPinyinParser()
-            parser.load(filepath)
-            count = parser.get_entry_count()
-        except Exception as e:
-            print(f"  Warning: Failed to parse {filepath}: {e}")
-
-    return {
-        "exists": True,
-        "count": count,
-        "size": size,
-        "size_str": size_str,
-    }
+    for filename in ['msp_lite.dat', 'msp_standard.dat', 'msp_full.dat', 'msp_win10.dat']:
+        path = root / filename
+        if not path.exists():
+            continue
+        count = None
+        if MSPinyinParser:
+            try:
+                parser = MSPinyinParser()
+                parser.load(str(path))
+                count = parser.get_entry_count()
+            except Exception as exc:
+                print(f"  Warning: 无法解析 {filename}: {exc}")
+        stats[filename] = {'count': count, 'size': os.path.getsize(path)}
+    return stats
 
 
-def update_readme(readme_path: str, stats: dict) -> bool:
-    """更新 README.md 中的统计信息"""
-    if not os.path.exists(readme_path):
-        print(f"ERROR: README.md not found at {readme_path}")
+def render_stats_block(stats: dict) -> str:
+    lines = [
+        STATS_START,
+        '| 文件 | 词条数 | 大小 | 适用场景 |',
+        '|:---|---:|---:|:---|',
+    ]
+    for filename in ['msp_lite.dat', 'msp_standard.dat', 'msp_full.dat', 'msp_win10.dat']:
+        item = stats.get(filename)
+        if not item:
+            continue
+        count = f"{item['count']:,}" if item.get('count') is not None else 'N/A'
+        size = format_size(item['size'])
+        name = f'**{filename}**' if filename == 'msp_lite.dat' else filename
+        lines.append(f'| {name} | {count} | {size} | {SCENES[filename]} |')
+    lines.append(STATS_END)
+    return '\n'.join(lines)
+
+
+def update_readme(readme_path: Path, stats: dict) -> bool:
+    if not readme_path.exists():
+        print(f'ERROR: README.md 不存在: {readme_path}')
         return False
 
-    with open(readme_path, 'r', encoding='utf-8') as f:
-        content = f.read()
-
+    content = readme_path.read_text(encoding='utf-8')
     original = content
 
-    # 1. 更新 hero 区域的词条数（从完整版获取）
-    if stats.get("full", {}).get("count"):
-        full_count = stats["full"]["count"]
-        # 替换 200万+ 为实际数字
+    if STATS_START in content and STATS_END in content:
+        start = content.index(STATS_START)
+        end = content.index(STATS_END) + len(STATS_END)
+        content = content[:start] + render_stats_block(stats) + content[end:]
+
+    full_count = stats.get('msp_full.dat', {}).get('count')
+    if full_count:
+        wan = full_count // 10000
         content = re.sub(
-            r'🎯 微软拼音增强词库[^>]*>[^>]*>[^>]*—\d+万\+',
-            f'🎯 微软拼音增强词库\n\n> 让你的输入法更懂你——{full_count // 10000}万+ 词条，半月自动更新，开箱即用',
-            content
+            r'> 让你的输入法更懂你——[^\n]*',
+            f'> 让你的输入法更懂你——{wan}万+ 条有效词条，三档可选，半月自动更新',
+            content,
+        )
+        content = re.sub(
+            r'\[!\[词条数\]\([^)]*\)\]\([^)]*\)',
+            f'[![词条数](https://img.shields.io/badge/词条-{wan}万+-blue)]'
+            f'(https://github.com/arbaleast/msp-dict/releases)',
+            content,
         )
 
-    # 2. 更新词条数 badge
-    if stats.get("full", {}).get("count"):
-        full_count = stats["full"]["count"]
-        content = re.sub(
-            r'\[\!\[词条数\]\([^)]+\)\]\([^)]+\)',
-            f'[![词条数](https://img.shields.io/badge/词条-{full_count // 10000}万+-blue)](https://github.com/arbaleast/msp-dict/releases)',
-            content
-        )
-
-    # 3. 更新推荐版词条数（约27万 -> 实际数字）
-    if stats.get("freq100", {}).get("count"):
-        freq100_count = stats["freq100"]["count"]
-        content = re.sub(
-            r'\|\s*\[?\*?msp_win10\.dat\*?\]?[^|]*⭐[^|]*\|\s*~?\d+万',
-            f'| [**msp_win10.dat**](https://github.com/arbaleast/msp-dict/releases/latest) ⭐ | {freq100_count:,}',
-            content
-        )
-
-    # 4. 更新推荐版文件大小
-    if stats.get("freq100", {}).get("size_str"):
-        size_str = stats["freq100"]["size_str"]
-        # 匹配 "Win10 DAT 推荐下载" 那行的末尾大小
-        content = re.sub(
-            r'(\| \[\*\*?msp_win10\.dat\*\*?\]?[^|]*⭐[^|]*\| [^|]*\| [^|]*\| )~\d+ MB',
-            f'\\g<1>' + size_str,
-            content
-        )
-
-    # 5. 更新完整版词条数
-    if stats.get("full", {}).get("count"):
-        full_count = stats["full"]["count"]
-        full_size = stats.get("full", {}).get("size_str", "-")
-        content = re.sub(
-            r'\|\s*\[?msp_full\.dat\]?[^|]*\| 完整版[^|]*\| [^|]*\|',
-            f'| [msp_full.dat](https://github.com/arbaleast/msp-dict/releases/latest) | {full_count:,} 词条 | 完整版（最全） | {full_size} |',
-            content
-        )
-
-    # 6. 更新最后构建日期
-    from datetime import date
-    today = date.today().isoformat()
     content = re.sub(
         r'<!--\s*BUILD_DATE:\s*\d{4}-\d{2}-\d{2}\s*-->',
-        f'<!-- BUILD_DATE: {today} -->',
-        content
+        f'<!-- BUILD_DATE: {date.today().isoformat()} -->',
+        content,
     )
 
     if content != original:
-        with open(readme_path, 'w', encoding='utf-8') as f:
-            f.write(content)
+        readme_path.write_text(content, encoding='utf-8')
         return True
     return False
 
 
-def main():
-    """主函数"""
-    # 获取项目根目录
-    project_root = Path(__file__).parent.parent
-    readme_path = project_root / "README.md"
+def main() -> int:
+    print('=== README 统计更新工具 ===\n')
+    stats = load_stats(ROOT)
+    if not stats:
+        print('未找到任何 msp_*.dat 或 build_summary.json，跳过')
+        return 1
+    for filename, item in stats.items():
+        count = f"{item['count']:,}" if item.get('count') is not None else 'N/A'
+        print(f"  {filename}: {count} 条, {format_size(item['size'])}")
 
-    print("=== README 统计更新工具 ===\n")
-
-    # 需要统计的文件
-    files = {
-        "full": "msp_full.dat",
-        "freq10": "msp_freq10.dat",
-        "freq50": "msp_freq50.dat",
-        "freq100": "msp_freq100.dat",
-        "freq500": "msp_freq500.dat",
-    }
-
-    stats = {}
-    print("📊 解析 DAT 文件统计:")
-    for key, filename in files.items():
-        filepath = project_root / filename
-        stat = get_dat_stats(str(filepath))
-        stats[key] = stat
-        if stat["exists"]:
-            count_str = f"{stat['count']:,}" if stat['count'] else "N/A"
-            print(f"  {filename}: {count_str} 词条, {stat['size_str']}")
-        else:
-            print(f"  {filename}: 不存在")
-
-    print()
-
-    # 更新 README
-    if update_readme(str(readme_path), stats):
-        print("✅ README.md 已更新")
-    else:
-        print("ℹ️  README.md 无需更新")
-
-    print()
+    updated = update_readme(ROOT / 'README.md', stats)
+    print('\n✅ README.md 已更新' if updated else '\nℹ️  README.md 无需更新')
+    return 0
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    sys.exit(main())

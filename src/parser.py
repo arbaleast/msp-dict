@@ -1,8 +1,8 @@
 """
 微软拼音用户词库解析器 (mschxudp 格式 ✅)
 
-格式来自 imewlconverter Win10MsPinyin.cs:
-  https://github.com/studyzy/imewlconverter
+格式来自 imewlconverter Win10MsPinyin.cs / MsChxUdpExporterBase.cs，
+字段布局与常量统一定义在 src/format_spec.py。
 
 Header (0x40 bytes):
   0x00: proto 'mschxudp' (8 bytes)
@@ -10,30 +10,52 @@ Header (0x40 bytes):
   0x0C: version 1 (4 bytes)
   0x10: phrase_offset_start = 0x40 (4 bytes)
   0x14: phrase_start = 0x40 + phrase_count * 4 (4 bytes)
-  0x18: phrase_end (4 bytes, filled after build)
+  0x18: phrase_end = 文件总大小 (4 bytes)
   0x1C: phrase_count (4 bytes)
   0x20: timestamp (8 bytes)
   0x28: reserved 0 (24 bytes)
 
 Phrase entry:
   magic (4 bytes, 0x00100010)
-  hanzi_offset (2 bytes) = 18 + pinyin_char_len * 2
-  rank (1 byte)
+  hanzi_offset (2 bytes) = 18 + 拼音 UTF-16LE 字节数
+  candidate position (1 byte)，同编码候选序号，1 起
   0x06 (1 byte)
   unknown (4 bytes, 0x00000000)
-  unknown (4 bytes, 0xE679CD20)
-  pinyin (pinyin_char_len * 2 bytes UTF-16LE)
+  unknown (4 bytes, 2000-01-01 纪元秒)
+  pinyin (UTF-16LE)
   split (2 bytes, 0x0000)
-  word (word_char_len * 2 bytes UTF-16LE)
+  word (UTF-16LE)
   terminator (2 bytes, 0x0000)
-
-注意: 旧版 parser.py 使用的 60 字节固定格式已被验证为错误的。
-     此文件为 mschxudp 格式的重新实现。
 """
 
 import struct
 from dataclasses import dataclass
 from typing import List, Optional
+
+from .format_spec import (
+    ENTRY_HANZI_OFFSET_BASE,
+    ENTRY_HEAD_BASE,
+    ENTRY_MAGIC,
+    HEADER_SIZE,
+    MAGIC,
+    MAX_CODE_UNITS,
+    OFF_PHRASE_COUNT,
+    OFF_PHRASE_END,
+    OFF_PHRASE_OFFSET_START,
+    OFF_PHRASE_START,
+)
+
+
+class MSPinyinFormatError(ValueError):
+    """mschxudp 解析错误。
+
+    Attributes:
+        category: 'format'（签名/协议头不对）或 'corruption'（截断/偏移越界/未对齐）
+    """
+
+    def __init__(self, message: str, category: str = 'format'):
+        super().__init__(message)
+        self.category = category
 
 
 @dataclass
@@ -42,132 +64,188 @@ class DictEntry:
     text: str              # 中文文本
     pinyin: str            # 拼音字符串（无空格，如 "zhongguo"）
     offset: int = 0        # 词条在文件中的偏移量
-    rank: int = 1          # 词频排名
+    rank: int = 1          # 候选序号（同一拼音下 1 起）
 
 
 class MSPinyinParser:
     """微软拼音用户词库解析器 (mschxudp 格式)"""
 
-    MAGIC = b'mschxudp'
-    HEADER_SIZE = 0x40      # 文件头固定大小 (64 字节)
+    MAGIC = MAGIC
+    HEADER_SIZE = HEADER_SIZE
 
-    # ---- 文件头偏移常量 (来源: imewlconverter Win10MsPinyin.cs) ----
-    _OFF_PROTO = 0          # 协议标识起始 (8 bytes)
-    _OFF_FLAG = 8           # 固定标志 0x00600002 (4 bytes)
-    _OFF_VERSION = 12       # 版本号 (4 bytes)
-    _OFF_PHRASE_OFFSET_START = 16  # 偏移表起始位置 (4 bytes)
-    _OFF_PHRASE_START = 20  # 词条数据起始位置 (4 bytes)
-    _OFF_PHRASE_END = 24    # 词条数据结束位置 (4 bytes)
-    _OFF_PHRASE_COUNT = 28  # 词条数量 (4 bytes)
-    _OFF_TIMESTAMP = 32     # Unix 时间戳 (8 bytes)
-    # 0x28 ~ 0x3F: 保留字段 (24 bytes)
-
-    # ---- 词条内部偏移常量 ----
-    _ENTRY_MAGIC = 0x00100010   # 词条魔数 (来源: mschxudp 格式规范)
-    _ENTRY_HEAD_BASE = 18       # 词条固定头大小 = 4+2+1+1+4+4
-    _ENTRY_PINYIN_START = 16    # 拼音数据在词条内的起始偏移 = 4(magic)+2(hanzi_off)+1(rank)+1(flag)+4(unk1)+4(unk2)
-    _MAX_PINYIN_LEN = 100       # 拼音长度合理性上限（防止畸形数据导致内存异常）
+    _ENTRY_MAGIC = ENTRY_MAGIC
+    _ENTRY_HEAD_BASE = ENTRY_HANZI_OFFSET_BASE  # 18 = 固定头 16 + 拼音后分隔符 2
+    _ENTRY_PINYIN_START = ENTRY_HEAD_BASE       # 16
+    _MAX_PINYIN_LEN = MAX_CODE_UNITS            # 拼音长度上限（UTF-16 单元）
 
     def __init__(self, filepath: str = None):
         self.filepath = filepath
         self.raw_data: bytes = b''
         self.entries: List[DictEntry] = []
         self.phrase_count = 0
+        self.warnings: List[str] = []
+        self.invalid_entries = 0
 
-    def load(self, filepath: str) -> int:
-        """加载词库文件，返回词条数
+    def load(self, filepath: str, strict: bool = False) -> int:
+        """加载词库文件，返回词条数。
 
         Args:
             filepath: 词库文件路径
-
-        Returns:
-            解析到的词条数量
+            strict: True 时对结构问题直接抛 MSPinyinFormatError；
+                False 时尽量跳过坏词条，把问题记入 self.warnings / invalid_entries
 
         Raises:
             FileNotFoundError: 文件不存在
-            ValueError: 文件格式无效
+            MSPinyinFormatError: 文件格式错误（category='format'）
+                或文件已损坏（category='corruption'）
         """
         self.filepath = filepath
         with open(filepath, 'rb') as f:
-            self.raw_data = f.read()
+            data = f.read()
 
-        data = self.raw_data
+        return self.parse_bytes(data, strict=strict)
+
+    def parse_bytes(self, data: bytes, strict: bool = False) -> int:
+        """解析内存中的词库数据（load 与编辑器重建共用）。"""
+        self.raw_data = data
+        self.warnings = []
+        self.invalid_entries = 0
+
         if len(data) < self.HEADER_SIZE:
-            raise ValueError(f"文件太小 ({len(data)} 字节)，不足以包含 mschxudp 文件头")
-
-        # 验证协议头
-        proto = data[0:8]
-        if proto != self.MAGIC:
-            raise ValueError(
-                f"无效的协议标识: {proto!r}，期望 'mschxudp'\n"
-                f"提示: 旧版 60 字节固定格式已被弃用，请使用 mschxudp 格式词库"
+            raise MSPinyinFormatError(
+                f"文件太小 ({len(data)} 字节)，不足以包含 {self.HEADER_SIZE} 字节的 mschxudp 文件头",
+                category='format',
             )
 
-        # 读取文件头字段
-        # 偏移表起始 = header[16:20], 词条起始 = header[20:24], 词条结束 = header[24:28], 词条数 = header[28:32]
-        phrase_offset_start = struct.unpack('<I', data[16:20])[0]
-        phrase_start = struct.unpack('<I', data[20:24])[0]
-        phrase_end = struct.unpack('<I', data[24:28])[0]
-        phrase_count = struct.unpack('<I', data[28:32])[0]
+        proto = data[0:8]
+        if proto != self.MAGIC:
+            raise MSPinyinFormatError(
+                f"无效的协议标识: {proto!r}，期望 'mschxudp'\n"
+                f"提示: 旧版 60 字节固定格式已被弃用，请使用 mschxudp 格式词库",
+                category='format',
+            )
+
+        phrase_offset_start = struct.unpack('<I', data[OFF_PHRASE_OFFSET_START:OFF_PHRASE_OFFSET_START + 4])[0]
+        phrase_start = struct.unpack('<I', data[OFF_PHRASE_START:OFF_PHRASE_START + 4])[0]
+        phrase_end = struct.unpack('<I', data[OFF_PHRASE_END:OFF_PHRASE_END + 4])[0]
+        phrase_count = struct.unpack('<I', data[OFF_PHRASE_COUNT:OFF_PHRASE_COUNT + 4])[0]
         self.phrase_count = phrase_count
 
-        # 读取偏移表（每个词条对应一个 4 字节偏移量）
-        offsets = []
-        for i in range(phrase_count):
-            off = struct.unpack(
-                '<I',
-                data[phrase_offset_start + i * 4:
-                     phrase_offset_start + i * 4 + 4]
-            )[0]
-            offsets.append(off)
-        # 添加哨兵值：最后一个词条的结束位置
+        # ---- 结构边界校验（对应 Windows/imewlconverter 的检查）----
+        problem = None
+        if phrase_offset_start < self.HEADER_SIZE:
+            problem = f"偏移表起点异常: 0x{phrase_offset_start:x} < 0x40"
+        elif phrase_count > (len(data) - self.HEADER_SIZE) // 4:
+            problem = f"词条数 {phrase_count} 超出文件可容纳的偏移表大小"
+        elif phrase_start < phrase_offset_start + 4 * phrase_count:
+            problem = (f"词条区起点 0x{phrase_start:x} 落在偏移表内 "
+                       f"(期望 >= 0x{phrase_offset_start + 4 * phrase_count:x})")
+        elif phrase_end < phrase_start:
+            problem = f"词条区结束 0x{phrase_end:x} 小于起点 0x{phrase_start:x}"
+        elif phrase_end > len(data):
+            problem = f"词条区结束 0x{phrase_end:x} 越界（文件仅 {len(data)} 字节）"
+
+        if problem:
+            if strict:
+                raise MSPinyinFormatError(f"文件结构损坏: {problem}", category='corruption')
+            self.warnings.append(f"文件结构损坏: {problem}")
+            if phrase_count > (len(data) - self.HEADER_SIZE) // 4:
+                raise MSPinyinFormatError(
+                    f"文件结构损坏: {problem}", category='corruption'
+                )
+
+        if phrase_end != len(data):
+            self.warnings.append(
+                f"header.phrase_end (0x{phrase_end:x}) 与文件实际大小 (0x{len(data):x}) 不一致"
+            )
+
+        # ---- 偏移表 ----
+        try:
+            offsets = [
+                struct.unpack('<I', data[phrase_offset_start + i * 4:
+                                         phrase_offset_start + i * 4 + 4])[0]
+                for i in range(phrase_count)
+            ]
+        except struct.error as exc:
+            raise MSPinyinFormatError(
+                f"偏移表被截断（无法读取第 {phrase_count} 项）", category='corruption'
+            ) from exc
+
+        # 哨兵：最后一条记录的结束位置
         offsets.append(phrase_end - phrase_start)
 
-        # 读取每个词条
+        if offsets and offsets[0] != 0:
+            self.warnings.append(f"偏移表首项应为 0，实际 {offsets[0]}")
+        for i in range(phrase_count):
+            if offsets[i + 1] < offsets[i]:
+                msg = f"偏移表非单调递增: 第 {i} 项 {offsets[i]} > 第 {i + 1} 项 {offsets[i + 1]}"
+                if strict:
+                    raise MSPinyinFormatError(f"文件结构损坏: {msg}", category='corruption')
+                self.warnings.append(msg)
+                break
+
+        # ---- 词条 ----
         self.entries = []
         for i in range(phrase_count):
             pos = phrase_start + offsets[i]
             entry_size = offsets[i + 1] - offsets[i]
-            entry = self._read_phrase(data, pos, entry_size)
-            if entry is not None:
-                self.entries.append(entry)
+            if pos < 0 or pos + entry_size > len(data) or entry_size <= 0:
+                self.invalid_entries += 1
+                msg = f"第 {i} 条记录越界: offset={offsets[i]}, size={entry_size}"
+                if strict:
+                    raise MSPinyinFormatError(f"文件结构损坏: {msg}", category='corruption')
+                self.warnings.append(msg)
+                continue
 
-        return phrase_count
+            entry = self._read_phrase(data, pos, entry_size)
+            if entry is None:
+                self.invalid_entries += 1
+                if strict:
+                    raise MSPinyinFormatError(
+                        f"文件结构损坏: 第 {i} 条记录无法解析（偏移 0x{pos:x}）",
+                        category='corruption',
+                    )
+                continue
+            self.entries.append(entry)
+
+        return len(self.entries)
 
     def _read_phrase(self, data: bytes, start: int, entry_size: int) -> Optional[DictEntry]:
         """读取单个词条，返回 DictEntry；格式错误时返回 None"""
+        if entry_size < self._ENTRY_HEAD_BASE + 4:
+            return None
         try:
-            # 校验 magic 值 (0x00100010 = mschxudp 词条固定魔数, 来源: imewlconverter Win10MsPinyin.cs)
             magic = struct.unpack('<I', data[start:start + 4])[0]
             if magic != self._ENTRY_MAGIC:
                 return None
 
             hanzi_offset = struct.unpack('<H', data[start + 4:start + 6])[0]
-            rank = data[start + 6]
+            position = data[start + 6]
 
-            # 拼音字符数 = (hanzi_offset - _ENTRY_HEAD_BASE) // 2
-            # _ENTRY_HEAD_BASE(18) = 固定头大小: 4(magic) + 2(hanzi_offset) + 1(rank) + 1(flag=0x06) + 4(unk1) + 4(unk2)
-            pinyin_char_len = (hanzi_offset - self._ENTRY_HEAD_BASE) // 2
-            if pinyin_char_len < 0 or pinyin_char_len > self._MAX_PINYIN_LEN:
+            # 拼音以 UTF-16LE 存储：hanzi_offset 必须落在偶数字节且不小于固定头 + 分隔符
+            if hanzi_offset < self._ENTRY_HEAD_BASE or hanzi_offset % 2 != 0:
                 return None
-            pinyin_byte_len = pinyin_char_len * 2  # UTF-16LE: 每字符 2 字节
+            pinyin_byte_len = hanzi_offset - self._ENTRY_HEAD_BASE
+            pinyin_units = pinyin_byte_len // 2
+            if pinyin_units > self._MAX_PINYIN_LEN:
+                return None
 
-            # 拼音内容从 start + _ENTRY_PINYIN_START 开始
-            # _ENTRY_PINYIN_START(16) = 4(magic) + 2(hanzi_offset) + 1(rank) + 1(flag) + 4(unk1) + 4(unk2)
             pinyin_start = start + self._ENTRY_PINYIN_START
-            pinyin_bytes = data[pinyin_start:pinyin_start + pinyin_byte_len]
-            pinyin_str = pinyin_bytes.decode('utf-16-le', errors='replace')
-            pinyin_str = pinyin_str.replace('\x00', '')
-
-            # 文本从拼音结束 + 2 (null terminator / split 分隔符 0x0000) 开始
-            word_start = pinyin_start + pinyin_byte_len + 2  # +2 跳过 null 分隔
-            word_byte_len = entry_size - (word_start - start) - 2  # -2 减去末尾 null terminator
-            if word_byte_len < 0:
+            if pinyin_start + pinyin_byte_len + 2 > start + entry_size:
                 return None
-            word_bytes = data[word_start:word_start + word_byte_len]
-            word = word_bytes.decode('utf-16-le', errors='replace')
-            word = word.replace('\x00', '')
+            pinyin_bytes = data[pinyin_start:pinyin_start + pinyin_byte_len]
+            # 拼音后的 0x0000 分隔符必须存在
+            if data[pinyin_start + pinyin_byte_len:pinyin_start + pinyin_byte_len + 2] != b'\x00\x00':
+                return None
+            pinyin_str = pinyin_bytes.decode('utf-16-le')
 
+            word_start = pinyin_start + pinyin_byte_len + 2
+            word_byte_len = (start + entry_size) - word_start - 2
+            if word_byte_len <= 0 or word_byte_len % 2 != 0:
+                return None
+            if data[start + entry_size - 2:start + entry_size] != b'\x00\x00':
+                return None
+            word = data[word_start:word_start + word_byte_len].decode('utf-16-le')
             if not word:
                 return None
 
@@ -175,7 +253,7 @@ class MSPinyinParser:
                 text=word,
                 pinyin=pinyin_str,
                 offset=start,
-                rank=rank,
+                rank=position,
             )
         except (struct.error, IndexError, UnicodeDecodeError):
             return None
@@ -225,17 +303,19 @@ def main():
     print(f"文件: {sys.argv[1]}")
     print(f"文件大小: {parser.get_file_size()} 字节")
     print(f"词条数量: {count}")
+    if parser.invalid_entries:
+        print(f"无法解析的词条: {parser.invalid_entries}")
     print()
 
     print("前 10 个词条:")
     for i, entry in enumerate(parser.entries[:10]):
-        print(f"  {i + 1}. {entry.text}  [{entry.pinyin}] (rank={entry.rank})")
+        print(f"  {i + 1}. {entry.text}  [{entry.pinyin}] (候选位={entry.rank})")
 
     print()
     print("后 10 个词条:")
     for i, entry in enumerate(parser.entries[-10:]):
         idx = len(parser.entries) - 9 + i
-        print(f"  {idx}. {entry.text}  [{entry.pinyin}] (rank={entry.rank})")
+        print(f"  {idx}. {entry.text}  [{entry.pinyin}] (候选位={entry.rank})")
 
 
 if __name__ == '__main__':

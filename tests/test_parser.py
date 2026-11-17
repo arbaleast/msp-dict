@@ -67,7 +67,8 @@ class TestMSPinyinParserEdgeCases:
     def test_get_entry_count(self):
         """获取词条数量"""
         builder = Win10MSPinyinBuilder()
-        test_words = [("词条1", "citiáo1", 1), ("词条2", "citiáo2", 2), ("词条3", "citiáo3", 3)]
+        # 拼音必须是合法的 a-z 序列（数字/符号会被构建器按格式规范拦截）
+        test_words = [("词条甲", "citiajia", 1), ("词条乙", "citiaoyi", 2), ("词条丙", "citiaobing", 3)]
         for word, py, rank in test_words:
             builder.add_word(word, py, rank)
         builder.save(self.tmpfile)

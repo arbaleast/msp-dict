@@ -33,3 +33,10 @@ crawl_output.txt
 _debug_*
 _test_*
 _tmp/
+
+# 构建产物（三档 DAT 与合并文本，CI 生成、不提交）
+msp_*.txt
+msp_*.dat
+build_summary.json
+scale_samples/
+.tmp/

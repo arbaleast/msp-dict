@@ -252,3 +252,37 @@ class TestPinyinConverterExtended:
         assert not PinyinConverter.is_valid_pinyin("")        # 空字符串无效
         assert not PinyinConverter.is_valid_pinyin("abc def") # 含空格无效
         assert not PinyinConverter.is_valid_pinyin("abc-def") # 含连字符无效
+
+
+class TestBatchImporterPinyinValidation:
+    """导入阶段就拦截非法拼音，避免保存时被静默丢弃（Issue #3）。"""
+
+    def test_import_txt_skips_invalid_and_empty_pinyin(self):
+        import tempfile
+        from src.builder_win10 import Win10MSPinyinBuilder
+        from src.editor import MSPinyinEditor
+
+        tmpdir = tempfile.mkdtemp()
+        datfile = os.path.join(tmpdir, 'base.dat')
+        builder = Win10MSPinyinBuilder()
+        builder.add_word("测试", "ceshi", 1)
+        builder.save(datfile)
+
+        editor = MSPinyinEditor()
+        editor.load(datfile)
+        importer = BatchImporter(editor)
+
+        source = os.path.join(tmpdir, 'words.txt')
+        with open(source, 'w', encoding='utf-8') as f:
+            f.write("坏词\tci1\n")
+            f.write("无音词\t\n")
+            f.write("好词\thaoci\n")
+
+        imported, skipped, errors = importer.import_txt(source)
+
+        assert imported == 1
+        assert skipped == 2
+        assert errors == 0
+
+        import shutil
+        shutil.rmtree(tmpdir, ignore_errors=True)
