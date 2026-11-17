@@ -5,7 +5,7 @@
 | 文件 | 职责 | 不许做的事 |
 |---|---|---|
 | `format_spec.py` | 协议常量、UTF-16 单元数、拼音规范化、长度上限 | 不依赖其它 `src` 模块 |
-| `builder_win10.py` | 清洗 → 去重 → 排序 → 分配候选位 → 序列化 | 不写文件、不打印，只回 `bytes` 与 `BuildStats` |
+| `builder_win10.py` | 清洗 → 去重 → 排序 → 分配候选位 → 序列化；按 `source` 做基础/扩展源分区与配额 | 不写文件、不打印，只回 `bytes` 与 `BuildStats` |
 | `parser.py` | 读取/校验结构，`strict` 区分 `format`/`corruption` | 不在解析中修改数据 |
 | `validator.py` | 四类问题分类报告与退出码；识别 55AA8881/55AA8880/DEL 容器并给出导入入口提示 | 不复用 builder 的写路径 |
 | `editor.py` | 增删词条（哈希索引 O(1)）、保存重建 | 不在保存时改变同音候选顺序 |

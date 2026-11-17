@@ -250,6 +250,9 @@ def cmd_build(args):
         exclude_single=exclude_single,
         max_word_units=max_word_chars,
         limit=limit,
+        extended_ratio=profile.extended_ratio if profile else None,
+        extended_max_word_units=profile.extended_max_word_units if profile else 6,
+        extended_min_word_units=profile.extended_min_word_units if profile else 2,
     )
     normal_selected = selected
     for probe in probes:

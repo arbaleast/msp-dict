@@ -24,6 +24,9 @@ class Profile:
     max_word_units: int           # 词条最大 UTF-16 单元数（用于剔除长句）
     min_freq: int                 # 最低词频（来源词频，仅用于筛选）
     windows_importable: bool      # 是否声明可直接导入 Windows
+    extended_ratio: Optional[float] = None   # 扩展源（萌娘/维基/SCEL）最多占比
+    extended_max_word_units: int = 6         # 扩展源词条最大字数
+    extended_min_word_units: int = 2         # 扩展源词条最小字数
 
     def describe(self) -> str:
         limit = f"≤{self.limit:,} 条" if self.limit else "全量"
@@ -39,6 +42,8 @@ PROFILES: Dict[str, Profile] = {
         max_word_units=8,
         min_freq=0,
         windows_importable=True,
+        extended_ratio=0.12,          # Lite：扩展源 ≤12%（约 2,400 条），其余留给 Frost/Ice
+        extended_max_word_units=5,
     ),
     'standard': Profile(
         name='standard',
@@ -48,6 +53,8 @@ PROFILES: Dict[str, Profile] = {
         max_word_units=16,
         min_freq=0,
         windows_importable=False,
+        extended_ratio=0.22,          # Standard：扩展源 ≤22%（约 11,000 条）
+        extended_max_word_units=5,
     ),
     'full': Profile(
         name='full',

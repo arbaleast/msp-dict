@@ -3,10 +3,11 @@
 ## 数据流
 
 ```
-cache/rime-*.txt（CI 下载，或本地 scripts/download_frost.py）
-        │  scripts/merge.py
+cache/rime-*.txt（基础源，CI 下载或本地 scripts/download_frost.py）
+cache/ext-*.dict.yaml + cache/scel/*.scel（扩展源，可选）
+        │  scripts/merge.py（强过滤 + 基础源优先去重 + 来源列）
         ▼
-msp_full.txt（有拼音、词频≥1，按词频降序）
+msp_full.txt（词条\t拼音\t词频\t来源；基础源在前按词频降序，扩展源在后）
         │  scripts/build_releases.py
         ▼
 msp_lite.dat / msp_standard.dat / msp_full.dat / msp_win10.dat
@@ -20,8 +21,8 @@ README.md 的 <!-- STATS:START --> 区块 + BUILD_DATE
 
 | 脚本 | 输入 | 输出 | 关键约束 |
 |---|---|---|---|
-| `download_frost.py` | rime-ice / rime-frost 上游 | `cache/rime-*.txt` | 清单与 CI 一致；`cache/` 不入库，新克隆必须先跑 |
-| `merge.py` | `cache/rime-*.txt` | `msp_full.txt`、`CHANGELOG.md` | 缺源文件直接失败（不产出残缺词库）；无拼音/词频<1 的词条剔除并计数；同词保留最高词频 |
+| `download_frost.py` | rime-ice / rime-frost + 扩展源 release | `cache/rime-*.txt`、`cache/ext-*.dict.yaml` | 基础源缺失即失败；扩展源失败只告警（`--strict-ext` 可收紧）；`cache/` 不入库 |
+| `merge.py` | `cache/rime-*.txt` + `cache/ext-*` | `msp_full.txt`、`CHANGELOG.md` | 基础源缺失直接失败；扩展源强过滤（纯中文、2~6 字、拼音合法）；同词基础源优先；无拼音/词频<1 剔除并计数 |
 | `build_releases.py` | `msp_full.txt` | 4 个 DAT + `build_summary.json` | 逐档 validate，非 0 退出阻断；`msp_win10.dat` 必须是 lite 的字节副本 |
 | `make_scale_samples.py` | `msp_full.txt` | `scale_samples/` | 仅用于复现规模卡顿，不随 Release 发布 |
 | `update_readme.py` | `build_summary.json` | README 统计块 | 无数据时不得瞎改；统计块标记必须保留 |
@@ -34,6 +35,11 @@ README.md 的 <!-- STATS:START --> 区块 + BUILD_DATE
 | lite | 20,000 | 剔除 | ≤8 单元 | Windows 默认导入 |
 | standard | 50,000 | 保留 | ≤16 单元 | 进阶用户 |
 | full | 不限 | 保留 | ≤64 单元 | 存档/转 Rime |
+
+扩展源配额（`extended_ratio`）：lite 0.12、standard 0.22、full 不限；
+扩展词长上限 `extended_max_word_units`：lite/standard 5、full 6。
+同一拼音下基础源永远排在扩展源前面（`_assign_frequency_positions` 的排序键），
+扩展词不得挤占第 1 候选位。
 
 ## CI（`.github/workflows/`）
 

@@ -140,39 +140,39 @@ class Win10MSPinyinBuilder:
         """
         if rank_mode not in ('frequency', 'position'):
             raise ValueError(f"未知 rank_mode: {rank_mode!r}")
-        self.words: List[Tuple[str, str, int]] = []  # (word, pinyin_str, rank)
+        self.words: List[Tuple[str, str, int, str]] = []  # (word, pinyin_str, rank, source)
         self.timestamp = timestamp
         self.rank_mode = rank_mode
         self.stats = BuildStats()
 
-    def add_word(self, word: str, pinyin_str: str, rank: int = 1):
+    def add_word(self, word: str, pinyin_str: str, rank: int = 1,
+                 source: str = 'base'):
         """添加词条（pinyin_str 为无空格字符串）。
 
         `rank` 的含义由 `rank_mode` 决定：默认是来源词频（只用于同音排序与
         三档筛选，不会写进候选序号字段）；`position` 模式下则是 1~9 的候选位。
         """
-        self.words.append((word, pinyin_str, rank))
+        self.words.append((word, pinyin_str, rank,
+                           (source or 'base').strip() or 'base'))
 
     def add_from_text_file(self, filepath: str, min_freq: int = None,
                            exclude_single: bool = False,
                            max_word_units: int = None,
-                           limit: int = None) -> int:
-        """从 TSV 文本批量添加词条，格式 `词条\\t拼音\\t词频`（词频可省略）。
+                           limit: int = None,
+                           extended_ratio: float = None,
+                           extended_max_word_units: int = 6,
+                           extended_min_word_units: int = 2) -> int:
+        """从 TSV 文本批量添加词条，格式 `词条\\t拼音\\t词频[\\t来源]`。
 
-        文件按词频降序排列时，`limit` 即「取词频最高的前 N 条」。这里的筛选是
-        选词策略（不算违规），格式清洗仍统一在 build() 中执行。
+        第 4 列是来源标记（`base` / `moegirl` / `wiki` / `sogou`），缺省视为
+        `base`。给了 `limit` 与 `extended_ratio` 时按配额选词：扩展源最多占
+        `limit * extended_ratio` 个名额，其余留给基础源；某一侧数量不足时由另一侧补足。
 
-        Args:
-            filepath: 输入文件路径
-            min_freq: 只接收词频不低于该值的词条
-            exclude_single: 剔除单字词
-            max_word_units: 词条最大 UTF-16 单元数
-            limit: 最多接收多少条
-
-        Returns:
-            实际加入的词条数
+        这里的筛选是选词策略（不算违规），格式清洗仍统一在 build() 中执行。
         """
-        added = 0
+        base_rows: List[Tuple[str, str, int, str]] = []
+        ext_rows: List[Tuple[str, str, int, str]] = []
+
         with open(filepath, 'r', encoding='utf-8') as f:
             for line in f:
                 line = line.rstrip('\n\r')
@@ -189,20 +189,38 @@ class Win10MSPinyinBuilder:
                         freq = int(parts[2])
                     except ValueError:
                         freq = 1
+                source = parts[3].strip() if len(parts) >= 4 else 'base'
+                if not source:
+                    source = 'base'
 
                 if min_freq is not None and freq < min_freq:
                     continue
-                units = utf16_units(word)
-                if exclude_single and units < 2:
-                    continue
-                if max_word_units is not None and units > max_word_units:
-                    continue
 
-                self.add_word(word, pinyin, freq)
-                added += 1
-                if limit is not None and added >= limit:
-                    break
-        return added
+                units = utf16_units(word)
+                if source == 'base':
+                    if exclude_single and units < 2:
+                        continue
+                    if max_word_units is not None and units > max_word_units:
+                        continue
+                    base_rows.append((word, pinyin, freq, source))
+                else:
+                    if units < extended_min_word_units or units > extended_max_word_units:
+                        continue
+                    ext_rows.append((word, pinyin, freq, source))
+
+        if limit is None:
+            selected = base_rows + ext_rows
+        else:
+            ext_cap = int(limit * extended_ratio) if extended_ratio else 0
+            ext_selected = ext_rows[:ext_cap]
+            base_selected = base_rows[:limit - len(ext_selected)]
+            if len(base_selected) < limit - len(ext_selected):
+                # 基础源不足，用扩展源补足剩余名额
+                ext_selected = ext_rows[:limit - len(base_selected)]
+            selected = base_selected + ext_selected
+
+        self.words.extend(selected)
+        return len(selected)
 
     # ------------------------------------------------------------------
     # 清洗 / 排序 / 候选序号分配
@@ -210,9 +228,9 @@ class Win10MSPinyinBuilder:
     def _prepare_entries(self) -> List[Tuple[str, str, int, bytes, bytes, int]]:
         """清洗、去重、排序，返回 (word, code, rank, word_utf16, code_utf16, position)。"""
         stats = BuildStats()
-        # (code, word) -> rank；frequency 模式保留最高词频，position 模式保留首个候选位
-        best: Dict[Tuple[str, str], int] = {}
-        for word, pinyin, rank in self.words:
+        # (code, word) -> (rank, source)；frequency 模式保留最高词频，position 模式保留首个候选位
+        best: Dict[Tuple[str, str], Tuple[int, str]] = {}
+        for word, pinyin, rank, source in self.words:
             word = (word or '').strip()
             code = normalize_pinyin(pinyin)
 
@@ -241,10 +259,11 @@ class Win10MSPinyinBuilder:
             key = (code, word)
             if key in best:
                 stats.note('duplicate')
-                if self.rank_mode == 'frequency' and rank > best[key]:
-                    best[key] = rank
+                old_rank, old_source = best[key]
+                if self.rank_mode == 'frequency' and rank > old_rank:
+                    best[key] = (rank, old_source)
                 continue
-            best[key] = rank
+            best[key] = (rank, source)
 
         if self.rank_mode == 'position':
             result = self._assign_explicit_positions(best, stats)
@@ -263,13 +282,16 @@ class Win10MSPinyinBuilder:
     def _assign_frequency_positions(self, best, stats):
         """按拼音聚簇，同拼音内词频高者在前，依次分配 1~9。"""
         prepared = sorted(
-            ((code, word, freq) for (code, word), freq in best.items()),
-            key=lambda item: (item[0], -item[2], len(item[1]), item[1]),
+            ((code, word, freq, source)
+             for (code, word), (freq, source) in best.items()),
+            # 同一拼音内：基础源永远排在扩展源前面，扩展源不得挤占第 1 候选位
+            key=lambda item: (item[0], 0 if item[3] == 'base' else 1,
+                              -item[2], len(item[1]), item[1]),
         )
         result = []
         current_code = None
         position = 0
-        for code, word, freq in prepared:
+        for code, word, freq, source in prepared:
             if code != current_code:
                 current_code = code
                 position = 0
@@ -287,7 +309,7 @@ class Win10MSPinyinBuilder:
         """
         accepted = []
         used = set()
-        for (code, word), position in best.items():
+        for (code, word), (position, source) in best.items():
             if position < 1:
                 stats.note('invalid_position')
                 continue

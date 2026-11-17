@@ -13,6 +13,7 @@ cache/ 不入库（见 .gitignore），新克隆的仓库必须先跑一次本�
 """
 
 import argparse
+import json
 import os
 import time
 import urllib.request
@@ -63,18 +64,87 @@ FILES = [
 ]
 
 
+# 扩展源：优先取上游 latest release 的 Rime 词典，避免自己爬站
+# (缓存文件名, GitHub 仓库, 资源名匹配规则, 兜底地址)
+EXTENDED = [
+    ('ext-moegirl.dict.yaml', 'outloudvi/mw2fcitx',
+     lambda name: name == 'moegirl.dict.yaml',
+     'https://github.com/outloudvi/mw2fcitx/releases/download/20261024/moegirl.dict.yaml'),
+    ('ext-zhwiki.dict.yaml', 'felixonmars/fcitx5-pinyin-zhwiki',
+     lambda name: name.startswith('zhwiki-') and name.endswith('.dict.yaml'),
+     'https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/0.3.1/zhwiki-20261018.dict.yaml'),
+]
+
+
+def resolve_extended_url(repo: str, matcher) -> str:
+    """通过 GitHub API 找 latest release 里的目标资源；失败时由调用方回退。"""
+    api = f'https://api.github.com/repos/{repo}/releases/latest'
+    req = urllib.request.Request(api, headers={'User-Agent': 'msp-dict-build',
+                                               'Accept': 'application/vnd.github+json'})
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        data = json.loads(resp.read().decode('utf-8'))
+    for asset in data.get('assets', []):
+        if matcher(asset.get('name', '')):
+            return asset['browser_download_url']
+    raise OSError(f'{repo} 的 latest release 中没有匹配的资源')
+
+
+def download_one(url: str, out_path: Path, retries: int) -> bool:
+    """单文件下载，失败重试；成功返回 True。"""
+    for attempt in range(1, retries + 1):
+        try:
+            urllib.request.urlretrieve(url, out_path)
+            if out_path.stat().st_size == 0:
+                raise OSError('下载结果为空文件')
+            print(f'  OK ({out_path.stat().st_size // 1024}KB)', flush=True)
+            return True
+        except Exception as e:  # 网络抖动/CDN 限流：重试后再判定失败
+            print(f'  重试 {attempt}/{retries}: {e}')
+            if attempt < retries:
+                time.sleep(3 * attempt)
+    if out_path.exists() and out_path.stat().st_size == 0:
+        out_path.unlink()
+    return False
+
+
+def download_extended(cache_dir: Path, force: bool, retries: int) -> list:
+    """下载扩展源；返回失败的文件名列表（默认只告警）。"""
+    failed = []
+    for fname, repo, matcher, fallback in EXTENDED:
+        out_path = cache_dir / fname
+        if out_path.exists() and not force and out_path.stat().st_size > 0:
+            print(f'SKIP {fname} ({out_path.stat().st_size // 1024}KB)')
+            continue
+        print(f'DOWN {fname}...', flush=True)
+        url = fallback
+        try:
+            url = resolve_extended_url(repo, matcher)
+            print(f'  latest: {url}')
+        except Exception as e:
+            print(f'  查询 latest release 失败（{e}），回退固定版本')
+        if not download_one(url, out_path, retries):
+            failed.append(fname)
+    return failed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description='下载 rime-ice / rime-frost 词库源到 cache/')
     parser.add_argument('--cache', default=str(ROOT / 'cache'), help='缓存目录')
     parser.add_argument('--force', action='store_true', help='已存在也重新下载')
     parser.add_argument('--retries', type=int, default=3, help='单个文件的下载重试次数')
+    parser.add_argument('--no-extended', action='store_true',
+                        help='只下载基础源（rime-ice / rime-frost）')
+    parser.add_argument('--extended-only', action='store_true',
+                        help='只下载扩展源（萌娘百科 / 中文维基）')
+    parser.add_argument('--strict-ext', action='store_true',
+                        help='扩展源下载失败时返回非 0（默认只告警，避免第三方波动阻断发布）')
     args = parser.parse_args()
 
     cache_dir = Path(args.cache)
     cache_dir.mkdir(parents=True, exist_ok=True)
 
     failed = []
-    for fname, url in FILES:
+    for fname, url in ([] if args.extended_only else FILES):
         out_path = cache_dir / fname
         if out_path.exists() and not args.force:
             print(f'SKIP {fname} ({out_path.stat().st_size // 1024}KB)')
@@ -97,11 +167,24 @@ def main() -> int:
         if last_error is not None:
             failed.append(fname)
 
-    print(f'\n完成：{len(FILES) - len(failed)}/{len(FILES)} 个文件')
+    base_total = 0 if args.extended_only else len(FILES)
+    print(f'\n基础源完成：{base_total - len(failed)}/{base_total} 个文件')
+
+    ext_failed = []
+    if not args.no_extended:
+        print('\n=== 扩展源（萌娘百科 / 中文维基） ===')
+        ext_failed = download_extended(cache_dir, args.force, args.retries)
+
     if failed:
         print('失败文件: ' + ', '.join(failed))
         print('可重跑本脚本补齐（已存在的文件会跳过）')
         return 1
+    if ext_failed:
+        print('扩展源缺失: ' + ', '.join(ext_failed))
+        if args.strict_ext:
+            print('--strict-ext 已开启，视为失败')
+            return 1
+        print('将降级为仅基础源构建（merge.py 会告警）')
     print('下一步: python scripts/merge.py')
     return 0
 

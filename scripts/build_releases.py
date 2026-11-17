@@ -47,6 +47,9 @@ def build_one(profile_name: str, source: Path, output_dir: Path,
         exclude_single=profile.exclude_single,
         max_word_units=profile.max_word_units,
         limit=profile.limit,
+        extended_ratio=profile.extended_ratio,
+        extended_max_word_units=profile.extended_max_word_units,
+        extended_min_word_units=profile.extended_min_word_units,
     )
 
     output = output_dir / f"msp_{profile.name}.dat"
@@ -115,6 +118,9 @@ def build_canary(profile_name: str, source: Path, output_dir: Path,
         exclude_single=profile.exclude_single,
         max_word_units=profile.max_word_units,
         limit=limit,
+        extended_ratio=profile.extended_ratio,
+        extended_max_word_units=profile.extended_max_word_units,
+        extended_min_word_units=profile.extended_min_word_units,
     )
     for probe in probes:
         builder.add_word(probe.word, probe.pinyin, CANARY_SOURCE_RANK)

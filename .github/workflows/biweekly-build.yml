@@ -98,6 +98,11 @@ jobs:
           fetch "https://raw.githubusercontent.com/gaboolic/rime-frost/master/luna_pinyin.dict.yaml" cache/rime-frost_luna_pinyin.txt
           echo "rime-frost done"
 
+      - name: Download extended sources (moegirl / zhwiki)
+        run: |
+          # 扩展源走上游 release，避免 CI 直接爬站；失败只告警不阻断（--strict-ext 可收紧）
+          python scripts/download_frost.py --extended-only --cache cache
+
       - name: Merge RIME sources
         run: |
           echo "=== 合并词库（剔除无拼音的纯词频表） ==="
