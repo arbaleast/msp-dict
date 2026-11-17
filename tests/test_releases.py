@@ -11,11 +11,12 @@ from src.parser import MSPinyinParser  # noqa: E402
 
 
 def run_releases(source, output_dir, *extra):
+    env = {**os.environ, 'PYTHONUTF8': '1', 'PYTHONIOENCODING': 'utf-8'}
     return subprocess.run(
         [sys.executable, 'scripts/build_releases.py',
          '--input', str(source), '--output-dir', str(output_dir),
          '--timestamp', '1600000000', *extra],
-        cwd=ROOT, capture_output=True, text=True,
+        cwd=ROOT, capture_output=True, text=True, encoding='utf-8', env=env,
     )
 
 
@@ -62,11 +63,12 @@ def test_single_profile_only_builds_requested_tier(tmp_path):
     source.write_text(''.join(lines), encoding='utf-8')
     output_dir = tmp_path / "dist"
 
+    env = {**os.environ, 'PYTHONUTF8': '1', 'PYTHONIOENCODING': 'utf-8'}
     result = subprocess.run(
         [sys.executable, 'scripts/build_releases.py',
          '--input', str(source), '--output-dir', str(output_dir),
          '--profiles', 'lite', '--timestamp', '1600000000'],
-        cwd=ROOT, capture_output=True, text=True,
+        cwd=ROOT, capture_output=True, text=True, encoding='utf-8', env=env,
     )
 
     assert result.returncode == 0, result.stderr

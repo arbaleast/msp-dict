@@ -12,9 +12,11 @@ from src.parser import MSPinyinParser  # noqa: E402
 
 
 def run_cli(*args):
+    # Windows 控制台默认不是 UTF-8，子进程输出中文需要显式指定
+    env = {**os.environ, 'PYTHONUTF8': '1', 'PYTHONIOENCODING': 'utf-8'}
     return subprocess.run(
         [sys.executable, '-m', 'src.cli', *args],
-        cwd=ROOT, capture_output=True, text=True,
+        cwd=ROOT, capture_output=True, text=True, encoding='utf-8', env=env,
     )
 
 
