@@ -3,11 +3,13 @@
 import os
 import struct
 import sys
+from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from src.builder_win10 import Win10MSPinyinBuilder
 from src.format_spec import HEADER_FLAG, HEADER_SIZE
+from src.parser import MSPinyinParser
 from src.validator import DatValidator
 
 NOW = 1600000000
@@ -209,3 +211,38 @@ class TestScaleWarnings:
 
         assert report.exit_code == 0
         assert [i.code for i in report.issues] == ['ui_freeze_risk']
+
+
+class TestRealWorldSample:
+    """真实 Windows 样本（tests/fixtures/mschxudp_wubi_sample.dat）
+
+    该文件是 imewlconverter 仓库里的真实 mschxudp 产物，由 Windows 侧生成，
+    用来保证我们的解析器/校验器与真实文件一致——只靠自造样本会自证自洽。
+    """
+
+    fixture = Path(__file__).parent / 'fixtures' / 'mschxudp_wubi_sample.dat'
+
+    def test_fixture_exists_and_is_mschxudp(self):
+        assert self.fixture.is_file(), f"缺少真实样本: {self.fixture}"
+        data = self.fixture.read_bytes()
+
+        assert len(data) == 144
+        assert data[0:8] == b'mschxudp'
+        assert struct.unpack_from('<I', data, 8)[0] == 0x00600002
+        assert struct.unpack_from('<I', data, 12)[0] == 1
+        assert struct.unpack_from('<I', data, 28)[0] == 2
+        assert data[0x28:0x40] == b'\x00' * 24
+
+    def test_validator_accepts_real_sample(self):
+        report = DatValidator().validate(str(self.fixture))
+
+        assert report.exit_code == 0, report.format_text()
+        assert report.phrase_count == 2
+        assert report.parsed_entries == 2
+
+    def test_parser_reads_real_sample(self):
+        parser = MSPinyinParser()
+        assert parser.load(str(self.fixture)) == 2
+
+        entries = {e.text: e.pinyin for e in parser.entries}
+        assert entries == {'深蓝词库转换': 'iayr', '曾毅': 'ulue'}

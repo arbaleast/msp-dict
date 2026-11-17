@@ -3,7 +3,7 @@
 ## 数据流
 
 ```
-cache/rime-*.txt（CI 下载或本地缓存）
+cache/rime-*.txt（CI 下载，或本地 scripts/download_frost.py）
         │  scripts/merge.py
         ▼
 msp_full.txt（有拼音、词频≥1，按词频降序）
@@ -20,7 +20,8 @@ README.md 的 <!-- STATS:START --> 区块 + BUILD_DATE
 
 | 脚本 | 输入 | 输出 | 关键约束 |
 |---|---|---|---|
-| `merge.py` | `cache/rime-*.txt` | `msp_full.txt`、`CHANGELOG.md` | 无拼音/词频<1 的词条剔除并计数；同词保留最高词频 |
+| `download_frost.py` | rime-ice / rime-frost 上游 | `cache/rime-*.txt` | 清单与 CI 一致；`cache/` 不入库，新克隆必须先跑 |
+| `merge.py` | `cache/rime-*.txt` | `msp_full.txt`、`CHANGELOG.md` | 缺源文件直接失败（不产出残缺词库）；无拼音/词频<1 的词条剔除并计数；同词保留最高词频 |
 | `build_releases.py` | `msp_full.txt` | 4 个 DAT + `build_summary.json` | 逐档 validate，非 0 退出阻断；`msp_win10.dat` 必须是 lite 的字节副本 |
 | `make_scale_samples.py` | `msp_full.txt` | `scale_samples/` | 仅用于复现规模卡顿，不随 Release 发布 |
 | `update_readme.py` | `build_summary.json` | README 统计块 | 无数据时不得瞎改；统计块标记必须保留 |
@@ -50,6 +51,7 @@ README.md 的 <!-- STATS:START --> 区块 + BUILD_DATE
 
 ## 质量门
 
-- 本地演练：`python scripts/merge.py && python scripts/build_releases.py && python -m src.cli validate msp_lite.dat`。
+- 本地演练：`python scripts/download_frost.py && python scripts/merge.py && python scripts/build_releases.py && python -m src.cli validate msp_lite.dat`。
+- `scripts/` 只保留这 5 个正式脚本；一次性排障脚本不进仓库。
 - 产物名、词条数、体积与 README 统计块一致（允许 CI 自动刷新后略有差异）。
 - 工作流 YAML 可被 `yaml.safe_load` 解析；步骤失败必须让 job 失败，不得 `|| true` 吞掉。

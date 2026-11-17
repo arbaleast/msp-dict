@@ -169,11 +169,18 @@ def main() -> int:
     output_dir = Path(args.output)
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    if not cache_dir.is_dir():
+        print(f'错误: 缓存目录不存在: {cache_dir}\n'
+              f'先执行: python scripts/download_frost.py', file=sys.stderr)
+        return 1
+
     all_entries = []
     source_counts = {}
+    missing = []
     for fn in FILES:
         path = cache_dir / fn
         if not path.exists():
+            missing.append(fn)
             print(f'{fn}: MISSING')
             continue
         with open(path, encoding='utf-8') as f:
@@ -182,6 +189,14 @@ def main() -> int:
         source_counts[fn] = len(entries)
         size_kb = os.path.getsize(path) // 1024
         print(f'{fn}: {len(entries):>8,} 条  ({size_kb:>6}KB)')
+
+    if missing:
+        print(f'\n错误: 缺少 {len(missing)} 个源文件，合并结果会严重不完整。', file=sys.stderr)
+        print('先执行: python scripts/download_frost.py', file=sys.stderr)
+        return 1
+    if not all_entries:
+        print('错误: 没有可用的源文件，拒绝产出空词库。', file=sys.stderr)
+        return 1
 
     merged = merge(all_entries)
     no_pinyin = sum(1 for _, (p, _) in merged if not p)

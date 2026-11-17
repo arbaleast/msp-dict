@@ -256,3 +256,141 @@ class TestFrequencyToPositionMapping:
 
         assert [r['position'] for r in records] == [1, 2, 3]
         assert [r['word'] for r in records] == ["丙", "乙", "甲"]
+
+
+class TestMschxudpRoundtrip:
+    """构建 → 解析闭环"""
+
+    def test_build_and_parse_roundtrip(self):
+        """构建→解析 闭环: 验证文本和拼音保持一致性"""
+        builder = Win10MSPinyinBuilder()
+        test_data = [
+            ("中国", "zhongguo", 1),
+            ("北京", "beijing", 2),
+            ("上海", "shanghai", 3),
+            ("人工智能", "rengongzhineng", 1),
+            ("机器学习", "jiqixuexi", 5),
+            ("深度学习", "shenduxuexi", 3),
+            ("数据分析", "shujufenxi", 2),
+        ]
+        for word, py, rank in test_data:
+            builder.add_word(word, py, rank)
+
+        parser = MSPinyinParser()
+        count = parser.parse_bytes(builder.build())
+
+        assert count == len(test_data), f"词条数不匹配: {count} != {len(test_data)}"
+
+        parsed_map = {e.text: e for e in parser.entries}
+        for word, py, rank in test_data:
+            assert word in parsed_map, f"缺少词条: {word}"
+            assert parsed_map[word].pinyin == py, \
+                f"拼音不匹配: {word}: {parsed_map[word].pinyin} != {py}"
+
+    def test_parse_empty_dict(self):
+        """空词库解析测试"""
+        builder = Win10MSPinyinBuilder()
+
+        parser = MSPinyinParser()
+        count = parser.parse_bytes(builder.build())
+
+        assert count == 0, f"空词库应返回 0，实际: {count}"
+
+    def test_large_entry_roundtrip(self):
+        """较长词汇构建解析测试"""
+        builder = Win10MSPinyinBuilder()
+        long_text = "中华人民共和国"
+        long_pinyin = "zhonghuarenmingongheguo"
+        builder.add_word(long_text, long_pinyin, 1)
+
+        parser = MSPinyinParser()
+        count = parser.parse_bytes(builder.build())
+
+        assert count == 1
+        assert parser.entries[0].text == long_text
+        assert parser.entries[0].pinyin == long_pinyin
+
+    def test_invalid_file_is_rejected(self):
+        """无效文件处理测试：非 mschxudp 头必须抛 ValueError"""
+        parser = MSPinyinParser()
+
+        try:
+            parser.parse_bytes(b'invalid data')
+            assert False, "应抛出 ValueError"
+        except ValueError as e:
+            assert 'mschxudp' in str(e).lower() or '无效' in str(e), \
+                f"错误消息不明确: {e}"
+
+
+class TestBuilderBasics:
+    """构建器基础行为"""
+
+    def test_build_empty(self):
+        """构建空词库"""
+        builder = Win10MSPinyinBuilder()
+        data = builder.build()
+
+        assert len(data) > 0
+        assert data[0:8] == b'mschxudp'
+
+    def test_build_and_verify_header(self):
+        """构建并验证文件头"""
+        builder = Win10MSPinyinBuilder(timestamp=1234567890)
+        builder.add_word("中国", "zhongguo", 1)
+        data = builder.build()
+
+        # 验证协议标识
+        assert data[0:8] == b'mschxudp'
+
+        # 验证标志字段
+        assert struct.unpack('<I', data[8:12])[0] == 0x00600002
+
+        # 验证版本号
+        assert struct.unpack('<I', data[12:16])[0] == 1
+
+        # 验证词条数
+        assert struct.unpack('<I', data[28:32])[0] == 1
+
+        # 验证时间戳
+        assert struct.unpack('<Q', data[32:40])[0] == 1234567890
+
+    def test_build_multiple_words(self):
+        """构建多个词条"""
+        builder = Win10MSPinyinBuilder()
+        words = [
+            ("中国", "zhongguo", 1),
+            ("北京", "beijing", 2),
+            ("上海", "shanghai", 3),
+            ("测试", "ceshi", 4),
+        ]
+        for word, py, rank in words:
+            builder.add_word(word, py, rank)
+
+        data = builder.build()
+
+        assert struct.unpack('<I', data[28:32])[0] == 4
+
+        # 解析验证
+        parser = MSPinyinParser()
+        assert parser.parse_bytes(data) == 4
+
+    def test_build_with_custom_timestamp(self):
+        """带自定义时间戳构建"""
+        builder = Win10MSPinyinBuilder(timestamp=9999999999)
+        builder.add_word("测试", "ceshi", 1)
+        data = builder.build()
+
+        assert struct.unpack('<Q', data[32:40])[0] == 9999999999
+
+    def test_save_and_load_consistency(self):
+        """保存和加载的一致性"""
+        builder = Win10MSPinyinBuilder()
+        builder.add_word("人工智能", "rengongzhineng", 5)
+        builder.add_word("机器学习", "jiqixuexi", 3)
+
+        # 重新构建应产生相同大小
+        builder2 = Win10MSPinyinBuilder()
+        builder2.add_word("人工智能", "rengongzhineng", 5)
+        builder2.add_word("机器学习", "jiqixuexi", 3)
+
+        assert len(builder.build()) == len(builder2.build())

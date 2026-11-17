@@ -1,0 +1,16 @@
+[tool.pytest.ini_options]
+# 只收集 tests/，避免误扫 src/ 里的库模块或 .tmp/ 下的临时产物
+testpaths = ["tests"]
+norecursedirs = [".tmp", ".git", ".trellis", "cache", "dist", "output", "crawler", "scripts"]
+python_files = ["test_*.py"]
+addopts = "-ra"
+
+[tool.coverage.run]
+data_file = "output/.coverage"
+source = ["src"]
+
+[tool.coverage.html]
+directory = "output/htmlcov/"
+
+[tool.coverage.xml]
+output = "output/coverage.xml"

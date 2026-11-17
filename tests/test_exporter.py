@@ -2,7 +2,7 @@
 测试 src/exporter.py 模块
 
 验证导出功能（JSON 导出、统计信息等）。
-TXT/CSV 导出基本功能已在 src/test_win10_format.py 中覆盖。
+TXT/CSV/JSON 导出功能在本文件中覆盖。
 """
 
 import os
@@ -159,3 +159,50 @@ class TestExporterEdgeCases:
 
         os.remove(csv_out)
         os.remove(empty_file)
+
+
+class TestExporterFormats:
+    """TXT / CSV 导出内容校验"""
+
+    def test_export_txt_content(self, tmp_path):
+        """导出 TXT 测试"""
+        datfile = tmp_path / "export_txt.dat"
+        builder = Win10MSPinyinBuilder()
+        builder.add_word("中国", "zhongguo", 1)
+        builder.save(str(datfile))
+
+        parser = MSPinyinParser()
+        parser.load(str(datfile))
+
+        exporter = Exporter(parser)
+        txt_file = tmp_path / "export.txt"
+        count = exporter.export_txt(str(txt_file))
+        assert count == 1
+
+        content = txt_file.read_text(encoding='utf-8').strip()
+        assert '中国' in content
+        assert 'zhongguo' in content
+
+    def test_export_csv_content(self, tmp_path):
+        """导出 CSV 测试"""
+        datfile = tmp_path / "export_csv.dat"
+        builder = Win10MSPinyinBuilder()
+        builder.add_word("北京", "beijing", 2)
+        builder.save(str(datfile))
+
+        parser = MSPinyinParser()
+        parser.load(str(datfile))
+
+        exporter = Exporter(parser)
+        csv_file = tmp_path / "export.csv"
+        count = exporter.export_csv(str(csv_file))
+        assert count == 1
+
+        import csv
+        with open(csv_file, 'r', encoding='utf-8', newline='') as f:
+            reader = csv.reader(f)
+            header = next(reader)
+            assert header == ['text', 'pinyin', 'rank']
+            row = next(reader)
+            assert row[0] == '北京'
+            assert row[1] == 'beijing'

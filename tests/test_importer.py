@@ -2,7 +2,7 @@
 测试 src/importer.py 模块
 
 验证各种导入格式和 RimeConverter 功能。
-BatchImporter 的基本导入功能已在 src/test_win10_format.py 中覆盖。
+BatchImporter 的基本导入功能与拼音规范化在本文件中覆盖。
 """
 
 import os
@@ -286,3 +286,65 @@ class TestBatchImporterPinyinValidation:
 
         import shutil
         shutil.rmtree(tmpdir, ignore_errors=True)
+
+
+class TestPinyinConverterNormalization:
+    """拼音规范化与合法性校验"""
+
+    def test_normalize_remove_spaces(self):
+        assert PinyinConverter.normalize_pinyin("ni hao") == "nihao"
+
+    def test_normalize_lowercase(self):
+        assert PinyinConverter.normalize_pinyin("ZhongGuo") == "zhongguo"
+
+    def test_normalize_tone_marks(self):
+        assert PinyinConverter.normalize_pinyin("wǒ ài nǐ") == "woaini"
+
+    def test_normalize_mixed(self):
+        result = PinyinConverter.normalize_pinyin("  Wǒ  Ài  Nǐ  ")
+        assert result == "woaini"
+
+    def test_is_valid_pinyin(self):
+        assert PinyinConverter.is_valid_pinyin("zhongguo")
+        assert PinyinConverter.is_valid_pinyin("beijing")
+        assert not PinyinConverter.is_valid_pinyin("")
+        assert not PinyinConverter.is_valid_pinyin("ni hao")  # 有空格
+
+
+class TestRimeFormatDetection:
+    """Rime 格式检测"""
+
+    def test_rime_format_detection(self, tmp_path):
+        rime_file = tmp_path / "detect.rime"
+        rime_file.write_text(
+            "---\nname: test\nversion: \"1.0\"\n---\n"
+            "中国\tzhongguo\n北京\tbeijing\n",
+            encoding='utf-8',
+        )
+
+        fmt = RimeConverter.detect_format(str(rime_file))
+        assert fmt == 'rime', f"格式检测错误: {fmt}"
+
+
+class TestBatchImporterTxtWorkflow:
+    """TXT 批量导入：无拼音行必须跳过"""
+
+    def test_import_txt_skips_row_without_pinyin(self, tmp_path):
+        datfile = tmp_path / "importer.dat"
+        txtfile = tmp_path / "import.txt"
+
+        builder = Win10MSPinyinBuilder()
+        builder.add_word("测试", "ceshi", 1)
+        builder.save(str(datfile))
+
+        txtfile.write_text("机器学习\tjiqixuexi\n深度学习\n", encoding='utf-8')
+
+        editor = MSPinyinEditor()
+        editor.load(str(datfile))
+
+        importer = BatchImporter(editor)
+        importer.import_txt(str(txtfile))
+
+        # mschxudp 记录必须有拼音；无拼音行会被跳过而不是写出 0 长度编码
+        assert importer.imported_count == 1, f"应导入 1 条，实际: {importer.imported_count}"
+        assert importer.skipped_count == 1, f"应跳过 1 条，实际: {importer.skipped_count}"

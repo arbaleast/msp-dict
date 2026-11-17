@@ -1,8 +1,7 @@
 """
 测试 src/editor.py 模块
 
-验证 MSPinyinEditor 的额外功能。
-基础编辑功能已在 src/test_win10_format.py 中覆盖。
+验证 MSPinyinEditor 的额外功能与完整的增删流程。
 """
 
 import os
@@ -134,3 +133,41 @@ class TestEditorExtended:
 
         assert editor.add_entry("词条A", "citiáoA", 1) is True
         assert editor.add_entry("词条A", "citiáoA", 2) is False  # 重复
+
+
+class TestEditorWorkflow:
+    """编辑器添加/删除词条的完整流程"""
+
+    def test_editor_add_and_remove(self, tmp_path):
+        """编辑器添加/删除词条测试"""
+        datfile = tmp_path / "editor.dat"
+
+        # 构建初始词库
+        builder = Win10MSPinyinBuilder()
+        builder.add_word("测试", "ceshi", 1)
+        builder.add_word("词库", "ciku", 2)
+        builder.add_word("编辑器", "bianjiqi", 3)
+        builder.save(str(datfile))
+
+        # 编辑
+        editor = MSPinyinEditor()
+        editor.load(str(datfile))
+        assert editor.get_entry_count() == 3
+
+        # 添加新词条
+        assert editor.add_entry("机器学习", "jiqixuexi", 1)
+        assert editor.add_entry("深度学习", "shenduxuexi", 2)
+        assert not editor.add_entry("测试", "ceshi", 5)  # 重复应失败
+
+        # 删除
+        assert editor.remove_entry("词库")
+        assert not editor.remove_entry("不存在")  # 不存在应失败
+
+        # 保存
+        editor.save(str(datfile))
+        assert editor.get_entry_count() == 4  # 3 - 1 + 2 = 4
+
+        # 验证结果
+        texts = set(editor.get_all_texts())
+        expected = {"测试", "编辑器", "机器学习", "深度学习"}
+        assert texts == expected, f"词条不匹配: {texts} != {expected}"

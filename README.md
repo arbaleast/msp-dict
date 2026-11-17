@@ -182,25 +182,32 @@ Header: 64 字节（mschxudp + 版本 + 偏移表位置 + 词条数 + 时间戳�
 ```
 msp-dict/
 ├── .github/workflows/
-│   └── biweekly-build.yml     # 半月自动构建
-├── src/
+│   ├── biweekly-build.yml     # 半月自动构建与发布
+│   └── test.yml               # ubuntu + windows 测试矩阵
+├── src/                       # 核心库（只有库代码，无测试）
 │   ├── format_spec.py         # mschxudp 规范常量与字段校验（唯一事实来源）
 │   ├── parser.py              # mschxudp 解析器（支持 strict 模式）
 │   ├── builder_win10.py       # Win10 DAT 构建器（清洗 + 候选序号 + 时间戳）
 │   ├── validator.py           # 四类问题分类校验器
 │   ├── profiles.py            # lite / standard / full 三档策略
 │   ├── converter.py           # 格式转换器
-│   ├── editor.py              # 词库编辑器
+│   ├── editor.py              # 词库编辑器（哈希索引，批量导入 O(N)）
 │   ├── exporter.py            # 导出器
 │   ├── importer.py            # 导入器
 │   └── cli.py                 # 命令行入口
 ├── crawler/                   # 词条采集（可选）
-├── scripts/
+├── scripts/                   # 正式流水线脚本（5 个）
+│   ├── download_frost.py      # 下载 rime-ice / rime-frost 源到 cache/
 │   ├── merge.py               # 合并 Rime 源 -> msp_full.txt
 │   ├── build_releases.py      # 三档 DAT + 兼容副本 + 构建摘要
 │   ├── make_scale_samples.py  # 1w/3w/5w/10w 梯度测试包
 │   └── update_readme.py       # CI 自动更新 README 统计
 ├── tests/                     # 单元测试（pytest）
+│   ├── fixtures/              # 真实 Windows mschxudp 样本
+│   └── test_*.py
+├── docs/                      # 诊断报告等长文
+├── AGENTS.md                  # Agent 入口（规则正文在 .trellis/spec/）
+├── pyproject.toml             # pytest / coverage 配置
 └── README.md
 ```
 
@@ -213,7 +220,10 @@ git clone https://github.com/arbaleast/msp-dict.git
 cd msp-dict
 pip install pytest          # 构建本身只用标准库
 
-# 1) 合并已有缓存词库 -> msp_full.txt
+# 0) 下载词库源到 cache/（cache/ 不入库，新克隆必须先跑一次，约 80MB）
+python scripts/download_frost.py
+
+# 1) 合并 Rime 源 -> msp_full.txt
 python scripts/merge.py
 
 # 2) 三档构建（含 msp_win10.dat 兼容副本与 build_summary.json）

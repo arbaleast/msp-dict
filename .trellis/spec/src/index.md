@@ -30,7 +30,7 @@
 ## Pre-dev 检查清单（改 src/ 必读）
 
 1. 先读 `format_spec.py`：要改的常量/上限是否已存在？优先复用。
-2. 影响二进制布局的改动：同步 `parser` 的结构校验、`validator` 的错误分类、`tests/test_builder_format.py` 与 `tests/test_parser_strict.py`。
+2. 影响二进制布局的改动：同步 `parser` 的结构校验、`validator` 的错误分类、`tests/test_builder_format.py` 与 `tests/test_parser.py`。
 3. 影响 CLI 的改动：保持既有子命令与参数可用（`parse/export/import/convert/add/remove/stats/build`），新增参数用可选默认值。
 4. 新增清洗规则：必须在 `BuildStats.reasons` 计数，CLI 与 CI 能看到拦截数量。
 5. 改 `editor`：索引与 `entries` 必须同步；`add/remove/save` 后 `find_by_text` 结果必须与列表一致。

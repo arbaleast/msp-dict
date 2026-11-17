@@ -1,6 +1,7 @@
 # Python
 __pycache__/
 *.py[cod]
+*.pyc
 *.egg-info/
 dist/
 build/
@@ -8,12 +9,20 @@ build/
 .coverage
 .coverage.*
 
-# 代码覆盖率报告（coverage.py）
+# 代码覆盖率报告（coverage.py，配置见 pyproject.toml [tool.coverage.*]）
 output/htmlcov/
 output/coverage.xml
 
 # 构建产物 - MSPinyin DAT 词库文件
 *.dat
+# 例外：测试用的真实样本必须入库，否则单测依赖未跟踪文件
+!tests/fixtures/*.dat
+
+# 词库源（CI/本地由 scripts/download_frost.py 下载，不入库）
+cache/
+
+# 本机凭据（如 crawler 的 SOGOU_COOKIE），绝不提交
+.env
 
 # 抓取器下载缓存（CI 运行时自动下载）
 .cache/
