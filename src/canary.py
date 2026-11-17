@@ -22,6 +22,7 @@ Canary 诊断探针：验证 .dat 词库是否真的被 Windows 微软拼音加�
 """
 
 import hashlib
+import re
 import json
 import struct
 from dataclasses import dataclass
@@ -41,6 +42,17 @@ from .format_spec import (
 )
 
 MANIFEST_FORMAT = 'msp-dict-canary-manifest/1'
+
+# manifest 里每个探针必须具备的字段
+MANIFEST_REQUIRED_PROBE_FIELDS = ('pinyin', 'word', 'rank', 'physical_index', 'byte_offset')
+
+# manifest 里必须存在的顶层字段（除 probes）
+MANIFEST_REQUIRED_FIELDS = (
+    'format', 'sha256', 'file_size',
+    'normal_entry_count', 'canary_entry_count', 'total_entry_count', 'probes',
+)
+
+_SHA256_RE = re.compile(r'^[0-9a-f]{64}$')
 
 # 探针使用的来源词频：取极大值，保证同一拼音下探针排在第一位、拿到候选位 1。
 # 注意这只是「排序用词频」，最终写入候选序号字段的仍是 1~9 的候选位。
@@ -247,3 +259,71 @@ def read_manifest(manifest_path) -> Dict[str, object]:
     """读取 manifest JSON。"""
     with open(manifest_path, 'r', encoding='utf-8') as f:
         return json.load(f)
+
+
+def validate_manifest_schema(manifest: object) -> List[str]:
+    """校验 manifest 的结构合法性（只看结构，不与文件比对）。
+
+    任何外部提供的 manifest 都必须先过这一关：顶层必须是对象、必填字段
+    齐全、类型正确、计数自洽。返回错误说明列表；空列表表示结构合法。
+
+    Args:
+        manifest: 已解析的 JSON 对象（可能是任意类型）
+
+    Returns:
+        错误说明列表（空表示通过）
+    """
+    errors: List[str] = []
+
+    if not isinstance(manifest, dict):
+        return [f'manifest 顶层必须是 JSON 对象，实际为 {type(manifest).__name__}']
+
+    for field in MANIFEST_REQUIRED_FIELDS:
+        if field not in manifest:
+            errors.append(f'缺少必填字段: {field}')
+
+    fmt = manifest.get('format')
+    if fmt is not None and fmt != MANIFEST_FORMAT:
+        errors.append(f'format 不正确: 期望 {MANIFEST_FORMAT}，实际 {fmt!r}')
+
+    sha = manifest.get('sha256')
+    if sha is not None and (not isinstance(sha, str) or not _SHA256_RE.match(sha)):
+        errors.append(f'sha256 必须是 64 位十六进制字符串，实际 {sha!r}')
+
+    size = manifest.get('file_size')
+    if size is not None and (not isinstance(size, int) or isinstance(size, bool) or size < 0):
+        errors.append(f'file_size 必须是非负整数，实际 {size!r}')
+
+    counts = {}
+    for field in ('normal_entry_count', 'canary_entry_count', 'total_entry_count'):
+        value = manifest.get(field)
+        if value is None:
+            continue
+        if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+            errors.append(f'{field} 必须是非负整数，实际 {value!r}')
+        else:
+            counts[field] = value
+
+    if len(counts) == 3:
+        if counts['normal_entry_count'] + counts['canary_entry_count'] != counts['total_entry_count']:
+            errors.append(
+                '计数不自洽: normal({normal}) + canary({canary}) != total({total})'.format(
+                    normal=counts['normal_entry_count'],
+                    canary=counts['canary_entry_count'],
+                    total=counts['total_entry_count']))
+
+    probes = manifest.get('probes')
+    if probes is not None:
+        if not isinstance(probes, list):
+            errors.append(f'probes 必须是列表，实际为 {type(probes).__name__}')
+        else:
+            for index, probe in enumerate(probes):
+                if not isinstance(probe, dict):
+                    errors.append(f'probes[{index}] 必须是对象，实际为 {type(probe).__name__}')
+                    continue
+                missing = [f for f in MANIFEST_REQUIRED_PROBE_FIELDS if f not in probe]
+                if missing:
+                    errors.append(
+                        f'probes[{index}] 缺少字段: {", ".join(missing)}')
+
+    return errors

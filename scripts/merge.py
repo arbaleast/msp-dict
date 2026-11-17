@@ -392,7 +392,8 @@ def main() -> int:
             if args.strict_ext:
                 print(f'\n错误: --strict-ext 要求扩展源齐全，缺少: '
                       f'{", ".join(ext_missing)}', file=sys.stderr)
-                print('先执行: python scripts/download_frost.py --with-extended', file=sys.stderr)
+                print('先执行: python scripts/download_frost.py --strict-ext',
+                      file=sys.stderr)
                 return 1
             print(f'ℹ️  扩展源缺失 {len(ext_missing)} 个，已降级为仅基础源')
         merged = merge_extended(merged, ext_entries)

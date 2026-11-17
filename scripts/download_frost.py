@@ -90,21 +90,46 @@ def resolve_extended_url(repo: str, matcher) -> str:
 
 
 def download_one(url: str, out_path: Path, retries: int) -> bool:
-    """单文件下载，失败重试；成功返回 True。"""
+    """单文件下载，失败重试；成功返回 True。
+
+    下载先写 ``<目标>.part``，校验非空后再原子替换目标文件：
+    中断或失败不会在缓存目录留下半截文件，旧的完整文件也不会被破坏。
+    """
+    part_path = out_path.with_name(out_path.name + '.part')
     for attempt in range(1, retries + 1):
         try:
-            urllib.request.urlretrieve(url, out_path)
-            if out_path.stat().st_size == 0:
+            if part_path.exists():
+                part_path.unlink()
+            urllib.request.urlretrieve(url, part_path)
+            if part_path.stat().st_size == 0:
                 raise OSError('下载结果为空文件')
+            # 校验通过才替换正式文件
+            os.replace(part_path, out_path)
             print(f'  OK ({out_path.stat().st_size // 1024}KB)', flush=True)
             return True
         except Exception as e:  # 网络抖动/CDN 限流：重试后再判定失败
             print(f'  重试 {attempt}/{retries}: {e}')
+            if part_path.exists():
+                try:
+                    part_path.unlink()
+                except OSError:
+                    pass
             if attempt < retries:
                 time.sleep(3 * attempt)
-    if out_path.exists() and out_path.stat().st_size == 0:
-        out_path.unlink()
     return False
+
+
+def is_usable_cache(path: Path) -> bool:
+    """判断已有缓存文件是否可用。
+
+    规则：必须是普通文件、非空，且不是下载过程中的临时文件（*.part）。
+    """
+    try:
+        if path.name.endswith('.part'):
+            return False
+        return path.is_file() and path.stat().st_size > 0
+    except OSError:
+        return False
 
 
 def download_extended(cache_dir: Path, force: bool, retries: int) -> list:
@@ -112,7 +137,7 @@ def download_extended(cache_dir: Path, force: bool, retries: int) -> list:
     failed = []
     for fname, repo, matcher, fallback in EXTENDED:
         out_path = cache_dir / fname
-        if out_path.exists() and not force and out_path.stat().st_size > 0:
+        if not force and is_usable_cache(out_path):
             print(f'SKIP {fname} ({out_path.stat().st_size // 1024}KB)')
             continue
         print(f'DOWN {fname}...', flush=True)
@@ -146,25 +171,18 @@ def main() -> int:
     failed = []
     for fname, url in ([] if args.extended_only else FILES):
         out_path = cache_dir / fname
-        if out_path.exists() and not args.force:
+        if not args.force and is_usable_cache(out_path):
             print(f'SKIP {fname} ({out_path.stat().st_size // 1024}KB)')
             continue
-        print(f'DOWN {fname}...', flush=True)
-        last_error = None
-        for attempt in range(1, args.retries + 1):
+        if out_path.exists() and not is_usable_cache(out_path):
+            # 0 字节的残片不算有效缓存，先删掉再重下
+            print(f'  清理无效缓存: {fname}')
             try:
-                urllib.request.urlretrieve(url, out_path)
-                if out_path.stat().st_size == 0:
-                    raise OSError('下载结果为空文件')
-                print(f'  OK ({out_path.stat().st_size // 1024}KB)')
-                last_error = None
-                break
-            except Exception as e:  # 网络抖动/CDN 限流：重试后再判定失败
-                last_error = e
-                print(f'  重试 {attempt}/{args.retries}: {e}')
-                if attempt < args.retries:
-                    time.sleep(3 * attempt)
-        if last_error is not None:
+                out_path.unlink()
+            except OSError:
+                pass
+        print(f'DOWN {fname}...', flush=True)
+        if not download_one(url, out_path, args.retries):
             failed.append(fname)
 
     base_total = 0 if args.extended_only else len(FILES)

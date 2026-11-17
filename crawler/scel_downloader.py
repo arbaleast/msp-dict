@@ -94,26 +94,63 @@ class SogouCellDownloader:
             print(f"获取词库 {dict_id} 下载链接失败: {e}")
             return None
     
+    # 下载校验：SCEL 文件头必须是 @ + DCS 标记
+    SCEL_MAGIC = b'@'
+    SCEL_MARKER = b'DCS'
+    MIN_VALID_SIZE = 64
+
+    def _is_valid_scel(self, data: bytes) -> bool:
+        """校验下载内容是否是合法的 SCEL 文件（头部魔数 + 非空）。"""
+        if len(data) < self.MIN_VALID_SIZE:
+            return False
+        if not data.startswith(self.SCEL_MAGIC):
+            return False
+        return self.SCEL_MARKER in data[:16]
+
     def download_dict(self, dict_id: str, name: str) -> Optional[str]:
-        """下载单个词库"""
+        """下载单个词库。
+
+        下载采用「临时文件 + 校验 + 原子重命名」三步走：
+        任何一步失败都不会在缓存目录留下半截文件，旧的完整文件也不会被破坏。
+        """
+        part_path = None
         try:
             download_url = self.get_dict_download_url(dict_id)
             if not download_url:
                 return None
-            
-            resp = self.session.get(download_url, timeout=30)
-            
-            # 保存文件
+
             safe_name = re.sub(r'[^\w\u4e00-\u9fff-]', '_', name)
             filepath = os.path.join(self.output_dir, f"{safe_name}.scel")
-            
-            with open(filepath, 'wb') as f:
-                f.write(resp.content)
-            
+            part_path = filepath + '.part'
+
+            resp = self.session.get(download_url, timeout=30)
+            status = getattr(resp, 'status_code', 200)
+            if status != 200:
+                print(f"下载词库 {name} 失败: HTTP {status}")
+                return None
+
+            content = resp.content
+            if not self._is_valid_scel(content):
+                print(f"下载词库 {name} 失败: 内容不是合法 SCEL"
+                      f"（{len(content)} 字节）")
+                return None
+
+            # 先写临时文件，成功后再原子替换正式文件
+            with open(part_path, 'wb') as f:
+                f.write(content)
+            os.replace(part_path, filepath)
+            part_path = None
             return filepath
         except Exception as e:
             print(f"下载词库 {name} 失败: {e}")
             return None
+        finally:
+            # 失败时清理残留的 .part，避免下次被当成有效缓存
+            if part_path and os.path.exists(part_path):
+                try:
+                    os.remove(part_path)
+                except OSError:
+                    pass
     
     def download_category(self, category: str, max_dicts: int = 10) -> List[str]:
         """下载分类下的词库"""

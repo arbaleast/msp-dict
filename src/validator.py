@@ -27,6 +27,7 @@ from .canary import (
     iter_physical_records,
     locate_probes,
     read_manifest,
+    validate_manifest_schema,
     sha256_of,
 )
 from .format_spec import (
@@ -626,6 +627,7 @@ class CanaryChecker:
                 'STRUCT', 'FAIL', 'DAT 文件缺失或为空'))
 
         manifest = None
+        schema_errors: List[str] = []
         if not os.path.exists(manifest_path):
             report.dimensions.append(CanaryDimension(
                 'MANIFEST', 'FAIL', f'Manifest 不存在: {manifest_path}'))
@@ -635,10 +637,23 @@ class CanaryChecker:
             except (ValueError, OSError) as exc:
                 report.dimensions.append(CanaryDimension(
                     'MANIFEST', 'FAIL', f'Manifest 无法解析: {exc}'))
+                manifest = None
+            else:
+                # 结构校验先行：顶层不是对象 / 字段缺失 / 类型错误时，
+                # 后续的 .get() 与求和都可能抛未捕获异常，必须先拦下来
+                schema_errors = validate_manifest_schema(manifest)
+                if schema_errors:
+                    report.dimensions.append(CanaryDimension(
+                        'MANIFEST', 'FAIL', 'Manifest 结构非法',
+                        schema_errors))
 
-        if manifest is not None:
+        if manifest is not None and not schema_errors:
             report.dimensions.append(self._check_canary_dimension(data, manifest))
             report.dimensions.append(self._check_manifest_dimension(data, manifest))
+        elif manifest is not None:
+            report.dimensions.append(CanaryDimension(
+                'CANARY', 'FAIL', 'Manifest 结构非法，无法核对探针',
+                schema_errors))
         else:
             report.dimensions.append(CanaryDimension(
                 'CANARY', 'FAIL', '缺少 manifest，无法核对探针'))
@@ -658,13 +673,19 @@ class CanaryChecker:
         if not probes:
             return CanaryDimension('CANARY', 'FAIL', 'manifest 里没有探针定义')
 
+        # 结构校验已保证 probes 是 list、元素是 dict；这里再兜一层，
+        # 保证即使上游校验被绕过也不会抛 AttributeError
+        safe_probes = [p for p in probes if isinstance(p, dict)]
+        if not safe_probes:
+            return CanaryDimension('CANARY', 'FAIL', 'manifest 里没有合法的探针定义')
+
         located = locate_probes(data, [
             CanaryProbe(pinyin=str(p.get('pinyin', '')), word=str(p.get('word', '')))
-            for p in probes
+            for p in safe_probes
         ])
 
         failures: List[str] = []
-        for expected, actual in zip(probes, located):
+        for expected, actual in zip(safe_probes, located):
             label = f"{expected.get('pinyin')} → {expected.get('word')}"
             if not actual['found']:
                 failures.append(f'探针缺失: {label}')
@@ -696,20 +717,31 @@ class CanaryChecker:
         return CanaryDimension('CANARY', 'PASS', f'{len(located)} 个探针全部命中', [summary])
 
     def _check_manifest_dimension(self, data: bytes, manifest: Dict[str, object]) -> CanaryDimension:
+        """核对 manifest 与实际文件的一致性。
+
+        这里假定 manifest 已通过 :func:`validate_manifest_schema` 的结构校验
+        （必填字段齐全、类型正确、计数自洽），因此可以安全地直接取值比较；
+        任何缺失或不一致都必须报 FAIL，不能静默跳过。
+        """
         failures: List[str] = []
-        expected_sha = manifest.get('sha256')
+
+        expected_sha = manifest['sha256']
         actual_sha = sha256_of(data)
-        if expected_sha and expected_sha != actual_sha:
+        if expected_sha != actual_sha:
             failures.append(f'SHA256 不匹配: manifest={expected_sha}，实际={actual_sha}')
 
+        expected_size = manifest['file_size']
+        if expected_size != len(data):
+            failures.append(f'文件大小不符: manifest={expected_size}，实际={len(data)}')
+
         actual_total = sum(1 for _ in iter_physical_records(data))
-        expected_total = manifest.get('total_entry_count')
-        if expected_total is not None and actual_total != expected_total:
+        expected_total = manifest['total_entry_count']
+        if actual_total != expected_total:
             failures.append(f'词条总数不符: manifest={expected_total}，实际={actual_total}')
 
-        normal = manifest.get('normal_entry_count')
-        canary = manifest.get('canary_entry_count')
-        if normal is not None and canary is not None and normal + canary != expected_total:
+        normal = manifest['normal_entry_count']
+        canary = manifest['canary_entry_count']
+        if normal + canary != expected_total:
             failures.append(
                 f'计数不自洽: normal({normal}) + canary({canary}) != total({expected_total})')
 
@@ -719,4 +751,4 @@ class CanaryChecker:
         return CanaryDimension(
             'MANIFEST', 'PASS',
             f'SHA256 与词条计数一致（{actual_total:,} 条）',
-            [f'sha256={actual_sha}'])
+            [f'sha256={actual_sha}', f'file_size={len(data)}'])

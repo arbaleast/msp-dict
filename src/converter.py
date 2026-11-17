@@ -10,6 +10,7 @@ import re
 from typing import List, Tuple, Dict, Optional
 from .parser import MSPinyinParser
 from .importer import BatchImporter, RimeConverter
+from .format_spec import is_valid_pinyin
 
 
 class RimeToMSPConverter:
@@ -68,13 +69,15 @@ class RimeToMSPConverter:
     def __init__(self):
         self.pinyin_map: Dict[str, str] = dict(self.COMMON_PINYIN)
 
-    def get_pinyin(self, text: str) -> str:
-        """获取文本的无空格拼音字符串
+    def get_pinyin(self, text: str) -> Optional[str]:
+        """获取文本的无空格拼音字符串。
 
         策略:
         1. 先查完整词汇表
         2. 词汇表未命中时，逐字查找拼音并拼接
-        3. 未找到的字符保留为占位符
+        3. **任何一个字查不到真实拼音时返回 None**——绝不用 'xx' 之类的
+           占位符冒充拼音（占位符能通过 is_valid_pinyin 校验，会污染 DAT）。
+           调用方必须把 None 当作「无法转换」处理。
         """
         if text in self.pinyin_map:
             return self.pinyin_map[text]
@@ -82,12 +85,11 @@ class RimeToMSPConverter:
         # 逐字获取拼音
         parts = []
         for char in text:
-            if char in self.pinyin_map:
-                parts.append(self.pinyin_map[char])
-            else:
-                # 对未收录的汉字使用 pypinyin 库更准确，
-                # 此处保留占位符 'xx' 避免输出汉字符号
-                parts.append('xx')
+            pinyin = self.pinyin_map.get(char)
+            if not pinyin:
+                # 没有可靠读音 -> 明确失败，不伪造
+                return None
+            parts.append(pinyin)
         return ''.join(parts)
 
     def convert_file(self, rime_file: str, output_file: str) -> Dict:
@@ -104,13 +106,21 @@ class RimeToMSPConverter:
 
         count = 0
         auto_count = 0
+        unresolved: List[str] = []
         with open(output_file, 'w', encoding='utf-8') as f:
             for text, pinyin in entries:
                 if not pinyin:
                     pinyin = self.get_pinyin(text)
+                    if pinyin is None:
+                        # 无法确定真实拼音 -> 记录并跳过，绝不写入占位拼音
+                        unresolved.append(text)
+                        continue
                     auto_count += 1
                 # 移除拼音中的空格（mschxudp 格式要求无空格）
                 pinyin = pinyin.replace(' ', '')
+                if not is_valid_pinyin(pinyin):
+                    unresolved.append(text)
+                    continue
                 f.write(f"{text}\t{pinyin}\n")
                 count += 1
 
@@ -118,6 +128,8 @@ class RimeToMSPConverter:
             'total': count,
             'with_pinyin': count - auto_count,
             'auto_pinyin': auto_count,
+            'unresolved': len(unresolved),
+            'unresolved_words': unresolved[:20],
         }
 
 
