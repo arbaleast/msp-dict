@@ -1,0 +1,10 @@
+{
+  "root": ".trellis/spec",
+  "files": [
+    ".trellis/spec/guides/index.md",
+    ".trellis/spec/guides/conventions.md",
+    ".trellis/spec/src/index.md",
+    ".trellis/spec/scripts/index.md",
+    ".trellis/spec/tests/index.md"
+  ]
+}
