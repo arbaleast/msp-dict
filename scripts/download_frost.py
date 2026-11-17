@@ -14,6 +14,7 @@ cache/ 不入库（见 .gitignore），新克隆的仓库必须先跑一次本�
 
 import argparse
 import os
+import time
 import urllib.request
 from pathlib import Path
 
@@ -66,6 +67,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description='下载 rime-ice / rime-frost 词库源到 cache/')
     parser.add_argument('--cache', default=str(ROOT / 'cache'), help='缓存目录')
     parser.add_argument('--force', action='store_true', help='已存在也重新下载')
+    parser.add_argument('--retries', type=int, default=3, help='单个文件的下载重试次数')
     args = parser.parse_args()
 
     cache_dir = Path(args.cache)
@@ -78,11 +80,21 @@ def main() -> int:
             print(f'SKIP {fname} ({out_path.stat().st_size // 1024}KB)')
             continue
         print(f'DOWN {fname}...', flush=True)
-        try:
-            urllib.request.urlretrieve(url, out_path)
-            print(f'  OK ({out_path.stat().st_size // 1024}KB)')
-        except Exception as e:  # 网络抖动单个文件失败不中断整体下载
-            print(f'  FAIL: {e}')
+        last_error = None
+        for attempt in range(1, args.retries + 1):
+            try:
+                urllib.request.urlretrieve(url, out_path)
+                if out_path.stat().st_size == 0:
+                    raise OSError('下载结果为空文件')
+                print(f'  OK ({out_path.stat().st_size // 1024}KB)')
+                last_error = None
+                break
+            except Exception as e:  # 网络抖动/CDN 限流：重试后再判定失败
+                last_error = e
+                print(f'  重试 {attempt}/{args.retries}: {e}')
+                if attempt < args.retries:
+                    time.sleep(3 * attempt)
+        if last_error is not None:
             failed.append(fname)
 
     print(f'\n完成：{len(FILES) - len(failed)}/{len(FILES)} 个文件')
