@@ -92,6 +92,20 @@ jobs:
             python -m src.cli validate "$f"
           done
 
+      - name: Upload DAT artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: msp-dict-dat-${{ github.run_number }}
+          path: |
+            msp_lite.dat
+            msp_standard.dat
+            msp_full.dat
+            msp_win10.dat
+            build_summary.json
+          retention-days: 30
+          if-no-files-found: warn
+
       - name: Update README stats
         run: |
           echo "=== 更新 README.md 统计信息 ==="
