@@ -206,7 +206,14 @@ python -m src.cli build msp_full.txt -o probe.dat --profile lite --with-canary \
 
 ### 自动更新流程
 
-GitHub Actions 每月 **1 日、15 日 03:30 UTC**（北京时间 11:30）运行：
+GitHub Actions 每月 **1 日、15 日**运行，各安排两个低峰时段：
+
+- 主：`04:17 UTC`（北京时间 12:17）
+- 备：`12:17 UTC`（北京时间 20:17）——主任务被平台延迟时的兜底
+
+两次跑的是同一个按日期命名的 tag（`vYYYY.MM.DD`），同日重跑只更新不新建。
+GitHub 的定时任务不保证准点启动，实际可能延后数小时；也可用
+[Actions 页面手动触发](https://github.com/arbaleast/msp-dict/actions/workflows/biweekly-build.yml)。
 
 ```
 下载源词库（30+ 文件，约 80MB）
