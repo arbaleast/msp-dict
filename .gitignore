@@ -17,6 +17,7 @@ output/coverage.xml
 *.dat
 # 例外：测试用的真实样本必须入库，否则单测依赖未跟踪文件
 !tests/fixtures/*.dat
+!tests/fixtures/*.scel
 
 # 词库源（CI/本地由 scripts/download_frost.py 下载，不入库）
 cache/

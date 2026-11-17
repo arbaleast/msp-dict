@@ -280,9 +280,12 @@ class TestBatchImporterPinyinValidation:
 
         imported, skipped, errors = importer.import_txt(source)
 
+        # 拼音缺失/非法属于数据错误，必须计入 errors 而不是伪装成 skipped
         assert imported == 1
-        assert skipped == 2
-        assert errors == 0
+        assert skipped == 0
+        assert errors == 2
+        assert importer.error_reasons.get('缺少拼音') == 1
+        assert any('非法拼音' in reason for reason in importer.error_reasons)
 
         import shutil
         shutil.rmtree(tmpdir, ignore_errors=True)
@@ -345,6 +348,85 @@ class TestBatchImporterTxtWorkflow:
         importer = BatchImporter(editor)
         importer.import_txt(str(txtfile))
 
-        # mschxudp 记录必须有拼音；无拼音行会被跳过而不是写出 0 长度编码
+        # mschxudp 记录必须有拼音；无拼音行计入 errors（而不是写出 0 长度编码）
         assert importer.imported_count == 1, f"应导入 1 条，实际: {importer.imported_count}"
-        assert importer.skipped_count == 1, f"应跳过 1 条，实际: {importer.skipped_count}"
+        assert importer.skipped_count == 0, f"不应有跳过项，实际: {importer.skipped_count}"
+        assert importer.error_count == 1, f"应记录 1 个错误，实际: {importer.error_count}"
+        assert importer.error_messages, '必须记录失败原因'
+
+
+class TestImportErrorSemantics:
+    """缺失/非法拼音必须能被定位和统计，不能伪装成「已存在」而静默跳过。"""
+
+    def _importer(self, tmp_path):
+        from src.builder_win10 import Win10MSPinyinBuilder
+        from src.editor import MSPinyinEditor
+        from src.importer import BatchImporter
+        # 编辑器必须先加载词库文件，否则 add_entry 会对所有词条返回 False
+        dat = tmp_path / 'base.dat'
+        builder = Win10MSPinyinBuilder()
+        builder.add_word('种子', 'zhongzi', 1)
+        builder.save(str(dat))
+        editor = MSPinyinEditor()
+        editor.load(str(dat))
+        return BatchImporter(editor)
+
+    def test_missing_pinyin_is_an_error(self, tmp_path):
+        source = tmp_path / 'words.txt'
+        source.write_text('北京\n', encoding='utf-8')
+        importer = self._importer(tmp_path)
+
+        imported, skipped, errors = importer.import_txt(str(source))
+
+        assert (imported, skipped, errors) == (0, 0, 1)
+        assert importer.error_reasons.get('缺少拼音') == 1
+        assert '北京' in importer.error_messages[0]
+
+    def test_invalid_pinyin_is_an_error(self, tmp_path):
+        source = tmp_path / 'words.txt'
+        source.write_text('北京\t1234\n', encoding='utf-8')
+        importer = self._importer(tmp_path)
+
+        imported, skipped, errors = importer.import_txt(str(source))
+
+        assert (imported, skipped, errors) == (0, 0, 1)
+        assert any('非法拼音' in reason for reason in importer.error_reasons)
+
+    def test_duplicate_is_still_a_skip_not_an_error(self, tmp_path):
+        source = tmp_path / 'words.txt'
+        source.write_text('北京\tbeijing\n北京\tbeijing\n', encoding='utf-8')
+        importer = self._importer(tmp_path)
+
+        imported, skipped, errors = importer.import_txt(str(source))
+
+        assert (imported, skipped, errors) == (1, 1, 0)
+
+    def test_error_counts_are_reported_in_stats(self, tmp_path):
+        source = tmp_path / 'words.txt'
+        source.write_text('北京\n上海\tgood\n', encoding='utf-8')
+        importer = self._importer(tmp_path)
+
+        importer.import_txt(str(source))
+        stats = importer.get_stats()
+
+        assert stats['errors'] == 1
+        assert stats['error_reasons']['缺少拼音'] == 1
+
+
+class TestEditorNotLoaded:
+    """编辑器未加载词库时必须报前置条件错误，而不是伪装成「词条已存在」。"""
+
+    def test_editor_not_loaded_is_reported_as_error(self, tmp_path):
+        from src.editor import MSPinyinEditor
+        from src.importer import BatchImporter
+
+        source = tmp_path / 'words.txt'
+        source.write_text('北京\tbeijing\n', encoding='utf-8')
+
+        editor = MSPinyinEditor()          # 故意不 load()
+        importer = BatchImporter(editor)
+
+        imported, skipped, errors = importer.import_txt(str(source))
+
+        assert (imported, skipped, errors) == (0, 0, 1)
+        assert any('未加载' in reason for reason in importer.error_reasons)

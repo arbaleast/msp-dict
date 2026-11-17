@@ -27,7 +27,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: python -m pip install --upgrade pip pytest
+        run: python -m pip install --upgrade pip pytest requests pypinyin
 
       - name: Run pytest
         run: python -m pytest tests -q
@@ -36,3 +36,4 @@ jobs:
         run: |
           python -m src.cli --help
           python -m src.cli validate --help
+          python -m crawler.cli --help

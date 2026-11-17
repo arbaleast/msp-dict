@@ -7,17 +7,19 @@ Usage:
     python -m crawler.cli update      # 抓取 + 导入到词库
     python -m crawler.cli stats      # 显示数据源统计
 
-数据源（5个，无需代理）:
+数据源（6个，无需代理）:
   - GitHub Trending（热门项目名）
   - Wikipedia 中文（百科词条）
   - Bilibili 热榜（热搜词）
   - Moegirl 萌娘百科（ACG词条）
   - Wikidata 实体标签（中文实体名）
+  - Zhihu 热榜（知乎热词）
 """
 
 import argparse
 import sys
 import os
+import tempfile
 from pathlib import Path
 
 # 添加项目根目录到路径
@@ -124,72 +126,117 @@ def cmd_fetch(args):
 
 def cmd_update(args):
     """抓取并导入到词库"""
-    # 先抓取
-    print("[CLI] Step 1: Fetching new words...")
-    print("=" * 50)
-
-    # 临时保存抓取结果
-    temp_output = '/tmp/mspinyin_fetch_temp.txt'
-
-    # 修改参数，设置临时输出
-    class FetchArgs:
-        github = args.github or args.all
-        wikipedia = args.wikipedia or args.all
-        bilibili = args.bilibili or args.all
-        moegirl = args.moegirl or args.all
-        wikidata = args.wikidata or args.all
-        zhihu = args.zhihu or args.all
-        all = args.all
-        proxy = args.proxy
-        limit = args.limit
-        existing = args.existing
-        output = temp_output
-
-    fetch_args = FetchArgs()
-    result = cmd_fetch(fetch_args)
-
-    if result != 0:
-        print("[CLI] Fetch failed, aborting update.")
-        return result
-
-    # 导入到词库
-    print("\n[CLI] Step 2: Importing to 词库...")
-    print("=" * 50)
-
     if not args.mspinyin:
         print("[CLI] Error: --mspinyin required for update command")
         return 1
 
-    from crawler.importer import BatchImporter
-    from crawler.editor import MSPinyinEditor
+    # 先抓取
+    print("[CLI] Step 1: Fetching new words...")
+    print("=" * 50)
 
-    # 加载词库编辑器
-    editor = MSPinyinEditor()
-    editor.load(args.mspinyin)
+    # 临时保存抓取结果（用 tempfile 避免并发冲突与残留）
+    temp_handle = tempfile.NamedTemporaryFile(
+        mode='w', suffix='.txt', prefix='mspinyin_fetch_', delete=False, encoding='utf-8')
+    temp_output = temp_handle.name
+    temp_handle.close()
 
-    print(f"Current word count: {editor.get_entry_count()}")
+    try:
+        # 修改参数，设置临时输出
+        class FetchArgs:
+            github = args.github or args.all
+            wikipedia = args.wikipedia or args.all
+            bilibili = args.bilibili or args.all
+            moegirl = args.moegirl or args.all
+            wikidata = args.wikidata or args.all
+            zhihu = args.zhihu or args.all
+            all = args.all
+            proxy = args.proxy
+            limit = args.limit
+            existing = args.existing
+            output = temp_output
 
-    # 导入新词
-    importer = BatchImporter(editor)
-    imported, skipped, errors = importer.import_txt(temp_output)
+        fetch_args = FetchArgs()
+        result = cmd_fetch(fetch_args)
 
-    stats = importer.get_stats()
-    print(f"\nImport results:")
-    print(f"  Imported: {stats['imported']}")
-    print(f"  Skipped:  {stats['skipped']}")
-    print(f"  Errors:   {stats['errors']}")
+        if result != 0:
+            print("[CLI] Fetch failed, aborting update.")
+            return result
 
-    if stats['imported'] > 0:
-        # 保存
-        editor.save(args.mspinyin)
-        print(f"\n[CLI] Updated 词库: {args.mspinyin}")
-        print(f"New word count: {editor.get_entry_count()}")
+        from crawler.importer import BatchImporter
+        # 编辑器实现在 src/editor.py（crawler.importer 只做转导出）
+        from src.editor import MSPinyinEditor
+        from crawler.pinyin_resolver import pypinyin_available, resolve_pinyin
 
-    # 清理临时文件
-    if os.path.exists(temp_output):
-        os.remove(temp_output)
+        # 采集结果是纯词条，必须先补全拼音才能写入 mschxudp 记录
+        print("\n[CLI] Step 2: Resolving pinyin...")
+        print("=" * 50)
+        words = []
+        with open(temp_output, 'r', encoding='utf-8') as f:
+            for line in f:
+                word = line.strip()
+                if word:
+                    words.append(word)
 
-    return 0
+        resolved, unresolved = resolve_pinyin(words)
+        if not pypinyin_available():
+            print("[CLI] pypinyin 未安装，无法自动补全拼音。")
+            print("      安装: pip install \"msp-dict[crawler]\"")
+        print(f"  待补全词条: {len(words)}")
+        print(f"  补全成功:   {len(resolved)}")
+        print(f"  无法补全:   {len(unresolved)}")
+
+        # 重写临时文件为「词条\t拼音」，供 BatchImporter 读取
+        with open(temp_output, 'w', encoding='utf-8') as f:
+            for word, pinyin in resolved.items():
+                f.write(f"{word}\t{pinyin}\n")
+
+        # 无法补全拼音的词条单独落盘，绝不塞空拼音进词库
+        unresolved_path = Path(args.mspinyin).parent / 'unresolved.txt'
+        if unresolved:
+            with open(unresolved_path, 'w', encoding='utf-8') as f:
+                for word in unresolved:
+                    f.write(f"{word}\n")
+            print(f"  未解析词条已写入: {unresolved_path}")
+        elif unresolved_path.exists():
+            unresolved_path.unlink()
+
+        print("\n[CLI] Step 3: Importing to 词库...")
+        print("=" * 50)
+
+        # 加载词库编辑器
+        editor = MSPinyinEditor()
+        editor.load(args.mspinyin)
+
+        print(f"Current word count: {editor.get_entry_count()}")
+
+        # 导入新词
+        importer = BatchImporter(editor)
+        imported, skipped, errors = importer.import_txt(temp_output)
+
+        stats = importer.get_stats()
+        print(f"\nImport results:")
+        print(f"  Imported: {stats['imported']}")
+        print(f"  Skipped:  {stats['skipped']}")
+        print(f"  Errors:   {stats['errors']}")
+        for reason, count in sorted(stats.get('error_reasons', {}).items()):
+            print(f"    - {reason}: {count}")
+        for message in importer.error_messages[:10]:
+            print(f"    ! {message}")
+        if len(importer.error_messages) > 10:
+            print(f"    ... 其余 {len(importer.error_messages) - 10} 条错误未显示")
+
+        if stats['imported'] > 0:
+            # 保存
+            editor.save(args.mspinyin)
+            print(f"\n[CLI] Updated 词库: {args.mspinyin}")
+            print(f"New word count: {editor.get_entry_count()}")
+
+        return 0
+    finally:
+        # 无论成功失败都清理临时文件
+        if os.path.exists(temp_output):
+            os.remove(temp_output)
+
 
 
 def cmd_stats(args):
@@ -278,7 +325,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # 抓取所有数据源（5个）
+  # 抓取所有数据源（6个）
   python -m crawler.cli fetch --all
 
   # 只抓取萌娘百科和Wikidata

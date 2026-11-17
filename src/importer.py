@@ -34,6 +34,18 @@ class PinyinConverter:
         return is_valid_pinyin(pinyin)
 
 
+class ImportOutcome:
+    """导入结果分类（供统计与错误定位使用）。"""
+
+    ADDED = 'added'
+    DUPLICATE = 'duplicate'
+    EMPTY_PINYIN = 'empty_pinyin'
+    INVALID_PINYIN = 'invalid_pinyin'
+    INVALID_TEXT = 'invalid_text'
+    # 编辑器未加载词库文件：属于前置条件错误，不能伪装成「词条已存在」
+    EDITOR_NOT_LOADED = 'editor_not_loaded'
+
+
 class BatchImporter:
     """批量导入器"""
 
@@ -42,28 +54,60 @@ class BatchImporter:
         self.imported_count = 0
         self.skipped_count = 0
         self.error_count = 0
+        # 错误明细：每条记录「来源: 词条 -> 原因」，便于定位失败原因
+        self.error_messages: List[str] = []
+        # 按原因分类的错误计数
+        self.error_reasons: Dict[str, int] = {}
+
+    def _classify_entry(self, text: str, pinyin_str: str = '',
+                        rank: int = 1) -> Tuple[str, str]:
+        """校验并添加词条，返回 (状态, 原因说明)。
+
+        状态取值见 :class:`ImportOutcome`：
+        - ``added``：已加入待写入队列
+        - ``duplicate``：词条已存在（唯一允许计入 skipped 的情况）
+        - ``empty_pinyin`` / ``invalid_pinyin``：拼音缺失或非法（计入 errors）
+        """
+        # 规范化拼音：去空格/声调/ü -> v
+        normalized = PinyinConverter.normalize_pinyin(pinyin_str or '')
+
+        # mschxudp 记录必须有合法拼音。缺失/非法拼音属于数据错误，
+        # 必须计入 errors 而不是伪装成「已存在」被 skipped 掩盖。
+        if not normalized:
+            return (ImportOutcome.EMPTY_PINYIN, '缺少拼音')
+        if not PinyinConverter.is_valid_pinyin(normalized):
+            return (ImportOutcome.INVALID_PINYIN, f'非法拼音 {pinyin_str!r}')
+
+        # 前置条件：编辑器必须已加载词库文件，否则 add_entry 会对任何词条
+        # 返回 False。若不区分，就会把「未加载」误报成「词条已存在」。
+        if not getattr(self.editor, 'raw_data', None):
+            return (ImportOutcome.EDITOR_NOT_LOADED,
+                    '编辑器未加载词库文件（请先 editor.load()）')
+
+        # 调用 editor 的 add_entry (text, pinyin, rank)
+        if self.editor.add_entry(text, normalized, rank):
+            return (ImportOutcome.ADDED, '')
+        return (ImportOutcome.DUPLICATE, '词条已存在')
 
     def _add_entry(self, text: str, pinyin_str: str = '', rank: int = 1) -> bool:
         """通用添加词条方法
 
         Args:
             text: 中文文本
-            pinyin_str: 拼音字符串（可含空格，会被自动规范化）
+            pinyin_str: 拼音字符串（可含空格，会被自动规范化）；**必填**
             rank: 词频排名
 
         Returns:
-            是否添加成功
+            是否添加成功（词条已存在或拼音非法时返回 False）
         """
-        # 规范化拼音：去空格/声调/ü -> v
-        pinyin_str = PinyinConverter.normalize_pinyin(pinyin_str)
+        status, _reason = self._classify_entry(text, pinyin_str, rank)
+        return status == ImportOutcome.ADDED
 
-        # mschxudp 记录必须有合法拼音；无拼音或非法字符直接跳过，
-        # 避免保存时被构建器静默丢弃导致统计失真
-        if not PinyinConverter.is_valid_pinyin(pinyin_str):
-            return False
-
-        # 调用 editor 的 add_entry (text, pinyin, rank)
-        return self.editor.add_entry(text, pinyin_str, rank)
+    def _record_error(self, source: str, text: str, reason: str) -> None:
+        """记录一条错误明细并计数。"""
+        self.error_count += 1
+        self.error_reasons[reason] = self.error_reasons.get(reason, 0) + 1
+        self.error_messages.append(f'{source}: {text!r} -> {reason}')
 
     def _is_valid_chinese(self, text: str) -> bool:
         """检查文本是否有效
@@ -94,11 +138,14 @@ class BatchImporter:
     def import_txt(self, filepath: str) -> Tuple[int, int, int]:
         """从 TXT 文件批量导入
 
-        格式: 每行一个词条，可选制表符分隔拼音
+        格式: 每行一个词条，**制表符分隔的拼音是必填项**
 
         示例:
             中国\tzhongguo
-            北京
+            北京\tbeijing
+
+        缺少拼音的行会被计入 errors（而非 skipped），详见
+        :class:`ImportOutcome`。
 
         Args:
             filepath: TXT 文件路径
@@ -109,6 +156,8 @@ class BatchImporter:
         self.imported_count = 0
         self.skipped_count = 0
         self.error_count = 0
+        self.error_messages = []
+        self.error_reasons = {}
 
         with open(filepath, 'r', encoding='utf-8') as f:
             for line_num, line in enumerate(f, 1):
@@ -128,13 +177,15 @@ class BatchImporter:
                     continue
 
                 try:
-                    if self._add_entry(text, pinyin):
+                    status, reason = self._classify_entry(text, pinyin)
+                    if status == ImportOutcome.ADDED:
                         self.imported_count += 1
+                    elif status == ImportOutcome.DUPLICATE:
+                        self.skipped_count += 1
                     else:
-                        self.skipped_count += 1  # 已存在
+                        self._record_error(f'第 {line_num} 行', text, reason)
                 except Exception as e:
-                    self.error_count += 1
-                    print(f"第 {line_num} 行错误: {e}")
+                    self._record_error(f'第 {line_num} 行', text, f'异常: {e}')
 
         return (self.imported_count, self.skipped_count, self.error_count)
 
@@ -153,6 +204,8 @@ class BatchImporter:
         self.imported_count = 0
         self.skipped_count = 0
         self.error_count = 0
+        self.error_messages = []
+        self.error_reasons = {}
 
         with open(filepath, 'r', encoding='utf-8') as f:
             reader = csv.reader(f)
@@ -161,6 +214,8 @@ class BatchImporter:
             for row_num, row in enumerate(reader, 1):
                 if len(row) <= max(text_col, pinyin_col):
                     self.error_count += 1
+                    self.error_reasons['缺少列'] = self.error_reasons.get('缺少列', 0) + 1
+                    self.error_messages.append(f'第 {row_num} 行: 列数不足 -> 缺少拼音列')
                     continue
 
                 text = row[text_col].strip()
@@ -174,10 +229,13 @@ class BatchImporter:
                     continue
 
                 try:
-                    if self._add_entry(text, pinyin):
+                    status, reason = self._classify_entry(text, pinyin)
+                    if status == ImportOutcome.ADDED:
                         self.imported_count += 1
-                    else:
+                    elif status == ImportOutcome.DUPLICATE:
                         self.skipped_count += 1
+                    else:
+                        self._record_error(f'第 {row_num} 行', text, reason)
                 except Exception as e:
                     self.error_count += 1
                     print(f"第 {row_num} 行错误: {e}")
@@ -202,6 +260,8 @@ class BatchImporter:
         self.imported_count = 0
         self.skipped_count = 0
         self.error_count = 0
+        self.error_messages = []
+        self.error_reasons = {}
 
         with open(filepath, 'r', encoding='utf-8') as f:
             for line_num, line in enumerate(f, 1):
@@ -226,10 +286,13 @@ class BatchImporter:
                     continue
 
                 try:
-                    if self._add_entry(text, pinyin, rank):
+                    status, reason = self._classify_entry(text, pinyin, rank)
+                    if status == ImportOutcome.ADDED:
                         self.imported_count += 1
-                    else:
+                    elif status == ImportOutcome.DUPLICATE:
                         self.skipped_count += 1
+                    else:
+                        self._record_error(f'第 {line_num} 行', text, reason)
                 except Exception as e:
                     self.error_count += 1
                     print(f"第 {line_num} 行错误: {e}")
@@ -243,6 +306,7 @@ class BatchImporter:
             'skipped': self.skipped_count,
             'errors': self.error_count,
             'total': self.imported_count + self.skipped_count + self.error_count,
+            'error_reasons': dict(self.error_reasons),
         }
 
 

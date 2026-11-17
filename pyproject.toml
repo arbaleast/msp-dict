@@ -1,3 +1,37 @@
+[project]
+name = "msp-dict"
+version = "0.1.0"
+description = "Windows 10/11 微软拼音「用户定义的短语」词库构建、校验与诊断工具"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+# 核心链路（src/）只用标准库；requests 仅供爬虫下载器使用
+dependencies = [
+    "requests>=2.28",
+]
+
+[project.optional-dependencies]
+# 完整爬虫能力：python-dotenv 供搜狗细胞词库读取 Cookie，pypinyin 供采集词条补全拼音
+crawler = [
+    "python-dotenv>=1.0",
+    "pypinyin>=0.49",
+]
+# 仅测试
+test = [
+    "pytest>=7.0",
+]
+
+[project.scripts]
+msp-dict = "src.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+# 仓库根下的 src/ 与 crawler/ 都是可导入包（不是 src-layout），显式列出避免自动发现报错
+packages = ["src", "crawler", "crawler.fetchers"]
+
 [tool.pytest.ini_options]
 # 只收集 tests/，避免误扫 src/ 里的库模块或 .tmp/ 下的临时产物
 testpaths = ["tests"]

@@ -366,7 +366,8 @@ def main():
                           default='txt', help='输出格式')
 
     # import 命令
-    p_import = subparsers.add_parser('import', help='批量导入')
+    p_import = subparsers.add_parser(
+        'import', help='批量导入（TXT 必须为「词条<TAB>拼音」，拼音是必填项）')
     p_import.add_argument('file', help='词库文件路径')
     p_import.add_argument('input', help='要导入的文件')
 

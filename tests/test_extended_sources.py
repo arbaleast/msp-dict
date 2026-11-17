@@ -3,6 +3,9 @@
 import importlib.util
 import os
 import sys
+from pathlib import Path
+
+import pytest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
@@ -105,8 +108,26 @@ def test_merge_file_keeps_source_column_and_dedupes(tmp_path):
     )
 
 
-def test_scel_parser_wrapper_returns_empty_on_bad_file(tmp_path):
+def test_scel_parser_wrapper_raises_on_bad_file(tmp_path):
+    """损坏的 .scel 必须报错，不能静默返回空列表（否则会被当成「该源无数据」）。"""
+    from crawler.scel_parser import ScelParseError
+
     bad = tmp_path / 'bad.scel'
     bad.write_bytes(b'not a scel file')
 
-    assert merge_module.parse_scel_file(bad) == []
+    with pytest.raises(ScelParseError):
+        merge_module.parse_scel_file(bad)
+
+
+def test_scel_parser_wrapper_reads_real_fixture():
+    """真实二进制样本能解析出带拼音的词条。"""
+    fixture = Path(__file__).resolve().parent / 'fixtures' / 'valid_mock.scel'
+    assert fixture.exists(), '缺少 SCEL 样本'
+
+    entries = merge_module.parse_scel_file(fixture)
+
+    assert len(entries) == 6
+    mapping = {(word, pinyin) for word, pinyin, _freq in entries}
+    assert ('中国', "zhong'guo") in mapping
+    assert ('银行', "yin'hang") in mapping
+    assert ('银行', "yin'xing") in mapping, '多音词必须保留两个读音'

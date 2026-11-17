@@ -33,6 +33,7 @@ ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
 from src.format_spec import normalize_pinyin, utf16_units  # noqa: E402
+from crawler.scel_parser import ScelParseError  # noqa: E402
 
 CJK_RE = None  # 延迟编译，避免顶层 import re 之外的副作用
 EXT_MIN_UNITS = 2
@@ -162,16 +163,20 @@ def clean_extended(word: str, pinyin: str):
 
 
 def parse_scel_file(path: Path):
-    """用 crawler/scel_parser.py 解析一个 .scel，返回 [(词, 拼音, 词频)]。"""
-    try:
-        from crawler.scel_parser import ScelParser
-    except ImportError:
-        return []
+    """用 crawler/scel_parser.py 解析一个 .scel，返回 [(词, 拼音, 词频)]。
+
+    解析失败时抛出 ScelParseError（不静默返回空列表），由调用方决定
+    是跳过该文件还是终止构建。
+    """
+    from crawler.scel_parser import ScelParseError, ScelParser
+
     parser = ScelParser()
     try:
         parser.load(str(path))
-    except Exception:
-        return []
+    except ScelParseError:
+        raise
+    except Exception as exc:
+        raise ScelParseError(f'{path.name} 解析失败: {exc}') from exc
     return list(parser.entries)
 
 
@@ -302,7 +307,12 @@ def load_extended(cache_dir: Path, strict: bool):
     scel_files = sorted(cache_dir.glob(SCEL_GLOB))
     scel_total = 0
     for scel in scel_files:
-        raw = parse_scel_file(scel)
+        try:
+            raw = parse_scel_file(scel)
+        except ScelParseError as exc:
+            # 损坏的 .scel 不能静默跳过：明确告警并继续处理其它文件
+            print(f'\n⚠️  {scel.name} 解析失败，已跳过: {exc}')
+            continue
         kept = 0
         for word, pinyin, freq in raw:
             code = clean_extended(word, pinyin)
