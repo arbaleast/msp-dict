@@ -7,7 +7,7 @@
 | `format_spec.py` | 协议常量、UTF-16 单元数、拼音规范化、长度上限 | 不依赖其它 `src` 模块 |
 | `builder_win10.py` | 清洗 → 去重 → 排序 → 分配候选位 → 序列化 | 不写文件、不打印，只回 `bytes` 与 `BuildStats` |
 | `parser.py` | 读取/校验结构，`strict` 区分 `format`/`corruption` | 不在解析中修改数据 |
-| `validator.py` | 四类问题分类报告与退出码 | 不复用 builder 的写路径 |
+| `validator.py` | 四类问题分类报告与退出码；识别 55AA8881/55AA8880/DEL 容器并给出导入入口提示 | 不复用 builder 的写路径 |
 | `editor.py` | 增删词条（哈希索引 O(1)）、保存重建 | 不在保存时改变同音候选顺序 |
 | `importer.py` | TXT/CSV/Rime 批量导入、拼音规范化与拦截 | 不接收无拼音/非法拼音词条 |
 | `profiles.py` | lite/standard/full 档位参数 | 不含具体词条数据 |

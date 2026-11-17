@@ -171,6 +171,25 @@ class ValidationReport:
         return '\n'.join(lines)
 
 
+SELF_STUDY_MAGIC = b'\x55\xaa\x88\x81'
+USER_STORE_MAGIC = b'\x55\xaa\x88\x80'
+
+
+def _container_hint(data: bytes) -> str:
+    """识别常见的 Windows 输入法私有容器，给出可执行的下一步提示。"""
+    if data[0:4] == SELF_STUDY_MAGIC:
+        return ('这是微软拼音的「自学习词汇」库（ChsPinyinUDL，头部 55AA8881），'
+                '不是「用户自定义短语」的 mschxudp 格式。'
+                '请在「用户定义的短语 → 添加或编辑自定义短语 → 导入」中导入本项目的 .dat，'
+                '不要点同一页面上的「导入自学习词汇」。')
+    if data[0:4] == USER_STORE_MAGIC:
+        return ('这是 Windows 内部用户词条存储（头部 55AA8880），'
+                '不是可导入的 mschxudp 文件；请改为导入 msp_lite.dat。')
+    if data[0:4] == b'DEL ':
+        return ('这是微软拼音的「删除候选」记录文件（头部 DEL ），不是词库文件。')
+    return ''
+
+
 class DatValidator:
     """全量扫描 mschxudp 文件并分类报告问题。"""
 
@@ -195,10 +214,12 @@ class DatValidator:
             return report
 
         if data[0:8] != b'mschxudp':
-            report.add_issue(
-                'format', 'error', 'bad_magic',
-                f"协议标识不是 'mschxudp'（实际 {data[0:8]!r}），不是 Win10 微软拼音用户词库",
-            )
+            hint = _container_hint(data)
+            message = (f"协议标识不是 'mschxudp'（实际 {data[0:8]!r}），"
+                       f"不是 Win10 微软拼音用户词库")
+            if hint:
+                message += f"\n     {hint}"
+            report.add_issue('format', 'error', 'bad_magic', message)
             return report
 
         flag = struct.unpack_from('<I', data, OFF_FLAG)[0]

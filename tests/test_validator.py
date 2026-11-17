@@ -246,3 +246,27 @@ class TestRealWorldSample:
 
         entries = {e.text: e.pinyin for e in parser.entries}
         assert entries == {'深蓝词库转换': 'iayr', '曾毅': 'ulue'}
+
+
+def test_self_study_container_gets_actionable_hint(tmp_path):
+    """自学习词汇库（55AA8881）被当成词库导入时，必须指向正确的导入入口。"""
+    path = tmp_path / "ChsPinyinUDL.dat"
+    path.write_bytes(b'\x55\xaa\x88\x81' + b'\x00' * 60)
+
+    report = DatValidator(now=NOW).validate(str(path))
+
+    assert report.exit_code == 2
+    text = report.format_text()
+    assert "自学习词汇" in text
+    assert "添加或编辑自定义短语" in text
+    assert "导入自学习词汇" in text
+
+
+def test_windows_user_store_gets_actionable_hint(tmp_path):
+    path = tmp_path / "ChsPinyinIH.dat"
+    path.write_bytes(b'\x55\xaa\x88\x80' + b'\x00' * 60)
+
+    report = DatValidator(now=NOW).validate(str(path))
+
+    assert report.exit_code == 2
+    assert "内部用户词条存储" in report.format_text()
