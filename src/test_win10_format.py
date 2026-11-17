@@ -250,13 +250,13 @@ class TestImporter:
 
         editor = MSPinyinEditor()
         editor.load(self.tmpfile)
-        initial_count = editor.get_entry_count()
 
         importer = BatchImporter(editor)
         result = importer.import_txt(self.txtfile)
 
-        assert importer.imported_count == 2, f"应导入 2 条，实际: {importer.imported_count}"
-        assert importer.skipped_count == 0, f"应跳过 0 条，实际: {importer.skipped_count}"
+        # mschxudp 记录必须有拼音；无拼音行会被跳过而不是写出 0 长度编码
+        assert importer.imported_count == 1, f"应导入 1 条，实际: {importer.imported_count}"
+        assert importer.skipped_count == 1, f"应跳过 1 条，实际: {importer.skipped_count}"
 
         print(f"[PASS] TXT 导入测试通过: {result}")
 
