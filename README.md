@@ -25,10 +25,10 @@
 <!-- STATS:START -->
 | 文件 | 词条数 | 大小 | 适用场景 |
 |:---|---:|---:|:---|
-| **msp_lite.dat** | 19,988 | 855 KB | Windows 10/11 直接导入（推荐） |
-| msp_standard.dat | 49,167 | ~2 MB | 进阶用户；管理页会明显卡顿 |
-| msp_full.dat | 2,173,314 | ~114 MB | 存档 / 转 Rime 等，Windows 无法完整导入 |
-| msp_win10.dat | 19,988 | 855 KB | 兼容旧链接（= msp_lite.dat） |
+| **msp_lite.dat** | 19,988 | 856 KB | Windows 10/11 直接导入（推荐） |
+| msp_standard.dat | 49,175 | ~2 MB | 进阶用户；管理页会明显卡顿 |
+| msp_full.dat | 2,173,074 | ~114 MB | 存档 / 转 Rime 等，Windows 无法完整导入 |
+| msp_win10.dat | 19,988 | 856 KB | 兼容旧链接（= msp_lite.dat） |
 <!-- STATS:END -->
 
 > [!IMPORTANT]
