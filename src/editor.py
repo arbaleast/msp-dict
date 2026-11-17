@@ -8,7 +8,7 @@
 """
 
 import logging
-from typing import List, Tuple
+from typing import Dict, List
 from datetime import datetime
 from .parser import MSPinyinParser, DictEntry
 from .builder_win10 import Win10MSPinyinBuilder
@@ -23,8 +23,10 @@ class MSPinyinEditor(MSPinyinParser):
 
     def __init__(self, filepath: str = None):
         super().__init__(filepath)
-        # 待添加的词条: (text, pinyin, rank)
-        self._pending_add: List[Tuple[str, str, int]] = []
+        # 已加载词条的哈希索引: text -> DictEntry（首次出现者优先）
+        self._index: Dict[str, DictEntry] = {}
+        # 待添加的词条: text -> DictEntry（dict 保序，等价于原列表顺序）
+        self._pending_add: Dict[str, DictEntry] = {}
         # 待删除的词条文本
         self._pending_remove: set = set()
         # 最近一次保存时的构建统计（可用于提示被清洗拦截的词条）
@@ -33,10 +35,13 @@ class MSPinyinEditor(MSPinyinParser):
     def add_entry(self, text: str, pinyin: str = '', rank: int = 1) -> bool:
         """添加新词条（标记待添加，保存时重建）
 
+        通过哈希索引判断重复，单条 O(1)；批量导入整体 O(N)，不再随已加载
+        词条数线性增长。
+
         Args:
             text: 中文文本
             pinyin: 拼音字符串（无空格，如 "zhongguo"）
-            rank: 词频排名，值越小越靠前
+            rank: 来源词频，构建器只用它决定同音候选顺序与三档筛选
 
         Returns:
             是否添加成功（已存在的词条返回 False）
@@ -45,14 +50,11 @@ class MSPinyinEditor(MSPinyinParser):
         if not self.raw_data:
             return False
 
-        # 检查是否已存在（包括待添加列表）
-        if self.find_by_text(text):
+        # 检查是否已存在（已加载索引 + 待添加索引，均为 O(1)）
+        if text in self._index or text in self._pending_add:
             return False
-        for t, _, _ in self._pending_add:
-            if t == text:
-                return False
 
-        self._pending_add.append((text, pinyin, rank))
+        self._pending_add[text] = DictEntry(text=text, pinyin=pinyin, rank=rank)
         return True
 
     def remove_entry(self, text: str) -> bool:
@@ -67,8 +69,8 @@ class MSPinyinEditor(MSPinyinParser):
         if not self.raw_data:
             return False
 
-        entry = self.find_by_text(text)
-        if entry is None:
+        # 只有已加载的词条可删除（与旧语义一致：待添加项不可撤销）
+        if text not in self._index or text in self._pending_remove:
             return False
 
         self._pending_remove.add(text)
@@ -104,14 +106,9 @@ class MSPinyinEditor(MSPinyinParser):
                            self.last_build_stats.summary())
 
     def _collect_entries(self) -> List[DictEntry]:
-        """收集最终词条列表：过滤已删除 + 合并新增"""
+        """收集最终词条列表：过滤已删除 + 合并新增（保持原有顺序语义）"""
         merged = [e for e in self.entries if e.text not in self._pending_remove]
-        for text, pinyin, rank in self._pending_add:
-            merged.append(DictEntry(
-                text=text,
-                pinyin=pinyin,
-                rank=rank,
-            ))
+        merged.extend(self._pending_add.values())
         return merged
 
     def _build_data(self) -> bytes:
@@ -128,11 +125,30 @@ class MSPinyinEditor(MSPinyinParser):
         self.last_build_stats = builder.stats
         return data
 
+    def parse_bytes(self, data: bytes, strict: bool = False) -> int:
+        """解析后同步重建文本索引，保证 find_by_text/add_entry 与底层列表一致。"""
+        count = super().parse_bytes(data, strict=strict)
+        self._rebuild_index()
+        return count
+
+    def _rebuild_index(self) -> None:
+        self._index = {}
+        for entry in self.entries:
+            # 同一文本重复出现时，find_by_text 旧实现返回第一条
+            self._index.setdefault(entry.text, entry)
+
     def _reload_entries(self) -> None:
-        """从 self.raw_data 重新构建 self.entries（复用 parser 的解析逻辑）"""
+        """从 self.raw_data 重新构建 self.entries 与索引"""
         self.entries = []
         if self.raw_data:
             self.parse_bytes(self.raw_data)
+
+    def find_by_text(self, text: str):
+        """按文本查找词条（哈希索引，O(1)）"""
+        entry = self._index.get(text)
+        if entry is not None:
+            return entry
+        return self._pending_add.get(text)
 
     def get_stats(self) -> dict:
         """获取词库统计信息"""
