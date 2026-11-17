@@ -20,6 +20,7 @@
 | 提交信息、命名、错误处理 | `.trellis/spec/guides/conventions.md` | 提交前 |
 | 不确定读什么 | `.trellis/spec/guides/index.md` | 入口 |
 | 排查导入失败 / 格式根因 | `docs/ISSUE3_DIAGNOSIS.md` | 处理 Issue #3 类问题 |
+| 验证词库是否真被 Windows 加载 | `docs/CANARY_TESTING.md` | 跑探针 / 解读 check-canary |
 
 ## 常驻规则
 
