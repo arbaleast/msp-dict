@@ -171,21 +171,69 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TODAY=$(date +%Y-%m-%d)
-          TAG="v$(date +%Y.%m.%d)"
-          
-          # 读取 CHANGELOG.md 作为 release body
-          BODY=$(cat CHANGELOG.md)
-          
-          ASSETS="msp_lite.dat msp_standard.dat msp_full.dat msp_win10.dat msp_lite_canary.dat msp_lite_canary.json"
-          # 优先创建；如果 TAG 已存在则覆盖同名资产（同一天重跑也要能更新产物）
+          TAG="v$(date -u +%Y.%m.%d)"
+          TITLE="$TAG — 微软拼音增强词库"
+
+          TAG="$TAG" python - <<'PY'
+          import json
+          import os
+          import pathlib
+
+          tag = os.environ['TAG']
+          labels = {
+              'msp_lite.dat': '**推荐**：Windows 10/11 直接导入',
+              'msp_standard.dat': '进阶：覆盖更广，管理页会明显卡顿',
+              'msp_full.dat': '存档 / 转 Rime 等，**不要直接导入微软拼音**',
+              'msp_win10.dat': '兼容旧链接，与 `msp_lite.dat` 完全一致',
+          }
+          summary = json.loads(pathlib.Path('build_summary.json').read_text(encoding='utf-8'))
+          files = {item['file']: item for item in summary['profiles']}
+          if 'msp_win10.dat' not in files and 'msp_lite.dat' in files:
+              files['msp_win10.dat'] = dict(files['msp_lite.dat'], file='msp_win10.dat')
+
+          rows = []
+          for name in ('msp_lite.dat', 'msp_standard.dat', 'msp_full.dat', 'msp_win10.dat'):
+              item = files.get(name)
+              if not item:
+                  continue
+              size_mb = item['size_bytes'] / 1024 / 1024
+              size = f'{size_mb:.0f} MB' if size_mb >= 1 else f'{item["size_bytes"] / 1024:.0f} KB'
+              display = f'**{name}**' if name == 'msp_lite.dat' else name
+              rows.append(f'| {display} | {item["entries"]:,} | {size} | {labels.get(name, "")} |')
+
+          template = pathlib.Path('docs/release-notes-template.md').read_text(encoding='utf-8')
+          notes = template.replace('{{TAG}}', tag).replace('{{TABLE}}', os.linesep.join(rows))
+          pathlib.Path('release_notes.md').write_text(notes, encoding='utf-8')
+          print(f'已生成 release_notes.md（{len(rows)} 个产物）')
+          PY
+
+          sha256sum msp_lite.dat msp_standard.dat msp_full.dat msp_win10.dat > SHA256SUMS
+          ASSETS="msp_lite.dat msp_standard.dat msp_full.dat msp_win10.dat SHA256SUMS"
+
           if gh release view "$TAG" --repo ${{ github.repository }} > /dev/null 2>&1; then
-            echo "Release $TAG 已存在，覆盖同名资产"
+            echo "Release $TAG 已存在，更新标题/正文/资产"
+            gh release edit "$TAG" --repo ${{ github.repository }} \
+              --title "$TITLE" --notes-file release_notes.md
             gh release upload "$TAG" $ASSETS --clobber --repo ${{ github.repository }}
           else
             gh release create "$TAG" $ASSETS \
               --repo ${{ github.repository }} \
-              --title "微软拼音词库 $TAG" \
-              --notes "$BODY"
+              --title "$TITLE" \
+              --notes-file release_notes.md
             echo "已创建 release: $TAG"
+          fi
+
+      - name: Prune old releases (keep 3)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release list --limit 100 --json tagName,createdAt \
+            --jq 'sort_by(.createdAt) | reverse | .[3:] | .[].tagName' > old_releases.txt
+          if [ -s old_releases.txt ]; then
+            while read -r tag; do
+              echo "淘汰旧版本: $tag"
+              gh release delete "$tag" --cleanup-tag --yes --repo ${{ github.repository }}
+            done < old_releases.txt
+          else
+            echo "当前 Release 数量 ≤ 3，无需清理"
           fi

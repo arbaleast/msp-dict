@@ -22,6 +22,9 @@
 
 前往 [最新 Release](https://github.com/arbaleast/msp-dict/releases/latest) 下载。**日常使用只需下载 `msp_lite.dat`。**
 
+Release 统一按日期命名（`vYYYY.MM.DD — 微软拼音增强词库`），只保留最近 3 个版本；
+每个版本附带 `SHA256SUMS` 用于校验。
+
 <!-- STATS:START -->
 | 文件 | 词条数 | 大小 | 适用场景 |
 |:---|---:|---:|:---|
@@ -126,7 +129,8 @@ python -m src.cli build msp_full.txt -o probe.dat --profile lite --with-canary \
 
 ### 实测闭环
 
-1. 导入 `msp_lite_canary.dat`（入口同上）。
+1. 导入 `msp_lite_canary.dat`（入口同上）。该文件**不随 Release 发布**（正式产物零探针），
+   请从最近一次 Actions 构建的 `msp-dict-dat-*` artifact 获取，或按上面的命令本地生成。
 2. 记事本盲打 `cikutanzhen` → 应出现「词库探针已生效」；
    盲打 `zuiweitan` → 应出现「词库尾部已生效」。
 3. 在设置页点 **导出**，对导出的文件再跑一次 `check-canary`：
@@ -210,7 +214,8 @@ GitHub Actions 每月 **1 日、15 日 03:30 UTC**（北京时间 11:30）运行
   → build_releases.py 构建 lite / standard / full + msp_win10.dat
   → validate 逐文件校验（失败即阻断发布）
   → build_releases.py --with-canary 生成诊断产物 → check-canary 校验
-  → update_readme.py 刷新本页统计 → 提交 → 发布 Release
+  → update_readme.py 刷新本页统计 → 提交 → 发布 Release（标题 vYYYY.MM.DD — 微软拼音增强词库）
+  → 生成 SHA256SUMS → 淘汰第 4 个及更早的历史版本
 ```
 
 正式产物与 Canary 产物完全隔离：Canary 只生成 `msp_lite_canary.dat`，不会污染三档词库。
