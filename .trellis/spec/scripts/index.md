@@ -25,6 +25,7 @@ README.md 的 <!-- STATS:START --> 区块 + BUILD_DATE
 | `build_releases.py` | `msp_full.txt` | 4 个 DAT + `build_summary.json` | 逐档 validate，非 0 退出阻断；`msp_win10.dat` 必须是 lite 的字节副本 |
 | `make_scale_samples.py` | `msp_full.txt` | `scale_samples/` | 仅用于复现规模卡顿，不随 Release 发布 |
 | `update_readme.py` | `build_summary.json` | README 统计块 | 无数据时不得瞎改；统计块标记必须保留 |
+| `build_releases.py --with-canary` | `msp_full.txt` | `msp_<profile>_canary.dat` + `.json` | 独立产物，绝不覆盖正式 DAT；需有词条上限的档位 |
 
 ## 档位参数（`src/profiles.py`，改这里即改发布策略）
 

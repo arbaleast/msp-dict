@@ -15,10 +15,12 @@ Commands:
     stats       显示统计信息
     build       从文本构建 mschxudp 格式词库（支持 lite/standard/full 三档）
     validate    校验 DAT 文件是否可被 Windows 微软拼音导入
+    check-canary  核对 Canary 词库与其 manifest（结构/探针/计数/实机四维）
 """
 
 import argparse
 import json
+import time
 import os
 import sys
 
@@ -28,9 +30,16 @@ from .exporter import Exporter
 from .importer import BatchImporter, RimeConverter
 from .converter import BidirectionalConverter
 from .builder_win10 import REASON_LABELS, Win10MSPinyinBuilder
+from .canary import (
+    CANARY_SOURCE_RANK,
+    build_manifest,
+    locate_probes,
+    resolve_probes,
+    write_manifest,
+)
 from .format_spec import MAX_IMPORT_ENTRIES
 from .profiles import PROFILES, get_profile
-from .validator import DatValidator
+from .validator import CanaryChecker, DatValidator
 
 
 def cmd_parse(args):
@@ -222,6 +231,17 @@ def cmd_build(args):
     else:
         exclude_single = profile.exclude_single if profile else False
 
+    probes = []
+    if getattr(args, 'with_canary', False):
+        try:
+            probes = resolve_probes(args.canary_pinyin, args.canary_word)
+        except ValueError as exc:
+            print(f"错误: {exc}")
+            return 2
+        # 给探针预留名额，保证注入后总数仍不超过 Profile 上限
+        if limit is not None:
+            limit = max(0, limit - len(probes))
+
     builder = Win10MSPinyinBuilder(timestamp=args.timestamp or 0,
                                    rank_mode=args.rank_mode)
     selected = builder.add_from_text_file(
@@ -231,6 +251,9 @@ def cmd_build(args):
         max_word_units=max_word_chars,
         limit=limit,
     )
+    normal_selected = selected
+    for probe in probes:
+        builder.add_word(probe.word, probe.pinyin, CANARY_SOURCE_RANK)
 
     output = args.output or (os.path.splitext(args.input)[0] + '.dat')
     data = builder.build()
@@ -251,7 +274,43 @@ def cmd_build(args):
     if stats.accepted > MAX_IMPORT_ENTRIES:
         print(f"  ⚠️  词条数超过微软拼音约 {MAX_IMPORT_ENTRIES:,} 条上限："
               f"Windows 无法完整导入，请改用 lite 档（--profile lite）或转其他输入法")
+
+    if probes:
+        manifest_path = args.manifest or (os.path.splitext(output)[0] + '.json')
+        located = locate_probes(data, probes)
+        manifest = build_manifest(
+            profile=profile.name if profile else 'custom',
+            dat_path=output,
+            data=data,
+            selected_entry_count=normal_selected,
+            located=located,
+            generated_at=time.strftime('%Y-%m-%dT%H:%M:%S%z',
+                                       time.localtime(args.timestamp or time.time())),
+        )
+        write_manifest(manifest_path, manifest)
+        print(f"  Canary 探针: {len(probes)} 个（manifest: {manifest_path}）")
+        for item in located:
+            if item['found']:
+                print(f"    ✅ {item['pinyin']} → {item['word']}  "
+                      f"物理索引 {item['physical_index']}, 偏移 0x{item['byte_offset']:X}, "
+                      f"候选位 {item['rank']}")
+            else:
+                print(f"    ❌ {item['pinyin']} → {item['word']} 未写入文件！")
+        missing = [i for i in located if not i['found']]
+        if missing:
+            print("错误: 探针未出现在最终文件中", file=sys.stderr)
+            return 1
     return 0
+
+
+def cmd_check_canary(args):
+    """Canary 四维检查：结构 / 探针 / manifest / Windows 实机"""
+    report = CanaryChecker().check(args.dat_path, args.manifest)
+    if args.json:
+        print(json.dumps(report.to_dict(), ensure_ascii=False, indent=2))
+    else:
+        print(report.format_text())
+    return report.exit_code
 
 
 def cmd_validate(args):
@@ -344,10 +403,25 @@ def main():
                          help='剔除单字词（微软拼音自带单字）')
     p_build.add_argument('--timestamp', type=int,
                          help='写入文件头的 Unix 时间戳（用于可复现构建）')
+    p_build.add_argument('--with-canary', action='store_true',
+                         help='注入诊断探针并生成 manifest（独立产物，不污染正式词库）')
+    p_build.add_argument('--canary-pinyin', action='append',
+                         help='自定义探针拼音（与 --canary-word 成对，可重复）')
+    p_build.add_argument('--canary-word', action='append',
+                         help='自定义探针词条（与 --canary-pinyin 成对，可重复）')
+    p_build.add_argument('--manifest',
+                         help='Canary manifest 输出路径（默认与 DAT 同名 .json）')
     p_build.add_argument('--rank-mode', choices=('frequency', 'position'),
                          default='frequency',
                          help='第三列语义：frequency=来源词频（默认，同音按词频重排 1~9）；'
                               'position=已是 1~9 候选位，原样保留')
+
+    # check-canary 命令
+    p_canary = subparsers.add_parser(
+        'check-canary', help='核对 Canary 词库与其 manifest（结构/探针/计数/实机四维）')
+    p_canary.add_argument('dat_path', help='Canary 词库文件路径')
+    p_canary.add_argument('--manifest', required=True, help='对应的 manifest JSON 路径')
+    p_canary.add_argument('--json', action='store_true', help='输出 JSON 报告')
 
     # validate 命令
     p_validate = subparsers.add_parser('validate', help='校验 .dat 是否可被 Windows 导入')
@@ -368,6 +442,7 @@ def main():
         'stats': cmd_stats,
         'build': cmd_build,
         'validate': cmd_validate,
+        'check-canary': cmd_check_canary,
     }
 
     cmd = commands.get(args.command)

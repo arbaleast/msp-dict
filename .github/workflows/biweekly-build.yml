@@ -80,10 +80,13 @@ jobs:
           echo "=== 合并词库（剔除无拼音的纯词频表） ==="
           python scripts/merge.py
 
-      - name: Build release DAT files (lite / standard / full)
+      - name: Build release DAT files (lite / standard / full + canary)
         run: |
           echo "=== 构建三档词库 ==="
           python scripts/build_releases.py --input msp_full.txt
+          echo "=== 构建带诊断探针的独立产物（正式词库不受影响） ==="
+          python scripts/build_releases.py --input msp_full.txt --profiles lite \
+            --with-canary --canary-only --summary build_summary_canary.json
 
       - name: Validate DAT files
         run: |
@@ -92,6 +95,11 @@ jobs:
             echo "--- $f"
             python -m src.cli validate "$f"
           done
+
+      - name: Check canary probes
+        run: |
+          echo "=== Canary 四维检查（结构/探针/计数/实机四维） ==="
+          python -m src.cli check-canary msp_lite_canary.dat --manifest msp_lite_canary.json
 
       - name: Upload DAT artifacts
         if: always()
@@ -103,7 +111,10 @@ jobs:
             msp_standard.dat
             msp_full.dat
             msp_win10.dat
+            msp_lite_canary.dat
+            msp_lite_canary.json
             build_summary.json
+            build_summary_canary.json
           retention-days: 30
           if-no-files-found: warn
 
@@ -143,6 +154,7 @@ jobs:
             echo "Release $TAG 已存在，跳过"
           else
             gh release create "$TAG" msp_lite.dat msp_standard.dat msp_full.dat msp_win10.dat \
+              msp_lite_canary.dat msp_lite_canary.json \
               --repo ${{ github.repository }} \
               --title "微软拼音词库 $TAG" \
               --notes "$BODY"

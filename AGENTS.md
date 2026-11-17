@@ -25,6 +25,9 @@
 
 - 测试：`python -m pytest tests -q`（CI 同一命令，ubuntu + windows 矩阵）。
 - 校验：`python -m src.cli validate <file.dat>`；退出码 `0` 通过、`2` 格式错误、`3` 文件损坏、`4` 内容违规。
+- Canary 诊断：`build --with-canary` 产出独立探针词库（正式产物零污染），
+  `python -m src.cli check-canary <dat> --manifest <json>` 输出 `STRUCT/CANARY/MANIFEST/WINDOWS` 四维；
+  `[WINDOWS]` 只能实机验证，Python 侧通过不代表 Windows 已加载。
 - 不提交 `.dat`、`msp_*.txt`、`build_summary.json`、`scale_samples/`（均已在 `.gitignore`）。
 - 产物落 `dist/`（发布）或 `.tmp/`（调试）；仓库根不落散文件。
 - 改二进制语义或 CLI 行为时，提交说明必须写清「旧行为 → 新行为」及原因。

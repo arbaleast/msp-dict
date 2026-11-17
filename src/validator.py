@@ -22,6 +22,13 @@ import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
+from .canary import (
+    CanaryProbe,
+    iter_physical_records,
+    locate_probes,
+    read_manifest,
+    sha256_of,
+)
 from .format_spec import (
     ENTRY_HANZI_OFFSET_BASE,
     ENTRY_HEAD_BASE,
@@ -460,3 +467,235 @@ class DatValidator:
             )
         if 0 < count <= MAX_IMPORT_ENTRIES:
             report.stats['within_windows_limit'] = True
+
+
+# ======================================================================
+# Canary 诊断：结构 / 探针 / manifest / Windows 实机 四维检查
+# ======================================================================
+
+CANARY_DIMENSION_ORDER = ['STRUCT', 'CANARY', 'MANIFEST', 'WINDOWS']
+
+WINDOWS_VERIFICATION_GUIDE = [
+    '在记事本中盲打 cikutanzhen → 应出现「词库探针已生效」',
+    '在记事本中盲打 zuiweitan → 应出现「词库尾部已生效」',
+    '设置 → 时间和语言 → 语言和区域 → 中文(简体) → 键盘选项 → 微软拼音 →',
+    '  「用户自定义短语」→ 导入 msp_lite_canary.dat → 再点「导出」得到回环文件',
+    '把回环文件与 msp_lite_canary.dat 比对：探针仍在且词条数不减少 = 无静默截断',
+]
+
+
+@dataclass
+class CanaryDimension:
+    """一个检查维度的结论。"""
+
+    name: str                     # STRUCT | CANARY | MANIFEST | WINDOWS
+    status: str                   # PASS | FAIL | PENDING
+    detail: str = ''
+    lines: List[str] = field(default_factory=list)
+
+    @property
+    def ok(self) -> bool:
+        return self.status != 'FAIL'
+
+
+@dataclass
+class CanaryReport:
+    """Canary 四维检查报告。"""
+
+    dat_path: str
+    manifest_path: str
+    dimensions: List[CanaryDimension] = field(default_factory=list)
+
+    def dimension(self, name: str) -> Optional[CanaryDimension]:
+        for dim in self.dimensions:
+            if dim.name == name:
+                return dim
+        return None
+
+    @property
+    def ok(self) -> bool:
+        """所有可自动判定的维度都通过（[WINDOWS] 待实机验证，不参与判定）。"""
+        return all(dim.ok for dim in self.dimensions if dim.name != 'WINDOWS')
+
+    @property
+    def exit_code(self) -> int:
+        """0=自动维度全部通过，1=存在失败维度。"""
+        return 0 if self.ok else 1
+
+    @property
+    def verdict(self) -> str:
+        if not self.ok:
+            return 'Canary 检查未通过：文件与 manifest 不一致，导入该文件存在风险'
+        return 'Canary 自动检查通过；Windows 是否真正加载仍需实机验证（见 [WINDOWS]）'
+
+    def format_text(self) -> str:
+        lines = [
+            f'文件: {self.dat_path}',
+            f'Manifest: {self.manifest_path}',
+            '',
+        ]
+        for dim in self.dimensions:
+            mark = {'PASS': '✅', 'FAIL': '❌', 'PENDING': '⏳'}.get(dim.status, '?')
+            lines.append(f'[{dim.name}] {mark} {dim.status} — {dim.detail}')
+            for extra in dim.lines:
+                lines.append(f'    - {extra}')
+        lines.append('')
+        lines.append(f'结论: {self.verdict}')
+        return '\n'.join(lines)
+
+    def to_dict(self) -> Dict[str, object]:
+        return {
+            'dat_path': self.dat_path,
+            'manifest_path': self.manifest_path,
+            'ok': self.ok,
+            'exit_code': self.exit_code,
+            'verdict': self.verdict,
+            'dimensions': [
+                {
+                    'name': dim.name,
+                    'status': dim.status,
+                    'detail': dim.detail,
+                    'lines': list(dim.lines),
+                }
+                for dim in self.dimensions
+            ],
+        }
+
+
+class CanaryChecker:
+    """校验 Canary 词库与其 manifest 的一致性。
+
+    四个维度严格区分，**Python 侧通过不等于 Windows 导入成功**：
+      STRUCT   DAT 二进制结构与 Offset Table
+      CANARY   探针在最终文件中的物理存在性与位置
+      MANIFEST SHA256 与词条计数一致性
+      WINDOWS  微软拼音实际加载状态（只能实机验证）
+    """
+
+    def __init__(self, now: int = None):
+        self.now = now if now is not None else int(time.time())
+
+    def check(self, dat_path: str, manifest_path: str) -> CanaryReport:
+        report = CanaryReport(dat_path=dat_path, manifest_path=manifest_path)
+
+        data = b''
+        if not os.path.exists(dat_path):
+            report.dimensions.append(CanaryDimension(
+                'STRUCT', 'FAIL', f'DAT 文件不存在: {dat_path}'))
+        else:
+            with open(dat_path, 'rb') as f:
+                data = f.read()
+
+        struct_report = None
+        if data:
+            struct_report = DatValidator(now=self.now).validate(dat_path)
+            errors = [i for i in struct_report.issues if i.severity == 'error']
+            if struct_report.exit_code == 0:
+                report.dimensions.append(CanaryDimension(
+                    'STRUCT', 'PASS',
+                    f'结构校验通过（{struct_report.phrase_count:,} 条记录，0 个阻断问题）'))
+            else:
+                report.dimensions.append(CanaryDimension(
+                    'STRUCT', 'FAIL',
+                    f'结构校验未通过（exit={struct_report.exit_code}）',
+                    [f'{i.message}' + (f'（{i.count:,} 处）' if i.count > 1 else '')
+                     for i in errors]))
+        else:
+            report.dimensions.append(CanaryDimension(
+                'STRUCT', 'FAIL', 'DAT 文件缺失或为空'))
+
+        manifest = None
+        if not os.path.exists(manifest_path):
+            report.dimensions.append(CanaryDimension(
+                'MANIFEST', 'FAIL', f'Manifest 不存在: {manifest_path}'))
+        else:
+            try:
+                manifest = read_manifest(manifest_path)
+            except (ValueError, OSError) as exc:
+                report.dimensions.append(CanaryDimension(
+                    'MANIFEST', 'FAIL', f'Manifest 无法解析: {exc}'))
+
+        if manifest is not None:
+            report.dimensions.append(self._check_canary_dimension(data, manifest))
+            report.dimensions.append(self._check_manifest_dimension(data, manifest))
+        else:
+            report.dimensions.append(CanaryDimension(
+                'CANARY', 'FAIL', '缺少 manifest，无法核对探针'))
+            report.dimensions.append(CanaryDimension(
+                'MANIFEST', 'FAIL', '缺少 manifest，无法核对 SHA256 与计数'))
+
+        report.dimensions.append(CanaryDimension(
+            'WINDOWS', 'PENDING', '待实机验证（Python 侧校验不代表 Windows 已加载）',
+            list(WINDOWS_VERIFICATION_GUIDE)))
+
+        report.dimensions.sort(key=lambda d: CANARY_DIMENSION_ORDER.index(d.name))
+        return report
+
+    # ------------------------------------------------------------------
+    def _check_canary_dimension(self, data: bytes, manifest: Dict[str, object]) -> CanaryDimension:
+        probes = manifest.get('probes') or []
+        if not probes:
+            return CanaryDimension('CANARY', 'FAIL', 'manifest 里没有探针定义')
+
+        located = locate_probes(data, [
+            CanaryProbe(pinyin=str(p.get('pinyin', '')), word=str(p.get('word', '')))
+            for p in probes
+        ])
+
+        failures: List[str] = []
+        for expected, actual in zip(probes, located):
+            label = f"{expected.get('pinyin')} → {expected.get('word')}"
+            if not actual['found']:
+                failures.append(f'探针缺失: {label}')
+                continue
+            if actual['pinyin'] != expected.get('pinyin') or actual['word'] != expected.get('word'):
+                failures.append(f'探针内容不匹配: 期望 {label}，实际 {actual["pinyin"]} → {actual["word"]}')
+                continue
+            if expected.get('rank') is not None and actual['rank'] != expected.get('rank'):
+                failures.append(
+                    f'探针候选位不符: {label} 期望 {expected.get("rank")}，实际 {actual["rank"]}')
+            if expected.get('physical_index') is not None \
+                    and actual['physical_index'] != expected.get('physical_index'):
+                failures.append(
+                    f'探针物理索引不符: {label} 期望 {expected.get("physical_index")}，'
+                    f'实际 {actual["physical_index"]}')
+            if expected.get('byte_offset') is not None \
+                    and actual['byte_offset'] != expected.get('byte_offset'):
+                failures.append(
+                    f'探针字节偏移不符: {label} 期望 {expected.get("byte_offset")}，'
+                    f'实际 {actual["byte_offset"]}')
+
+        if failures:
+            return CanaryDimension('CANARY', 'FAIL', '探针核对失败', failures)
+
+        summary = '；'.join(
+            f'{item["pinyin"]} 位于第 {item["physical_index"]} 条 / 偏移 0x{item["byte_offset"]:X} / 候选位 {item["rank"]}'
+            for item in located
+        )
+        return CanaryDimension('CANARY', 'PASS', f'{len(located)} 个探针全部命中', [summary])
+
+    def _check_manifest_dimension(self, data: bytes, manifest: Dict[str, object]) -> CanaryDimension:
+        failures: List[str] = []
+        expected_sha = manifest.get('sha256')
+        actual_sha = sha256_of(data)
+        if expected_sha and expected_sha != actual_sha:
+            failures.append(f'SHA256 不匹配: manifest={expected_sha}，实际={actual_sha}')
+
+        actual_total = sum(1 for _ in iter_physical_records(data))
+        expected_total = manifest.get('total_entry_count')
+        if expected_total is not None and actual_total != expected_total:
+            failures.append(f'词条总数不符: manifest={expected_total}，实际={actual_total}')
+
+        normal = manifest.get('normal_entry_count')
+        canary = manifest.get('canary_entry_count')
+        if normal is not None and canary is not None and normal + canary != expected_total:
+            failures.append(
+                f'计数不自洽: normal({normal}) + canary({canary}) != total({expected_total})')
+
+        if failures:
+            return CanaryDimension('MANIFEST', 'FAIL', 'manifest 与文件不一致', failures)
+
+        return CanaryDimension(
+            'MANIFEST', 'PASS',
+            f'SHA256 与词条计数一致（{actual_total:,} 条）',
+            [f'sha256={actual_sha}'])

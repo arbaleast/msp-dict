@@ -11,6 +11,7 @@
 | `editor.py` | 增删词条（哈希索引 O(1)）、保存重建 | 不在保存时改变同音候选顺序 |
 | `importer.py` | TXT/CSV/Rime 批量导入、拼音规范化与拦截 | 不接收无拼音/非法拼音词条 |
 | `profiles.py` | lite/standard/full 档位参数 | 不含具体词条数据 |
+| `canary.py` | 诊断探针定义、探针物理定位（独立回读路径）、manifest 生成 | 不参与正式产物构建 |
 | `cli.py` | 子命令编排与用户输出 | 不内联二进制逻辑 |
 | `converter.py` / `exporter.py` | Rime 互转 / txt·csv·json 导出 | 不改写 DAT 协议 |
 
@@ -20,6 +21,19 @@
 - 记录：magic `0x00100010` | `hanzi_offset = 18 + 拼音字节数` | **候选位 1~9** | `0x06` | 0 | 2000 纪元秒 | 拼音 UTF-16LE | `0x0000` | 词条 UTF-16LE | `0x0000`。
 - 上限：拼音 ≤32 UTF-16 单元、词条 ≤64、同拼音候选 ≤9；参考实现导入上限 20,000 条。
 - 长度一律用 `utf16_units()` / `encode('utf-16-le')` 的字节数，禁止用 `len(str)` 推算偏移。
+
+## Canary 诊断构建（零污染）
+
+- 正式产物（`msp_lite.dat` / `msp_standard.dat` / `msp_full.dat` / `msp_win10.dat`）**永远不含探针**；
+  探针只出现在独立的 `msp_<profile>_canary.dat` + `msp_<profile>_canary.json`。
+- 注入时机：普通词条筛选、去重、截断（`limit - canary_count`）**之后**，探针走与普通词条
+  完全相同的序列化路径。
+- 探针用超大源词频（`CANARY_SOURCE_RANK`）确保同拼音下拿到候选位 1；manifest 里记录的
+  `rank` 是**最终候选位**。
+- DAT 记录按拼音字典序物理排列，因此**必须回读二进制文件**确认探针的真实
+  `physical_index` / `byte_offset`，不能拿内存插入顺序当证据（`canary.iter_physical_records`）。
+- `check-canary` 输出四维：`STRUCT` / `CANARY` / `MANIFEST` / `WINDOWS`；
+  `[WINDOWS]` 恒为「待实机验证」，Python 侧全绿**不等于** Windows 已加载。
 
 ## 词频与候选位（两种语义，不可混用）
 

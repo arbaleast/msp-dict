@@ -107,6 +107,49 @@ python -m src.cli validate msp_lite.dat
 > 若提示文件被占用，注销并重新登录后再删。只处理 `Chs` 目录下的
 > `ChsPinyin*.dat`，不要删除整个 `InputMethod` 目录；自学习词汇会一起清空。
 
+## 🧪 Canary 诊断构建（验证词库是否真被微软拼音加载）
+
+`msp_lite.dat` 结构合法 ≠ Windows 真的加载了。要做**闭环验证**，用带探针的独立
+诊断产物（正式产物永远不含探针，零污染）：
+
+```bash
+# 生成带探针的诊断词库 + manifest（独立文件，不覆盖 msp_lite.dat）
+python scripts/build_releases.py --input msp_full.txt --profiles lite --with-canary
+# 或单文件：
+python -m src.cli build msp_full.txt -o msp_lite_canary.dat --profile lite --with-canary
+
+# 四维检查（结构 / 探针 / manifest / Windows 实机）
+python -m src.cli check-canary msp_lite_canary.dat --manifest msp_lite_canary.json
+```
+
+默认注入**首尾双探针**（均为合法汉语拼音音节，避免被微软拼音全拼切分器忽略造成假阴性）：
+
+| 探针 | 拼音 | 候选词 | 作用 |
+|---|---|---|---|
+| 全拼探针 | `cikutanzhen` | 词库探针已生效 | 拼音字典序靠前，验证头部加载 |
+| 尾部探针 | `zuiweitan` | 词库尾部已生效 | 拼音字典序靠后，验证尾部未被静默截断 |
+
+可用 `--canary-pinyin` / `--canary-word` 成对自定义（可重复多次）。
+
+`check-canary` 严格区分四个维度，**Python 侧通过不代表 Windows 导入成功**：
+
+| 维度 | 含义 |
+|---|---|
+| `[STRUCT]` | DAT 二进制结构与 Offset Table 校验 |
+| `[CANARY]` | 探针在最终文件中的物理存在性、拼音/词条/Rank/字节偏移匹配 |
+| `[MANIFEST]` | SHA-256 与词条计数一致性 |
+| `[WINDOWS]` | 微软拼音实际加载状态——**只能实机验证** |
+
+### Windows 实测闭环步骤
+
+1. 设置 → 用户自定义短语 → 导入 `msp_lite_canary.dat`。
+2. 记事本里盲打 `cikutanzhen` → 应出现「词库探针已生效」；
+   盲打 `zuiweitan` → 应出现「词库尾部已生效」。
+3. 回到设置点「导出」得到回环文件，用 `check-canary` 核对（或直接比对词条数）：
+   探针仍在、词条数不减少 = Windows 没有静默截断。
+
+---
+
 ## 📊 词库格式
 
 ### Win10 DAT（mschxudp）

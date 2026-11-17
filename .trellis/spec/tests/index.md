@@ -27,6 +27,7 @@ python -m pytest tests/test_builder_format.py -q
 | `test_editor.py` / `test_editor_roundtrip.py` / `test_editor_performance.py` | 增删语义、索引一致性、保存顺序、20 万条 O(N) 基准 |
 | `test_importer.py` | TXT/CSV/Rime 导入、非法/空拼音跳过 |
 | `test_releases.py` | 三档构建、`msp_win10.dat` 字节副本、summary |
+| `test_canary.py` | 正式产物 0 探针、探针物理定位与上限、四维检查拦截、确定性构建 |
 | `tests/fixtures/` | 真实 Windows `mschxudp` 样本（入库），用于校验真实文件兼容性 |
 | `test_cli_validate.py` | `validate` 子命令退出码与输出、`build --profile` |
 | `test_merge.py` | 合并口径（无拼音/零词频剔除、最高词频优先） |
