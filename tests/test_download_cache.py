@@ -170,3 +170,64 @@ def test_stale_with_extended_option_is_gone():
     """回归：曾经提示过不存在的 --with-extended。"""
     source = Path(merge_script.__file__).read_text(encoding='utf-8')
     assert '--with-extended' not in source
+
+
+def test_mirror_urls_expand_to_three_sources():
+    """每个文件都要有多个镜像：jsDelivr 会对 Actions 出口 IP 返回 403。"""
+    mirrors = download_frost.mirror_urls(
+        'https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/food.dict.yaml')
+    assert mirrors == [
+        'https://cdn.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/food.dict.yaml',
+        'https://fastly.jsdelivr.net/gh/gaboolic/rime-frost@master/cn_dicts_cell/food.dict.yaml',
+        'https://raw.githubusercontent.com/gaboolic/rime-frost/master/cn_dicts_cell/food.dict.yaml',
+    ]
+
+
+def test_mirror_urls_keep_raw_origin_first():
+    mirrors = download_frost.mirror_urls(
+        'https://raw.githubusercontent.com/gaboolic/rime-frost/master/luna_pinyin.dict.yaml')
+    assert mirrors[0].startswith('https://raw.githubusercontent.com/')
+    assert any('fastly.jsdelivr.net' in m for m in mirrors)
+    assert any('cdn.jsdelivr.net' in m for m in mirrors)
+
+
+def test_mirror_urls_passthrough_unknown_scheme():
+    assert download_frost.mirror_urls('https://example.invalid/x.txt') == \
+        ['https://example.invalid/x.txt']
+
+
+def test_download_one_falls_back_to_next_mirror(monkeypatch, tmp_path):
+    """第一个镜像失败时必须自动换下一个镜像，而不是直接判定下载失败。"""
+    calls = []
+
+    def fake_urlretrieve(url, path):
+        calls.append(url)
+        if 'cdn.jsdelivr.net' in url:
+            raise OSError('HTTP Error 403: Forbidden')
+        Path(path).write_bytes(b'payload')
+
+    monkeypatch.setattr(download_frost.urllib.request, 'urlretrieve', fake_urlretrieve)
+
+    out = tmp_path / 'food.txt'
+    assert download_frost.download_one(
+        'https://cdn.jsdelivr.net/gh/o/r@main/p.txt', out, retries=2) is True
+    assert out.read_bytes() == b'payload'
+    assert not (tmp_path / 'food.txt.part').exists()
+    assert any('fastly.jsdelivr.net' in c for c in calls)
+
+
+def test_download_one_gives_up_after_all_mirrors(monkeypatch, tmp_path):
+    calls = []
+
+    def fake_urlretrieve(url, path):
+        calls.append(url)
+        raise OSError('boom')
+
+    monkeypatch.setattr(download_frost.urllib.request, 'urlretrieve', fake_urlretrieve)
+    monkeypatch.setattr(download_frost.time, 'sleep', lambda *_: None)
+
+    out = tmp_path / 'x.txt'
+    assert download_frost.download_one(
+        'https://cdn.jsdelivr.net/gh/o/r@main/p.txt', out, retries=2) is False
+    assert not out.exists()
+    assert not (tmp_path / 'x.txt.part').exists()

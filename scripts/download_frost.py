@@ -16,6 +16,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import time
 import urllib.request
 from datetime import datetime, timezone
@@ -92,33 +93,71 @@ def resolve_extended_url(repo: str, matcher) -> str:
     raise OSError(f'{repo} 的 latest release 中没有匹配的资源')
 
 
+def mirror_urls(url: str) -> List[str]:
+    """把一个下载地址展开成镜像列表。
+
+    jsDelivr 会对 GitHub Actions 出口 IP 间歇性返回 403，
+    raw.githubusercontent 也会被限流，因此每个文件准备多个镜像：
+
+    - ``cdn.jsdelivr.net/gh/<repo>@<ref>/<path>``
+    - ``fastly.jsdelivr.net/gh/<repo>@<ref>/<path>``
+    - ``raw.githubusercontent.com/<repo>/<ref>/<path>``
+
+    三者内容同源（都来自上游仓库的同一个 commit），只是 CDN 不同。
+    """
+    m = re.match(r'^https://cdn\.jsdelivr\.net/gh/([^@/]+/[^@/]+)@(.+)$', url)
+    if m:
+        repo, rest = m.group(1), m.group(2)
+        ref, _, path = rest.partition('/')
+        return [
+            url,
+            f'https://fastly.jsdelivr.net/gh/{repo}@{ref}/{path}',
+            f'https://raw.githubusercontent.com/{repo}/{ref}/{path}',
+        ]
+    m = re.match(r'^https://raw\.githubusercontent\.com/([^/]+/[^/]+)/(.+)$', url)
+    if m:
+        repo, rest = m.group(1), m.group(2)
+        ref, _, path = rest.partition('/')
+        return [
+            url,
+            f'https://fastly.jsdelivr.net/gh/{repo}@{ref}/{path}',
+            f'https://cdn.jsdelivr.net/gh/{repo}@{ref}/{path}',
+        ]
+    return [url]
+
+
 def download_one(url: str, out_path: Path, retries: int) -> bool:
     """单文件下载，失败重试；成功返回 True。
 
     下载先写 ``<目标>.part``，校验非空后再原子替换目标文件：
     中断或失败不会在缓存目录留下半截文件，旧的完整文件也不会被破坏。
+
+    每轮尝试会依次轮换多个镜像（见 :func:`mirror_urls`），
+    单个 CDN 限流不会导致整个构建失败。
     """
     part_path = out_path.with_name(out_path.name + '.part')
+    mirrors = mirror_urls(url)
     for attempt in range(1, retries + 1):
-        try:
-            if part_path.exists():
-                part_path.unlink()
-            urllib.request.urlretrieve(url, part_path)
-            if part_path.stat().st_size == 0:
-                raise OSError('下载结果为空文件')
-            # 校验通过才替换正式文件
-            os.replace(part_path, out_path)
-            print(f'  OK ({out_path.stat().st_size // 1024}KB)', flush=True)
-            return True
-        except Exception as e:  # 网络抖动/CDN 限流：重试后再判定失败
-            print(f'  重试 {attempt}/{retries}: {e}')
-            if part_path.exists():
-                try:
+        for mirror in mirrors:
+            try:
+                if part_path.exists():
                     part_path.unlink()
-                except OSError:
-                    pass
-            if attempt < retries:
-                time.sleep(3 * attempt)
+                urllib.request.urlretrieve(mirror, part_path)
+                if part_path.stat().st_size == 0:
+                    raise OSError('下载结果为空文件')
+                # 校验通过才替换正式文件
+                os.replace(part_path, out_path)
+                print(f'  OK ({out_path.stat().st_size // 1024}KB)', flush=True)
+                return True
+            except Exception as e:  # 网络抖动/CDN 限流：换镜像重试
+                print(f'  重试 {attempt}/{retries} [{mirror}]: {e}')
+                if part_path.exists():
+                    try:
+                        part_path.unlink()
+                    except OSError:
+                        pass
+        if attempt < retries:
+            time.sleep(3 * attempt)
     return False
 
 
