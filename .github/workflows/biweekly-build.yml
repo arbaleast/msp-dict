@@ -31,7 +31,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests pytest
+        run: pip install --upgrade pip pytest requests pypinyin
 
       - name: Run tests
         run: python -m pytest tests -q

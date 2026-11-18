@@ -172,12 +172,10 @@ class TestUpdateFlow:
         dat, rc = self._run_update(tmp_path, ['hello-world'], monkeypatch)
         assert rc == 0
 
+        # 无论 pypinyin 是否可用，解析不了的词条都必须落盘（不能静默丢弃）
         unresolved = tmp_path / 'unresolved.txt'
-        if pypinyin_available():
-            assert unresolved.exists()
-            assert 'hello-world' in unresolved.read_text('utf-8')
-        else:
-            assert not unresolved.exists()
+        assert unresolved.exists()
+        assert 'hello-world' in unresolved.read_text('utf-8')
 
         from src.parser import MSPinyinParser
         parser = MSPinyinParser()
