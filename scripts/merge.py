@@ -3,12 +3,12 @@
 合并 Rime 词库与扩展词源，输出按来源分层的全量文本 msp_full.txt。
 
 基础源（必需）:
-  rime-ice / rime-frost（cache/rime-*.txt）
+  rime-ice / rime-frost（.cache/rime-*.txt）
 
 扩展源（可选，缺失只告警）:
-  萌娘百科  cache/ext-moegirl.dict.yaml
-  中文维基  cache/ext-zhwiki.dict.yaml
-  搜狗 SCEL cache/scel/*.scel（需自行准备，解析复用 crawler/scel_parser.py）
+  萌娘百科  .cache/ext-moegirl.dict.yaml
+  中文维基  .cache/ext-zhwiki.dict.yaml
+  搜狗 SCEL .cache/scel/*.scel（需自行准备，解析复用 crawler/scel_parser.py）
 
 规则:
   * 同一词条保留最高词频；已有拼音优先于空拼音；基础源优先于扩展源
@@ -18,10 +18,11 @@
     （按「基础源单字热度」打分降序），三档构建据此做配额截断
 
 用法:
-    python scripts/merge.py                       # 读 cache/，写 msp_full.txt + CHANGELOG.md
+    python scripts/merge.py                       # 读 .cache/，写 .tmp/msp_full.txt + 根目录 CHANGELOG.md
     python scripts/merge.py --no-extended         # 只合并基础源
     python scripts/merge.py --strict-ext          # 扩展源缺失也视为失败（CI 可选）
     python scripts/merge.py --emit-freq-tiers     # 额外输出旧的 msp_freq*.txt（仅调试用）
+    python scripts/merge.py --output . --changelog CHANGELOG.md   # CI：产物落当前目录
 """
 
 import argparse
@@ -500,7 +501,7 @@ def write_freq_tiers(merged, output_dir: Path) -> None:
 
 
 def write_changelog(merged, usable_count, no_pinyin_count, source_counts,
-                    output_dir: Path, ext_stats=None, ext_counts=None):
+                    changelog_path: Path, ext_stats=None, ext_counts=None):
     ext_stats = ext_stats or {}
     ext_counts = ext_counts or {}
     by_source = {}
@@ -515,7 +516,7 @@ def write_changelog(merged, usable_count, no_pinyin_count, source_counts,
     def src_total(file_list):
         return sum(source_counts.get(f, 0) for f in file_list)
 
-    with open(output_dir / 'CHANGELOG.md', 'w', encoding='utf-8') as f:
+    with open(changelog_path, 'w', encoding='utf-8') as f:
         f.write('## 词库统计\n\n')
         f.write('| 指标 | 数值 |\n')
         f.write('|------|------|\n')
@@ -596,8 +597,10 @@ def load_extended(cache_dir: Path, strict: bool):
 
 def main() -> int:
     parser = argparse.ArgumentParser(description='合并 Rime 词库为 msp_full.txt')
-    parser.add_argument('--cache', default=str(ROOT / 'cache'), help='缓存目录')
-    parser.add_argument('--output', default=str(ROOT), help='输出目录')
+    parser.add_argument('--cache', default=str(ROOT / '.cache'), help='缓存目录')
+    parser.add_argument('--output', default=str(ROOT / '.tmp'), help='输出目录（默认 .tmp/，不落仓库根）')
+    parser.add_argument('--changelog', default=str(ROOT / 'CHANGELOG.md'),
+                        help='CHANGELOG 输出路径（默认仓库根 CHANGELOG.md）')
     parser.add_argument('--emit-freq-tiers', action='store_true',
                         help='额外输出旧的 msp_freq*.txt（仅调试用）')
     parser.add_argument('--no-extended', action='store_true',
@@ -609,6 +612,8 @@ def main() -> int:
     cache_dir = Path(args.cache)
     output_dir = Path(args.output)
     output_dir.mkdir(parents=True, exist_ok=True)
+    changelog_path = Path(args.changelog)
+    changelog_path.parent.mkdir(parents=True, exist_ok=True)
 
     if not cache_dir.is_dir():
         print(f'错误: 缓存目录不存在: {cache_dir}\n'
@@ -689,9 +694,9 @@ def main() -> int:
     if args.emit_freq_tiers:
         write_freq_tiers(merged, output_dir)
 
-    write_changelog(merged, usable_count, no_pinyin, source_counts, output_dir,
+    write_changelog(merged, usable_count, no_pinyin, source_counts, changelog_path,
                     ext_stats, ext_counts)
-    print('CHANGELOG.md 已生成')
+    print(f'CHANGELOG 已生成: {changelog_path}')
 
     used_extended = [name for name, _, _ in EXTENDED_FILES]
     used_extended += [p.name for p in sorted(cache_dir.glob(SCEL_GLOB))]

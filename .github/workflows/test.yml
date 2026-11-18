@@ -5,6 +5,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+# 源码树不写 __pycache__
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+
 jobs:
   test:
     name: pytest (${{ matrix.os }})

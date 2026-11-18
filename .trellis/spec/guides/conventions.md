@@ -27,6 +27,7 @@
 
 ## 文件落点
 
-- 构建/调试产物进 `.tmp/`（已 gitignore）；发布产物进 `dist/`（已 gitignore）。
-- 不提交 `.dat`、`msp_*.txt`、`build_summary.json`、`scale_samples/`。
+- 构建/调试产物进 `.tmp/`（含 `.tmp/dist/` 发布暂存）；持久缓存（词源/pytest/sogou）进 `.cache/`。
+- 仓库根与源码树不落生成物；唯一例外是 `CHANGELOG.md`（由 `merge.py` 刷新）。
+- 不提交 `.dat`、`msp_*.txt`、`build_summary.json`、`scale_samples/`（均已在 `.gitignore`）。
 - 长文放 `docs/`，README 只保留用户需要的最短路径与统计块。

@@ -44,4 +44,4 @@ python -m pytest tests/test_builder_format.py -q
 
 - `pytest tests -q` 全绿且用例数不减少（新增行为必须新增用例）。
 - 新用例在修复前实现上确实失败（红），修复后通过（绿）。
-- 测试不依赖网络、不依赖 `cache/` 是否存在。
+- 测试不依赖网络、不依赖 `.cache/` 是否存在。

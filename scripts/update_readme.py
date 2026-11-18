@@ -3,8 +3,8 @@
 自动更新 README.md 的构建统计（CI 在 build_releases.py 之后运行）。
 
 数据来源:
-  1. build_summary.json（首选，由 scripts/build_releases.py 生成）
-  2. 退回直接解析 msp_*.dat
+  1. build_summary.json（首选；仓库根缺失时回退 .tmp/dist/build_summary.json）
+  2. 退回直接解析 msp_*.dat（仓库根优先，其次 .tmp/dist/）
 
 更新内容:
   * <!-- STATS:START --> ... <!-- STATS:END --> 之间的四档下载表
@@ -50,10 +50,20 @@ def format_size(size_bytes: int) -> str:
 
 
 def load_stats(root: Path) -> dict:
-    """返回 {文件名: {'count': int, 'size': int}}。"""
-    summary_path = root / 'build_summary.json'
+    """返回 {文件名: {'count': int, 'size': int}}。
+
+    优先读仓库根的 build_summary.json；本地默认构建写的是
+    .tmp/dist/build_summary.json，因此按顺序回退。
+    """
+    summary_path = None
+    for candidate in (root / 'build_summary.json',
+                      root / '.tmp' / 'dist' / 'build_summary.json'):
+        if candidate.exists():
+            summary_path = candidate
+            break
+
     stats = {}
-    if summary_path.exists():
+    if summary_path is not None:
         summary = json.loads(summary_path.read_text(encoding='utf-8'))
         for item in summary.get('profiles', []):
             stats[item['file']] = {'count': item['entries'], 'size': item['size_bytes']}
@@ -61,9 +71,10 @@ def load_stats(root: Path) -> dict:
             stats['msp_win10.dat'] = dict(stats['msp_lite.dat'])
         return stats
 
+    search_dirs = [root, root / '.tmp' / 'dist']
     for filename in ['msp_lite.dat', 'msp_standard.dat', 'msp_full.dat', 'msp_win10.dat']:
-        path = root / filename
-        if not path.exists():
+        path = next((d / filename for d in search_dirs if (d / filename).exists()), None)
+        if path is None:
             continue
         count = None
         if MSPinyinParser:

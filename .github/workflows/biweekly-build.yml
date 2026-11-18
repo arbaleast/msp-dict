@@ -11,6 +11,10 @@ on:
     - cron: '17 12 1 * *'
   workflow_dispatch:  # 也可手动触发
 
+# 源码树不写 __pycache__（CI 产物只落运行器工作目录，不污染仓库）
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+
 # 同一时间只跑一个构建，避免两个延迟任务并发 push 同一分支
 concurrency:
   group: biweekly-build
@@ -47,14 +51,15 @@ jobs:
       - name: Merge RIME sources
         run: |
           echo "=== 合并词库（剔除无拼音的纯词频表） ==="
-          python scripts/merge.py
+          python scripts/merge.py --output .
 
       - name: Build release DAT files (lite / standard / full + canary)
         run: |
           echo "=== 构建三档词库 ==="
-          python scripts/build_releases.py --input msp_full.txt
+          python scripts/build_releases.py --input msp_full.txt --output-dir . \
+            --summary build_summary.json
           echo "=== 构建带诊断探针的独立产物（正式词库不受影响） ==="
-          python scripts/build_releases.py --input msp_full.txt --profiles lite \
+          python scripts/build_releases.py --input msp_full.txt --output-dir . --profiles lite \
             --with-canary --canary-only --summary build_summary_canary.json
 
       - name: Validate DAT files

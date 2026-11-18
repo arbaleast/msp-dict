@@ -3,30 +3,33 @@
 ## 数据流
 
 ```
-cache/rime-*.txt（基础源，CI 下载或本地 scripts/download_frost.py）
-cache/ext-*.dict.yaml + cache/scel/*.scel（扩展源，可选）
+.cache/rime-*.txt（基础源，CI 下载或本地 scripts/download_frost.py）
+.cache/ext-*.dict.yaml + .cache/scel/*.scel（扩展源，可选）
         │  scripts/merge.py（强过滤 + 基础源优先去重 + 来源列）
         ▼
-msp_full.txt（词条\t拼音\t词频\t来源；基础源在前按词频降序，扩展源在后）
+.tmp/msp_full.txt（词条\t拼音\t词频\t来源；基础源在前按词频降序，扩展源在后）
         │  scripts/build_releases.py
         ▼
-msp_lite.dat / msp_standard.dat / msp_full.dat / msp_win10.dat
-+ build_summary.json（词条数、大小、清洗统计、校验结果）
-        │  scripts/update_readme.py
+.tmp/dist/msp_lite.dat / msp_standard.dat / msp_full.dat / msp_win10.dat
++ .tmp/dist/build_summary.json（词条数、大小、清洗统计、校验结果）
+        │  scripts/update_readme.py（根缺失时回退 .tmp/dist/build_summary.json）
         ▼
 README.md 的 <!-- STATS:START --> 区块 + BUILD_DATE
 ```
+
+> 落点规则：词源缓存只进 `.cache/`（持久，不受 7 天清理影响）；构建/调试产物只进 `.tmp/`。
+> 仓库根与源码树不生成散落文件；`CHANGELOG.md` 是唯一保留在根的生成物。
 
 ## 脚本契约
 
 | 脚本 | 输入 | 输出 | 关键约束 |
 |---|---|---|---|
-| `download_frost.py` | rime-ice / rime-frost + 扩展源 release | `cache/rime-*.txt`、`cache/ext-*.dict.yaml` | 基础源缺失即失败；扩展源失败只告警（`--strict-ext` 可收紧）；`cache/` 不入库 |
-| `merge.py` | `cache/rime-*.txt` + `cache/ext-*` | `msp_full.txt`、`CHANGELOG.md` | 基础源缺失直接失败；扩展源强过滤（纯中文、2~6 字、拼音合法）；同词基础源优先；无拼音/词频<1 剔除并计数 |
-| `build_releases.py` | `msp_full.txt` | 4 个 DAT + `build_summary.json` | 逐档 validate，非 0 退出阻断；`msp_win10.dat` 必须是 lite 的字节副本 |
-| `make_scale_samples.py` | `msp_full.txt` | `scale_samples/` | 仅用于压测不同规模的构建/解析/校验，不随 Release 发布 |
-| `update_readme.py` | `build_summary.json` | README 统计块 | 无数据时不得瞎改；统计块标记必须保留 |
-| `build_releases.py --with-canary` | `msp_full.txt` | `msp_<profile>_canary.dat` + `.json` | 独立产物，绝不覆盖正式 DAT；需有词条上限的档位 |
+| `download_frost.py` | rime-ice / rime-frost + 扩展源 release | `.cache/rime-*.txt`、`.cache/ext-*.dict.yaml` | 基础源缺失即失败；扩展源失败只告警（`--strict-ext` 可收紧）；`.cache/` 不入库 |
+| `merge.py` | `.cache/rime-*.txt` + `.cache/ext-*` | `.tmp/msp_full.txt`、根 `CHANGELOG.md` | 基础源缺失直接失败；扩展源强过滤（纯中文、2~6 字、拼音合法）；同词基础源优先；无拼音/词频<1 剔除并计数 |
+| `build_releases.py` | `.tmp/msp_full.txt` | `.tmp/dist/` 下 4 个 DAT + `build_summary.json` | 逐档 validate，非 0 退出阻断；`msp_win10.dat` 必须是 lite 的字节副本 |
+| `make_scale_samples.py` | `.tmp/msp_full.txt` | `.tmp/scale_samples/` | 仅用于压测不同规模的构建/解析/校验，不随 Release 发布 |
+| `update_readme.py` | `build_summary.json`（根优先，回退 `.tmp/dist/`） | README 统计块 | 无数据时不得瞎改；统计块标记必须保留 |
+| `build_releases.py --with-canary` | `.tmp/msp_full.txt` | `msp_<profile>_canary.dat` + `.json` | 独立产物，绝不覆盖正式 DAT；需有词条上限的档位 |
 
 ## 档位参数（`src/profiles.py`，改这里即改发布策略）
 
@@ -44,8 +47,12 @@ README.md 的 <!-- STATS:START --> 区块 + BUILD_DATE
 ## CI（`.github/workflows/`）
 
 - `test.yml`：push/PR 触发，ubuntu-latest + windows-latest 矩阵跑 `pytest tests`。
-- `biweekly-build.yml`：每月 1/15 日 03:30 UTC，也可 `workflow_dispatch` 手动触发。
+- `biweekly-build.yml`：每月 1 日两个时段，也可 `workflow_dispatch` 手动触发。
   顺序：测试 → 下载源 → merge → build → validate → **upload-artifact** → 更新 README → 提交 → 创建 Release。
+- 构建步骤显式传参覆盖本地默认值：`merge.py --output .`、
+  `build_releases.py --input msp_full.txt --output-dir . --summary build_summary.json`
+  （Canary 步骤同步带 `--output-dir .`），保证后续 validate / upload / Release 无需改路径。
+- 两个 workflow 顶层都设 `PYTHONDONTWRITEBYTECODE: '1'`，运行器上也不产生 `__pycache__`。
 - 发布资产固定为 4 个 DAT；Actions artifact 保留 30 天，Release 永久。
 - 工作流只提交 `README.md` 与 `CHANGELOG.md`，禁止 `git add` 被 gitignore 的产物。
 
@@ -58,7 +65,8 @@ README.md 的 <!-- STATS:START --> 区块 + BUILD_DATE
 
 ## 质量门
 
-- 本地演练：`python scripts/download_frost.py && python scripts/merge.py && python scripts/build_releases.py && python -m src.cli validate msp_lite.dat`。
+- 本地演练：`python scripts/download_frost.py && python scripts/merge.py && python scripts/build_releases.py && python -m src.cli validate .tmp/dist/msp_lite.dat`。
 - `scripts/` 只保留这 5 个正式脚本；一次性排障脚本不进仓库。
+- 默认输出不落仓库根与源码树；`python -m pytest tests -q` 后 `find src scripts crawler tests -name __pycache__` 必须为空。
 - 产物名、词条数、体积与 README 统计块一致（允许 CI 自动刷新后略有差异）。
 - 工作流 YAML 可被 `yaml.safe_load` 解析；步骤失败必须让 job 失败，不得 `|| true` 吞掉。

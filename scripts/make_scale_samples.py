@@ -5,12 +5,13 @@
 不含任何清洗之外的选词策略：直接取全量词库中词频最高的前 N 条，
 保留单字与长词的真实占比，用来观察不同规模下构建、解析、校验的耗时与内存。
 
-输出（默认 scale_samples/）:
+输出（默认 .tmp/scale_samples/）:
     msp_scale_10000.dat ...
     scale_report.json          每个包的词条数/大小/词频分位数/单字占比/长词占比
 
 用法:
-    python scripts/make_scale_samples.py --input msp_full.txt
+    python scripts/make_scale_samples.py
+    python scripts/make_scale_samples.py --input .tmp/msp_full.txt --output-dir .tmp/scale_samples
     python scripts/make_scale_samples.py --sizes 10000,30000,50000,100000
 """
 
@@ -87,8 +88,8 @@ def build_sample(source: Path, size: int, output_dir: Path, timestamp: int) -> d
 
 def main() -> int:
     parser = argparse.ArgumentParser(description='生成梯度规模测试包')
-    parser.add_argument('--input', default=str(ROOT / 'msp_full.txt'))
-    parser.add_argument('--output-dir', default=str(ROOT / 'scale_samples'))
+    parser.add_argument('--input', default=str(ROOT / '.tmp' / 'msp_full.txt'))
+    parser.add_argument('--output-dir', default=str(ROOT / '.tmp' / 'scale_samples'))
     parser.add_argument('--sizes', default='10000,30000,50000,100000')
     parser.add_argument('--timestamp', type=int, default=0)
     args = parser.parse_args()

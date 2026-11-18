@@ -37,21 +37,21 @@ Canary 构建把两条**可辨识的探针**写进词库的首尾区域，导入
 
 ```bash
 # 方式一：发布脚本（同时生成 msp_lite_canary.dat + msp_lite_canary.json）
-python scripts/build_releases.py --input msp_full.txt --profiles lite --with-canary
+python scripts/build_releases.py --input .tmp/msp_full.txt --profiles lite --with-canary
 
 # 只生成 Canary，不重新构建正式三档（CI 用这个，更快）
-python scripts/build_releases.py --input msp_full.txt --profiles lite \
+python scripts/build_releases.py --input .tmp/msp_full.txt --profiles lite \
   --with-canary --canary-only --summary build_summary_canary.json
 
 # 方式二：单文件构建
-python -m src.cli build msp_full.txt -o msp_lite_canary.dat \
-  --profile lite --with-canary --manifest msp_lite_canary.json
+python -m src.cli build .tmp/msp_full.txt -o .tmp/msp_lite_canary.dat \
+  --profile lite --with-canary --manifest .tmp/msp_lite_canary.json
 ```
 
 自定义探针（`--canary-pinyin` 与 `--canary-word` 必须成对、可重复）：
 
 ```bash
-python -m src.cli build msp_full.txt -o probe.dat --profile lite --with-canary \
+python -m src.cli build .tmp/msp_full.txt -o .tmp/probe.dat --profile lite --with-canary \
   --canary-pinyin cikutanzhen --canary-word 词库探针已生效 \
   --canary-pinyin zuiweitan  --canary-word 词库尾部已生效
 ```

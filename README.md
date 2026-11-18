@@ -186,10 +186,10 @@ pip install -e ".[crawler]"      # 额外装 pypinyin / python-dotenv，用于�
 ### 完整构建流水线
 
 ```bash
-python scripts/download_frost.py --retries 5     # 下载源词库到 cache/（约 140MB，cache/ 不入库）
-python scripts/merge.py                          # 合并清洗 -> msp_full.txt
-python scripts/build_releases.py --input msp_full.txt   # 生成三档 .dat 与 build_summary.json
-python -m src.cli validate msp_lite.dat          # 校验产物
+python scripts/download_frost.py --retries 5     # 下载源词库到 .cache/（约 140MB，不入库）
+python scripts/merge.py                          # 合并清洗 -> .tmp/msp_full.txt
+python scripts/build_releases.py                 # 生成三档 .dat 到 .tmp/dist/ 与 build_summary.json
+python -m src.cli validate .tmp/dist/msp_lite.dat   # 校验产物
 ```
 
 脚本的完整参数说明见 [开发与构建指南](docs/DEVELOPMENT.md)。
@@ -201,7 +201,7 @@ python -m src.cli validate msp_lite.dat          # 校验产物
 ```bash
 python -m src.cli import msp_lite.dat words.txt   # words.txt: 词条<TAB>拼音<TAB>词频
 python -m src.cli export msp_lite.dat -f csv -o words.csv
-python -m crawler.cli update --all --mspinyin output/my_words.dat
+python -m crawler.cli update --all --mspinyin .tmp/my_words.dat
 ```
 
 `crawler.cli update` 会抓取网络热词并用 `pypinyin` 自动补拼音；补不出来的词写入
@@ -213,8 +213,8 @@ python -m crawler.cli update --all --mspinyin output/my_words.dat
 到底有没有加载成功、尾部有没有被截断：
 
 ```bash
-python scripts/build_releases.py --input msp_full.txt --profiles lite --with-canary
-python -m src.cli check-canary msp_lite_canary.dat --manifest msp_lite_canary.json
+python scripts/build_releases.py --input .tmp/msp_full.txt --profiles lite --with-canary
+python -m src.cli check-canary .tmp/dist/msp_lite_canary.dat --manifest .tmp/dist/msp_lite_canary.json
 ```
 
 探针原理、四维输出与实机闭环步骤见 [Canary 探针测试](docs/CANARY_TESTING.md)。

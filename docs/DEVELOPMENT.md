@@ -25,27 +25,31 @@ pip install -e ".[crawler]"       # 需要跑爬虫时（额外装 python-dotenv
 ## 完整构建流程
 
 ```bash
-# 0) 下载源词库到 cache/（cache/ 不入库，新克隆必须先跑一次，约 140MB）
+# 0) 下载源词库到 .cache/（.cache/ 不入库，新克隆必须先跑一次，约 140MB）
 python scripts/download_frost.py
 
-# 1) 合并 -> msp_full.txt（缺失源文件会直接报错，不再静默产出残缺词库）
+# 1) 合并 -> .tmp/msp_full.txt + 根目录 CHANGELOG.md（缺失源文件会直接报错，不再静默产出残缺词库）
 python scripts/merge.py
 
-# 2) 三档构建（含 msp_win10.dat 兼容副本与 build_summary.json）
-python scripts/build_releases.py --input msp_full.txt
+# 2) 三档构建（产物默认 .tmp/dist/，含 msp_win10.dat 兼容副本与 build_summary.json）
+python scripts/build_releases.py
 
 # 3) 校验
-python -m src.cli validate msp_lite.dat
+python -m src.cli validate .tmp/dist/msp_lite.dat
 
-# 可选：梯度测试包（1w / 3w / 5w / 10w，用于压测构建/解析/校验，观察耗时与内存）
-python scripts/make_scale_samples.py --input msp_full.txt
+# 可选：梯度测试包（默认 .tmp/scale_samples/，用于压测构建/解析/校验，观察耗时与内存）
+python scripts/make_scale_samples.py
 
 # 测试（CI 使用同一命令，ubuntu + windows 矩阵）
 python -m pytest tests -q
 ```
 
-`python scripts/update_readme.py` 会用 `build_summary.json` 刷新 README 的词条数与大小，
-CI 在每次构建后自动执行；本地也可以手动跑，脚本是幂等的。
+`python scripts/update_readme.py` 会优先读仓库根的 `build_summary.json`，缺失时自动回退
+`.tmp/dist/build_summary.json`，刷新 README 的词条数与大小；CI 在每次构建后自动执行，
+本地也可以手动跑，脚本是幂等的。
+
+**产物落点**：词源缓存 → `.cache/`；构建/调试产物 → `.tmp/`（DAT 在 `.tmp/dist/`）。
+仓库根与源码树不生成散落文件；`.cache/` 与 `.tmp/` 均已在 `.gitignore` 中。
 
 ## 脚本参数速查
 
@@ -54,7 +58,7 @@ CI 在每次构建后自动执行；本地也可以手动跑，脚本是幂等�
 
 | 参数 | 默认 | 说明 |
 |---|---|---|
-| `--cache` | `./cache` | 缓存目录 |
+| `--cache` | `./.cache` | 缓存目录 |
 | `--force` | 关 | 已存在也重新下载 |
 | `--retries` | `3` | 单个文件的下载重试次数（每轮轮换镜像） |
 | `--no-extended` | 关 | 不下载扩展源（萌娘/维基） |
@@ -71,8 +75,9 @@ CI 在每次构建后自动执行；本地也可以手动跑，脚本是幂等�
 
 | 参数 | 默认 | 说明 |
 |---|---|---|
-| `--cache` | `./cache` | 缓存目录（不存在直接报错） |
-| `--output` | 仓库根 | 输出目录，生成 `msp_full.txt` / `CHANGELOG.md` / `msp_full.meta.json` |
+| `--cache` | `./.cache` | 缓存目录（不存在直接报错） |
+| `--output` | `./.tmp` | 输出目录，生成 `msp_full.txt` / `msp_full.meta.json` |
+| `--changelog` | `./CHANGELOG.md` | CHANGELOG 输出路径（保留写仓库根） |
 | `--emit-freq-tiers` | 关 | 额外输出旧的 `msp_freq*.txt`（仅调试用） |
 | `--no-extended` | 关 | 不合并扩展源 |
 | `--strict-ext` | 关 | 扩展源缺失时直接失败 |
@@ -84,11 +89,11 @@ CI 在每次构建后自动执行；本地也可以手动跑，脚本是幂等�
 
 | 参数 | 默认 | 说明 |
 |---|---|---|
-| `--input` | `msp_full.txt` | 合并后的文本词库 |
-| `--output-dir` | 仓库根 | 产物目录 |
+| `--input` | `.tmp/msp_full.txt` | 合并后的文本词库 |
+| `--output-dir` | `.tmp/dist` | 产物目录（仓库根不落产物） |
 | `--profiles` | `lite,standard,full` | 要构建的档位 |
 | `--timestamp` | `0`（用当前时间） | 固定时间戳以获得可复现产物 |
-| `--summary` | `build_summary.json` | 构建摘要输出路径 |
+| `--summary` | `build_summary.json` | 构建摘要文件名（相对 `--output-dir`） |
 | `--with-canary` | 关 | 额外生成 `<profile>_canary.dat` + `.json` |
 | `--canary-only` | 关 | 只生成 Canary（必须配合 `--with-canary`） |
 | `--canary-pinyin` / `--canary-word` | 默认探针 | 成对使用、可重复 |
@@ -100,8 +105,8 @@ CI 在每次构建后自动执行；本地也可以手动跑，脚本是幂等�
 
 | 参数 | 默认 | 说明 |
 |---|---|---|
-| `--input` | `msp_full.txt` | 合并后的文本词库 |
-| `--output-dir` | `./scale_samples` | 梯度样本输出目录 |
+| `--input` | `.tmp/msp_full.txt` | 合并后的文本词库 |
+| `--output-dir` | `.tmp/scale_samples` | 梯度样本输出目录 |
 | `--sizes` | `10000,30000,50000,100000` | 各档条数 |
 | `--timestamp` | `0` | 固定时间戳 |
 
@@ -148,10 +153,10 @@ pip install -e ".[crawler]"
 
 ```bash
 # 抓取所有源并写入词库（拼音自动补全）
-python -m crawler.cli update --all --mspinyin output/my_words.dat
+python -m crawler.cli update --all --mspinyin .tmp/my_words.dat
 
 # 只抓某几个源
-python -m crawler.cli update --wikipedia --moegirl --mspinyin output/my_words.dat
+python -m crawler.cli update --wikipedia --moegirl --mspinyin .tmp/my_words.dat
 
 # 常用参数
 #   --limit N        每个数据源抓取数量（默认 100）
@@ -199,7 +204,7 @@ Header: 64 字节（mschxudp + 版本 + 偏移表位置 + 词条数 + 时间戳�
 
 | 元数据文件 | 由谁生成 | 内容 |
 |---|---|---|
-| `cache/sources_metadata.json` | `scripts/download_frost.py` | 每个下载源的 URL / 状态 / 时间 / 大小 / **SHA-256** |
+| `.cache/sources_metadata.json` | `scripts/download_frost.py` | 每个下载源的 URL / 状态 / 时间 / 大小 / **SHA-256** |
 | `msp_full.meta.json` | `scripts/merge.py` | 基础源与扩展源各自的 SHA-256、合并条数、可写入条数、产物 SHA-256 |
 | `<输出名>.meta.json` | `crawler/pipeline.py` | 采集输出的条目数与 SHA-256、各数据源贡献条数 |
 | `SHA256SUMS` | CI | 四个 Release 产物的 SHA-256 清单 |
@@ -227,6 +232,8 @@ msp-dict/
 ├── .github/workflows/
 │   ├── biweekly-build.yml     # 每月构建、校验、发布（含 Canary 检查与滚动清理）
 │   └── test.yml               # ubuntu + windows 测试矩阵
+├── .cache/                    # 持久缓存：词源 / sogou / pytest（gitignore，不随 .tmp 清理）
+├── .tmp/                      # 本地构建与调试产物：msp_full.txt、dist/、scale_samples/（gitignore）
 ├── src/                       # 核心库（只有库代码，无测试）
 │   ├── format_spec.py         # mschxudp 规范常量与字段校验（唯一事实来源）
 │   ├── parser.py              # 解析器（strict 模式区分格式错误与损坏）
@@ -240,8 +247,8 @@ msp-dict/
 │   ├── importer.py            # 导入 txt / csv / Rime（拼音必填）
 │   └── cli.py                 # 命令行入口
 ├── scripts/                   # 正式流水线脚本（5 个）
-│   ├── download_frost.py      # 下载 rime-ice / rime-frost / 扩展源到 cache/（三镜像回退）
-│   ├── merge.py               # 合并 Rime 源 -> msp_full.txt（保留多音字各读音）
+│   ├── download_frost.py      # 下载 rime-ice / rime-frost / 扩展源到 .cache/（三镜像回退）
+│   ├── merge.py               # 合并 Rime 源 -> .tmp/msp_full.txt（保留多音字各读音）
 │   ├── build_releases.py      # 三档 DAT + 兼容副本 + Canary + 构建摘要
 │   ├── make_scale_samples.py  # 1w/3w/5w/10w 梯度测试包
 │   └── update_readme.py       # 自动刷新 README 统计

@@ -2,17 +2,19 @@
 """
 构建三档发布词库（Issue #3）
 
-从合并后的全量文本（默认 msp_full.txt，按词频降序）生成：
+从合并后的全量文本（默认 .tmp/msp_full.txt，按词频降序）生成：
 
     msp_lite.dat      核心主力档，≤ 200,000 条，剔除单字/长句
     msp_standard.dat  全能进阶档，≤ 800,000 条
     msp_full.dat      全量档，不截断（仅存档/转其他输入法）
 
 并复制一份 msp_win10.dat 指向精简版，兼容旧下载链接。
+产物默认写入 .tmp/dist/，不在仓库根生成散落文件。
 
 用法:
-    python scripts/build_releases.py --input msp_full.txt
-    python scripts/build_releases.py --input msp_full.txt --output-dir dist
+    python scripts/build_releases.py
+    python scripts/build_releases.py --input .tmp/msp_full.txt --output-dir .tmp/dist
+    python scripts/build_releases.py --output-dir . --summary build_summary.json   # CI
 """
 
 import argparse
@@ -168,16 +170,16 @@ def build_canary(profile_name: str, source: Path, output_dir: Path,
 
 def main() -> int:
     parser = argparse.ArgumentParser(description='构建 lite/standard/full 三档词库')
-    parser.add_argument('--input', default=str(ROOT / 'msp_full.txt'),
+    parser.add_argument('--input', default=str(ROOT / '.tmp' / 'msp_full.txt'),
                         help='合并后的全量文本（词条\\t拼音\\t词频，按词频降序）')
-    parser.add_argument('--output-dir', default=str(ROOT),
-                        help='输出目录')
+    parser.add_argument('--output-dir', default=str(ROOT / '.tmp' / 'dist'),
+                        help='输出目录（默认 .tmp/dist/）')
     parser.add_argument('--profiles', default='lite,standard,full',
                         help='要构建的档位，逗号分隔')
     parser.add_argument('--timestamp', type=int, default=0,
                         help='写入文件头的 Unix 时间戳（0 = 当前时间）')
     parser.add_argument('--summary', default='build_summary.json',
-                        help='构建摘要 JSON 文件名')
+                        help='构建摘要 JSON 文件名（相对 --output-dir）')
     parser.add_argument('--with-canary', action='store_true',
                         help='额外生成带诊断探针的独立产物（msp_<profile>_canary.dat + .json），'
                              '正式产物不受影响')

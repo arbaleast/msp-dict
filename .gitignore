@@ -5,13 +5,6 @@ __pycache__/
 *.egg-info/
 dist/
 build/
-.pytest_cache/
-.coverage
-.coverage.*
-
-# 代码覆盖率报告（coverage.py，配置见 pyproject.toml [tool.coverage.*]）
-output/htmlcov/
-output/coverage.xml
 
 # 构建产物 - MSPinyin DAT 词库文件
 *.dat
@@ -19,17 +12,14 @@ output/coverage.xml
 !tests/fixtures/*.dat
 !tests/fixtures/*.scel
 
-# 词库源（CI/本地由 scripts/download_frost.py 下载，不入库）
-cache/
+# 持久缓存：词源 / sogou / pytest / coverage（CI 与本地共用）
+.cache/
 
 # 本机凭据（如 crawler 的 SOGOU_COOKIE），绝不提交
 .env
 
-# 抓取器下载缓存（CI 运行时自动下载）
-.cache/
-
-# 运行时输出
-output/
+# 本机临时产物：msp_full.txt、dist/、scale_samples/ 等（随时可清）
+.tmp/
 new_words*.txt
 crawl_output.txt
 
@@ -44,9 +34,8 @@ _debug_*
 _test_*
 _tmp/
 
-# 构建产物（三档 DAT 与合并文本，CI 生成、不提交）
+# 构建产物（CI 在仓库根生成、不提交）
 msp_*.txt
 msp_*.dat
 build_summary.json
 scale_samples/
-.tmp/

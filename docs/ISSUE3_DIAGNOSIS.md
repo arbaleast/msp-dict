@@ -46,7 +46,7 @@
 
 ### 旧产物如何重建
 
-仓库不提交 `.dat`（`.gitignore` 排除），因此用 `cache/` 中的真实词库源
+仓库不提交 `.dat`（`.gitignore` 排除），因此用 `.cache/` 中的真实词库源
 + `git show 00aa6a0:src/builder_win10.py`（修复前构建器）重建：
 
 ```bash

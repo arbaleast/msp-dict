@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-下载 rime-ice / rime-frost 词库源到 cache/（scripts/merge.py 的输入）。
+下载 rime-ice / rime-frost 词库源到 .cache/（scripts/merge.py 的输入）。
 
-cache/ 不入库（见 .gitignore），新克隆的仓库必须先跑一次本脚本，
+.cache/ 不入库（见 .gitignore），新克隆的仓库必须先跑一次本脚本，
 再执行 scripts/merge.py 构建词库。下载清单与
 .github/workflows/biweekly-build.yml 保持一致。
 
 用法:
     python scripts/download_frost.py                 # 下载缺失文件
     python scripts/download_frost.py --force         # 重新下载全部
-    python scripts/download_frost.py --cache cache   # 指定缓存目录
+    python scripts/download_frost.py --cache .cache  # 指定缓存目录
 """
 
 import argparse
@@ -208,7 +208,7 @@ def describe_source(path: Path, url: str, status: str) -> dict:
 
 
 def write_source_metadata(cache_dir: Path, entries: List[dict]) -> Path:
-    """把词源溯源信息写入 cache/sources_metadata.json。
+    """把词源溯源信息写入 .cache/sources_metadata.json。
 
     每次下载都会刷新该文件，字段包含来源 URL、拉取时间、原始文件大小与
     SHA-256，保证上游动态数据可追溯。
@@ -252,8 +252,8 @@ def download_extended(cache_dir: Path, force: bool, retries: int,
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description='下载 rime-ice / rime-frost 词库源到 cache/')
-    parser.add_argument('--cache', default=str(ROOT / 'cache'), help='缓存目录')
+    parser = argparse.ArgumentParser(description='下载 rime-ice / rime-frost 词库源到 .cache/')
+    parser.add_argument('--cache', default=str(ROOT / '.cache'), help='缓存目录')
     parser.add_argument('--force', action='store_true', help='已存在也重新下载')
     parser.add_argument('--retries', type=int, default=3, help='单个文件的下载重试次数')
     parser.add_argument('--no-extended', action='store_true',
