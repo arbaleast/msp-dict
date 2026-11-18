@@ -113,7 +113,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG="v$(date -u +%Y.%m.%d)"
-          TITLE="$TAG — 微软拼音增强词库"
+          TITLE="$TAG"   # 标题只用日期，不加后缀
 
           TAG="$TAG" python - <<'PY'
           import json
