@@ -75,13 +75,6 @@ Windows 自带的微软拼音打不出新词、流行语、专业名词和 ACG �
 | msp_win10.dat | 199,580 | ~9 MB | 兼容副本（= msp_lite.dat） |
 <!-- STATS:END -->
 
-| 文件 | 什么时候用 |
-|---|---|
-| `msp_lite.dat` | **默认选这个。** 20 万条以内的高频词与核心专有名词，日常够用 |
-| `msp_standard.dat` | 需要更全的覆盖（80 万条以内），专有名词与百科实体更多 |
-| `msp_full.dat` | 用于存档，或转成 Rime / 小狼毫格式。**不要导入微软拼音** |
-| `msp_win10.dat` | 旧教程里的文件名，内容和 `msp_lite.dat` 完全一样 |
-
 <p align="right">(<a href="#readme-top">返回顶部</a>)</p>
 
 ---
