@@ -314,23 +314,41 @@ def test_recovery_doc_requires_backup_before_deletion():
     assert '绝对不要删除整个 `InputMethod` 目录' in text
 
 
-def test_readme_links_to_recovery_instead_of_inlining_it():
-    """README 保持极简：只留一句警告 + 一个链接，不内联恢复步骤。"""
+def test_readme_keeps_compact_cli_cleanup_and_links_full_recovery():
+    """README 保留命令行快速清理（含备份），但不内联完整恢复教程。"""
     readme = (ROOT / 'README.md').read_text(encoding='utf-8')
     assert 'docs/RECOVERY.md' in readme
-    # 备份命令与逐文件删除表必须待在 RECOVERY.md，不能回到 README
-    for inlined in ('xcopy', 'msp-backup', '第 2 步：清理异常词库文件'):
-        assert inlined not in readme, f'README 又内联了恢复细节: {inlined}'
-    # 但仍要保留「先备份、再动手」的提醒
-    assert '备份' in readme
+
+    # 命令行快速清理必须有：备份、结束进程、删除词库文件
+    for token in ('xcopy', 'msp-backup', 'taskkill', 'ChsPinyinUDP.lex'):
+        assert token in readme, f'README 缺少命令行清理要素: {token}'
+
+    # 备份必须排在删除之前
+    assert readme.index('xcopy') < readme.index('ChsPinyinUDP.lex')
+
+    # 完整教程（逐文件后果表、分步标题）仍须待在 RECOVERY.md
+    for inlined in ('第 2 步：清理异常词库文件', '第 0 步：必须先备份',
+                    'ChsPinyinDeletedCands.dat'):
+        assert inlined not in readme, f'README 又内联了完整恢复细节: {inlined}'
+
+    # 禁止建议删掉整个 InputMethod 目录
+    assert '不要删除整个 `InputMethod` 目录' in readme
 
 
-def test_readme_links_to_development_instead_of_inlining_it():
-    """开发者内容（安装/脚本参数/格式）必须外链到 docs/DEVELOPMENT.md。"""
+def test_readme_keeps_install_and_pipeline_commands_but_not_param_tables():
+    """README 保留安装与流水线命令，但参数速查表仍须留在 docs/DEVELOPMENT.md。"""
     readme = (ROOT / 'README.md').read_text(encoding='utf-8')
     assert 'docs/DEVELOPMENT.md' in readme
-    for inlined in ('pip install', '--with-canary', 'download_frost.py'):
-        assert inlined not in readme, f'README 又内联了开发者内容: {inlined}'
+
+    for token in ('pip install -e ".[test]"', 'pip install -e ".[crawler]"',
+                  'download_frost.py', 'merge.py', 'build_releases.py',
+                  'src.cli validate'):
+        assert token in readme, f'README 缺少使用命令: {token}'
+
+    # 脚本参数速查表属于 DEVELOPMENT.md，不应回流到 README
+    for inlined in ('--canary-only', '--extended-only', '--strict-ext',
+                    '--emit-freq-tiers', '参数速查'):
+        assert inlined not in readme, f'README 又内联了参数表: {inlined}'
 
 
 @pytest.mark.parametrize('relative', ['README.md', 'docs/DEVELOPMENT.md',

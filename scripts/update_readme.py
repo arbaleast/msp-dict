@@ -7,8 +7,9 @@
   2. 退回直接解析 msp_*.dat
 
 更新内容:
-  * <!-- STATS:START --> ... <!-- STATS:END --> 之间的三档下载表
-  * hero 文案与徽章里的「万条」数字
+  * <!-- STATS:START --> ... <!-- STATS:END --> 之间的四档下载表
+  * <!-- TAGLINE:START --> ... <!-- TAGLINE:END --> 之间的宣传语词条数
+  * 顶部徽章里的「万条」数字
   * <!-- BUILD_DATE: YYYY-MM-DD -->
 """
 
@@ -29,12 +30,14 @@ except ImportError:  # pragma: no cover
 
 STATS_START = '<!-- STATS:START -->'
 STATS_END = '<!-- STATS:END -->'
+TAGLINE_START = '<!-- TAGLINE:START -->'
+TAGLINE_END = '<!-- TAGLINE:END -->'
 
 SCENES = {
-    'msp_lite.dat': '核心主力档，日常使用首选',
-    'msp_standard.dat': '全能进阶档，覆盖更广',
-    'msp_full.dat': '全量档，仅供存档 / 转其他输入法',
-    'msp_win10.dat': '兼容旧链接（= msp_lite.dat）',
+    'msp_lite.dat': '日常高频主力档，日常使用首选',
+    'msp_standard.dat': '专业与百科扩充档，覆盖面更广',
+    'msp_full.dat': '全量归档档，用于存档 / 转其他输入法',
+    'msp_win10.dat': '兼容副本（= msp_lite.dat）',
 }
 
 
@@ -92,6 +95,15 @@ def render_stats_block(stats: dict) -> str:
     return '\n'.join(lines)
 
 
+def render_tagline_block(wan: int) -> str:
+    """生成居中头部的宣传语区块。"""
+    return '\n'.join([
+        TAGLINE_START,
+        f'<p><strong>{wan}万+</strong> 条有效词条 · 三档可选 · 每月自动更新</p>',
+        TAGLINE_END,
+    ])
+
+
 def update_readme(readme_path: Path, stats: dict) -> bool:
     if not readme_path.exists():
         print(f'ERROR: README.md 不存在: {readme_path}')
@@ -108,11 +120,10 @@ def update_readme(readme_path: Path, stats: dict) -> bool:
     full_count = stats.get('msp_full.dat', {}).get('count')
     if full_count:
         wan = full_count // 10000
-        content = re.sub(
-            r'> 让你的输入法更懂你——[^\n]*',
-            f'> 让你的输入法更懂你——{wan}万+ 条有效词条，三档可选，每月自动更新',
-            content,
-        )
+        if TAGLINE_START in content and TAGLINE_END in content:
+            start = content.index(TAGLINE_START)
+            end = content.index(TAGLINE_END) + len(TAGLINE_END)
+            content = content[:start] + render_tagline_block(wan) + content[end:]
         content = re.sub(
             r'\[!\[词条数\]\([^)]*\)\]\([^)]*\)',
             f'[![词条数](https://img.shields.io/badge/词条-{wan}万+-blue)]'
