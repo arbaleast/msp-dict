@@ -41,10 +41,10 @@ certutil -hashfile msp_lite.dat SHA256    # Windows
 <!-- STATS:START -->
 | 文件 | 词条数 | 大小 | 适用场景 |
 |:---|---:|---:|:---|
-| **msp_lite.dat** | 19,988 | 855 KB | 核心主力档，日常使用首选 |
-| msp_standard.dat | 48,986 | ~2 MB | 全能进阶档，覆盖更广 |
+| **msp_lite.dat** | 199,580 | ~9 MB | 核心主力档，日常使用首选 |
+| msp_standard.dat | 793,861 | ~41 MB | 全能进阶档，覆盖更广 |
 | msp_full.dat | 2,238,515 | ~118 MB | 全量档，仅供存档 / 转其他输入法 |
-| msp_win10.dat | 19,988 | 855 KB | 兼容旧链接（= msp_lite.dat） |
+| msp_win10.dat | 199,580 | ~9 MB | 兼容旧链接（= msp_lite.dat） |
 <!-- STATS:END -->
 
 | 文件 | 什么时候用 |
