@@ -287,7 +287,18 @@ def test_readme_recovery_section_requires_backup_before_deletion():
     assert 'msp-backup' in text
     assert 'xcopy' in text
     # 删除动作必须出现在备份步骤之后
-    assert text.index('msp-backup') < text.index('清理词库数据')
+    backup_at = text.index('msp-backup')
+    delete_at = text.index('第 2 步：清理异常词库文件')
+    assert backup_at < delete_at
+    # 备份章节之前必须有醒目的高危警告
+    warning_at = text.index('严重警告')
+    assert warning_at < backup_at
+    # 必须写明哪些文件会被删掉、删掉的后果，以及回滚方式
+    for token in ('ChsPinyinUDP.lex', 'ChsPinyinEUDL.dat', 'ChsPinyinUDL.dat',
+                  '自学习', '回滚'):
+        assert token in text, f'恢复指引缺少 {token}'
+    # 禁止建议删掉整个 InputMethod 目录
+    assert '绝对不要删除整个 `InputMethod` 目录' in text
 
 
 @pytest.mark.parametrize('relative', ['README.md', 'docs/CANARY_TESTING.md',
