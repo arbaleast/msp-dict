@@ -20,7 +20,7 @@ Windows 10/11 微软拼音 `mschxudp` 词库，下载即用。
 
 ### 📥 [下载最新词库](https://github.com/arbaleast/msp-dict/releases/latest)
 
-[快速开始](#快速开始) · [报告 Bug](https://github.com/arbaleast/msp-dict/issues/new?title=Bug%3A+) · [提出建议](https://github.com/arbaleast/msp-dict/issues/new?title=Feature%3A+)
+[快速开始](#快速开始) · [报告 Bug](https://github.com/arbaleast/msp-dict/issues/new?template=bug_report.yml) · [数据源问题](https://github.com/arbaleast/msp-dict/issues/new?template=data_source.yml) · [提出建议](https://github.com/arbaleast/msp-dict/issues/new?template=feature_request.yml)
 
 </div>
 

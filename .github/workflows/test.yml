@@ -31,7 +31,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: python -m pip install --upgrade pip pytest requests pypinyin
+        run: python -m pip install --upgrade pip pytest requests pypinyin pyyaml
 
       - name: Run pytest
         run: python -m pytest tests -q

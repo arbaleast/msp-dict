@@ -1,0 +1,127 @@
+name: Bug 报告
+description: 导入失败、词条不生效、词库文件异常等问题，请附上 validate 输出
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。这个表单会强制你贴出**可复现证据**，否则问题很难被定位。
+
+        - 先确认导入入口：必须是「词库和自学习 → 用户定义的短语 → 添加或编辑自定义短语 → 导入」，
+          **不要点同一页面上的「导入自学习词汇」**（后者要的是 `ChsPinyinUDL` 格式，文件头 `55AA8881`，
+          我们的文件是 `mschxudp`，文件头 `mschxudp`，点错必然报「文件格式错误或文件已损坏」）。
+        - 项目内置校验命令：`python -m src.cli validate <file.dat>`，退出码 `0` 通过、`2` 格式错误、`3` 文件损坏、`4` 内容违规。
+
+  - type: dropdown
+    id: edition
+    attributes:
+      label: 使用的词库档位
+      description: 选你实际导入的那个文件。不同档位条目数差别很大，问题往往与档位相关。
+      options:
+        - msp_lite.dat（日常高频主力档，约 20 万条）
+        - msp_standard.dat（专业与百科扩充档，约 80 万条）
+        - msp_full.dat（全量归档档，约 220 万条，仅供存档/转其他输入法）
+        - msp_win10.dat（兼容副本，内容等同 msp_lite.dat）
+        - 自行用 scripts/build_releases.py 构建
+        - 不确定 / 从别处拿到的文件
+    validations:
+      required: true
+
+  - type: textarea
+    id: validate_output
+    attributes:
+      label: validate 输出
+      description: |
+        在**下载到的那个 .dat 文件所在的目录**执行下面命令，把完整输出贴进来（不要只贴最后一行）：
+
+        ```
+        python -m src.cli validate msp_lite.dat
+        ```
+
+        想看机器可读格式可以加 `--json`。如果命令报 `ModuleNotFoundError`，请贴出完整报错原文。
+      placeholder: |
+        $ python -m src.cli validate msp_lite.dat
+        统计: 词条 199,580 条（成功解析 199,580 条）
+        结论: 格式合法，未发现阻断导入的问题
+        （把这里替换成你的真实输出）
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 从打开设置到出问题的每一步，写成可以照着做的编号列表。
+      placeholder: |
+        1. 下载 msp_lite.dat（Release v2026.11.18）
+        2. 设置 → 时间和语言 → 语言和区域 → 中文(简体) → 键盘选项 → 微软拼音
+        3. 点「词库和自学习」→「用户定义的短语」→「添加或编辑自定义短语」→「导入」
+        4. 选择 msp_lite.dat
+        5. 弹出「导入：失败（文件格式错误或文件已损坏）」
+    validations:
+      required: true
+
+  - type: input
+    id: expected
+    attributes:
+      label: 期望结果
+      description: 你以为会怎样。
+    validations:
+      required: true
+
+  - type: input
+    id: actual
+    attributes:
+      label: 实际结果
+      description: 实际看到了什么（报错原文、界面表现、是否转圈等）。
+    validations:
+      required: true
+
+  - type: input
+    id: os_version
+    attributes:
+      label: 操作系统版本
+      description: 例如 Windows 11 23H2 / Windows 10 22H2。运行 `winver` 可查。
+      placeholder: Windows 11 23H2
+    validations:
+      required: true
+
+  - type: input
+    id: msp_version
+    attributes:
+      label: 微软拼音版本
+      description: 设置 → 时间和语言 → 语言和区域 → 中文(简体)「…」→ 语言选项 → 微软拼音「…」→ 常规 里的版本号。
+      placeholder: 2.2.16.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: canary_output
+    attributes:
+      label: check-canary 输出（可选，但强烈建议）
+      description: |
+        如果你导入的是 Canary 探针词库，请把下面命令的完整输出贴上来，它会分四维核对
+        （结构 / 探针 / 清单 / 实机）：
+
+        ```
+        python -m src.cli check-canary msp_lite_canary.dat --manifest msp_lite_canary.json
+        ```
+
+        没有 Canary 文件就跳过本项。生成方法见 docs/CANARY_TESTING.md。
+      placeholder: |
+        $ python -m src.cli check-canary msp_lite_canary.dat --manifest msp_lite_canary.json
+        [STRUCT] PASS - ...
+        [CANARY] PASS - ...
+        [MANIFEST] PASS - ...
+        [WINDOWS] PENDING - 待实机验证
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: 其它信息（可选）
+      description: 截图、词条示例、复现用的输入拼音等。截图请直接拖进正文框。
+    validations:
+      required: false

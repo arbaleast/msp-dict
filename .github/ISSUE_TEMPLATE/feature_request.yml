@@ -1,0 +1,85 @@
+name: 功能请求
+description: 新档位、新词源、新校验能力、新的构建选项等
+title: "[功能]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        提新功能前先说明**它要解决什么实际问题**——我们更看重真实场景，而不是「能不能加」。
+
+        如果你的请求和词库内容有关（比如想要某个新词源、新的档位划分、新的排序规则），
+        请在下一项里附上现有工具跑出来的结果作为基线：
+
+        ```
+        python -m src.cli validate <file.dat>
+        ```
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 要解决的问题
+      description: 你遇到了什么、现在怎么做很麻烦、期望变成什么样。
+      placeholder: |
+        现在每次想知道某个词库到底有多少条、能不能导入，都得先本地跑一遍构建。
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_behavior
+    attributes:
+      label: 当前的验证证据
+      description: |
+        贴出你实际跑出来的结果（命令 + 输出）。与 DAT 相关的请求请包含：
+
+        ```
+        python -m src.cli validate <file.dat>
+        ```
+
+        与 DAT 无关的请求（例如只想要个新的构建选项），请贴上你当前使用的命令和它的输出/报错，
+        并说明为什么不够用。
+      placeholder: |
+        $ python -m src.cli validate msp_lite.dat
+        统计: 词条 199,580 条（成功解析 199,580 条）
+        结论: 格式合法，未发现阻断导入的问题
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed
+    attributes:
+      label: 期望的方案（可选）
+      description: 你设想的做法。有具体命令行、配置文件格式或界面草图更好。
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 考虑过的其它方案（可选）
+      description: 以及它们为什么不够好。
+    validations:
+      required: false
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: 影响范围
+      description: 这个需求会动到哪一层。
+      options:
+        - 只影响词库内容（选词、清洗、排序、配额）
+        - 只影响构建/发布流程
+        - 只影响校验工具（validate / check-canary）
+        - 只影响爬虫采集
+        - 涉及二进制格式（mschxudp）—— 这类改动需要向后兼容讨论，会先开 Issue 对齐
+        - 还不确定
+    validations:
+      required: true
+
+  - type: input
+    id: related
+    attributes:
+      label: 关联 Issue / 讨论（可选）
+      description: 相关的 Issue 编号或 Discussions 链接。
+    validations:
+      required: false

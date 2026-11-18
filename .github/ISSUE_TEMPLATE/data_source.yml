@@ -1,0 +1,118 @@
+name: 数据源 / 构建问题
+description: 某个词条缺失、拼音不对、词频异常、或构建过程报错
+title: "[数据源]: "
+labels: ["data-source"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        这个表单用于反馈**词库内容层面的问题**：某个词没进来、拼音错了、重复了、或者构建流水线挂了。
+
+        排查时请先拿到证据，不要凭印象描述：
+
+        ```
+        python -m src.cli validate <file.dat>
+        ```
+
+        退出码含义：`0` 通过、`2` 格式错误、`3` 文件损坏、`4` 内容违规。
+        想看词条内容可以配合 `python -m src.cli parse <file.dat>` 或 `python -m src.cli export <file.dat> -o out.txt`。
+
+  - type: dropdown
+    id: source_group
+    attributes:
+      label: 涉及的数据源
+      description: 归到哪一组上游词库。选「其他」时在下一项写清楚。
+      options:
+        - Rime-Ice（雾凇拼音，iDvel/rime-ice）
+        - Rime-Frost（白霜拼音，gaboolic/rime-frost）
+        - 萌娘百科（mw2fcitx，outloudvi/mw2fcitx）
+        - 中文维基百科（fcitx5-pinyin-zhwiki，felixonmars/fcitx5-pinyin-zhwiki）
+        - 搜狗细胞词库（.scel）
+        - 合并/构建流程本身
+        - 其他
+    validations:
+      required: true
+
+  - type: input
+    id: source_file
+    attributes:
+      label: 涉及的数据源文件
+      description: |
+        精确到文件。缓存里的文件名与上游文件名的对应关系：
+
+        | 缓存文件名 | 上游文件 |
+        |---|---|
+        | `rime-ice_base.txt` | Rime-Ice `cn_dicts/base.dict.yaml` |
+        | `rime-ice_ext.txt` | Rime-Ice `cn_dicts/ext.dict.yaml` |
+        | `rime-frost_base.txt` | Rime-Frost `cn_dicts/base.dict.yaml` |
+        | `rime-frost_ext.txt` | Rime-Frost `cn_dicts/ext.dict.yaml` |
+        | `rime-frost_food.txt` | Rime-Frost `cn_dicts_cell/food.dict.yaml` |
+        | `rime-frost_idiom.txt` | Rime-Frost `cn_dicts_cell/idiom.dict.yaml` |
+        | `rime-frost_luna_pinyin.txt` | Rime-Frost `luna_pinyin.dict.yaml` |
+        | `ext-moegirl.dict.yaml` | 萌娘百科 Rime 词典 |
+        | `ext-zhwiki.dict.yaml` | 中文维基百科 Rime 词典 |
+        | `cache/scel/*.scel` | 搜狗细胞词库（需自行下载） |
+
+        不确定就写你看到的现象对应的关键词，例如「food」。
+      placeholder: rime-ice_base.txt (base.dict.yaml)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: expected_direction
+    attributes:
+      label: 期望的词条变化方向
+      description: 这个词应该变多、变正确，还是被删掉。
+      options:
+        - 增加（缺少这个词条）
+        - 修正（词条在，但拼音/写法不对）
+        - 删除（不该出现的词条混进来了）
+        - 词频/排序不对（候选顺序不符合预期）
+        - 不确定
+    validations:
+      required: true
+
+  - type: textarea
+    id: word_examples
+    attributes:
+      label: 具体词条示例
+      description: 贴出具体的「词条 + 拼音 + 你期望的结果」，一行一条。有问题的那条请标出来。
+      placeholder: |
+        词条: 银行
+        拼音: yin'xing
+        期望: 出现在 msp_lite.dat 中，候选位 1
+    validations:
+      required: true
+
+  - type: textarea
+    id: validate_output
+    attributes:
+      label: validate 输出
+      description: |
+        对你手上的 .dat 文件执行下面命令，把完整输出贴上来：
+
+        ```
+        python -m src.cli validate msp_lite.dat
+        ```
+      placeholder: |
+        $ python -m src.cli validate msp_lite.dat
+        统计: 词条 199,580 条（成功解析 199,580 条）
+        结论: 格式合法，未发现阻断导入的问题
+    validations:
+      required: true
+
+  - type: input
+    id: upstream_version
+    attributes:
+      label: 上游版本 / 提交（可选）
+      description: 上游词库的 tag 或 commit（如果你知道的话），用于定位是上游变更还是我们处理的问题。
+    validations:
+      required: false
+
+  - type: textarea
+    id: build_log
+    attributes:
+      label: 构建日志（可选）
+      description: 如果问题出在构建阶段，贴 `python scripts/merge.py` 或 `python scripts/build_releases.py` 的输出。
+    validations:
+      required: false

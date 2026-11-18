@@ -19,6 +19,8 @@ crawler = [
 # 仅测试
 test = [
     "pytest>=7.0",
+    # Issue 模板语法自检（tests/test_issue_templates.py 需要解析 .yml）
+    "pyyaml>=6.0",
 ]
 
 [project.scripts]

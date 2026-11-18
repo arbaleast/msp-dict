@@ -21,7 +21,7 @@ IS_WINDOWS = os.name == 'nt'
 
 
 def default_mspinyin_dict() -> Path:
-    """微软拼音「自定义短语」文件的默认位置（按平台区分）。
+    r"""微软拼音「自定义短语」文件的默认位置（按平台区分）。
 
     Windows 上位于 %APPDATA%\Microsoft\InputMethod\OC\英\1049\custom_phrase.dat；
     其他平台没有这个目录，退回到项目内 output/ 下——Linux 上

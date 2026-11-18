@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 使用问题（怎么导入、选哪个档位）
+    url: https://github.com/arbaleast/msp-dict/discussions
+    about: 导入步骤、档位选择、常见疑问都在 Discussions 里讨论，比 Issue 更容易被搜到。
+  - name: 词库是否真的被 Windows 加载（Canary 探针）
+    url: https://github.com/arbaleast/msp-dict/blob/main/docs/CANARY_TESTING.md
+    about: 导入后想确认词条真的生效、或者怀疑被静默截断，先看这份实机验证指南。
+  - name: 导入失败与格式根因
+    url: https://github.com/arbaleast/msp-dict/blob/main/docs/ISSUE3_DIAGNOSIS.md
+    about: 「文件格式错误或文件已损坏」「管理界面转圈卡死」等历史问题的诊断结论与恢复方法。
