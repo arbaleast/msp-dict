@@ -33,7 +33,7 @@ from src.canary import (  # noqa: E402
     resolve_probes,
     write_manifest,
 )
-from src.profiles import PROFILES, get_profile  # noqa: E402
+from src.profiles import PROFILES, REFERENCE_IMPORT_LIMIT, get_profile  # noqa: E402
 from src.validator import DatValidator  # noqa: E402
 
 
@@ -65,7 +65,9 @@ def build_one(profile_name: str, source: Path, output_dir: Path,
         'size_bytes': output.stat().st_size,
         'size_mb': round(output.stat().st_size / 1024 / 1024, 2),
         'build': builder.stats.to_dict(),
-        'windows_importable': profile.windows_importable,
+        # 仅为「参考实现阈值」，不是 Windows 实机验证结论
+        'reference_import_limit': REFERENCE_IMPORT_LIMIT,
+        'within_reference_import_limit': profile.within_reference_import_limit,
     }
 
     print(f"[{profile.name}] {profile.describe()}")

@@ -14,6 +14,14 @@
 from dataclasses import dataclass
 from typing import Dict, Optional
 
+# 参考实现（深蓝词库转换器）在导出 mschxudp 时的硬性上限。
+#
+# 注意：这是**参考阈值**，不是 Windows 实机验证结论——微软拼音并没有公开
+# 文档化的导入条数上限，本项目也没有在多台真机上逐一验证过这个数字。
+# 任何「可直接导入 Windows」的表述都必须附着实机验证记录，否则一律以
+# 「低于参考阈值」这种弱表述为准。
+REFERENCE_IMPORT_LIMIT = 20000
+
 
 @dataclass(frozen=True)
 class Profile:
@@ -23,10 +31,14 @@ class Profile:
     exclude_single: bool          # 是否剔除单字词（微软拼音自带单字）
     max_word_units: int           # 词条最大 UTF-16 单元数（用于剔除长句）
     min_freq: int                 # 最低词频（来源词频，仅用于筛选）
-    windows_importable: bool      # 是否声明可直接导入 Windows
     extended_ratio: Optional[float] = None   # 扩展源（萌娘/维基/SCEL）最多占比
     extended_max_word_units: int = 6         # 扩展源词条最大字数
     extended_min_word_units: int = 2         # 扩展源词条最小字数
+
+    @property
+    def within_reference_import_limit(self) -> bool:
+        """该档位条数是否低于参考实现阈值（**非** Windows 实机验证结论）。"""
+        return self.limit is not None and self.limit <= REFERENCE_IMPORT_LIMIT
 
     def describe(self) -> str:
         limit = f"≤{self.limit:,} 条" if self.limit else "全量"
@@ -41,7 +53,6 @@ PROFILES: Dict[str, Profile] = {
         exclude_single=True,
         max_word_units=8,
         min_freq=0,
-        windows_importable=True,
         extended_ratio=0.12,          # Lite：扩展源 ≤12%（约 2,400 条），其余留给 Frost/Ice
         extended_max_word_units=5,
     ),
@@ -52,7 +63,6 @@ PROFILES: Dict[str, Profile] = {
         exclude_single=False,
         max_word_units=16,
         min_freq=0,
-        windows_importable=False,
         extended_ratio=0.22,          # Standard：扩展源 ≤22%（约 11,000 条）
         extended_max_word_units=5,
     ),
@@ -63,7 +73,6 @@ PROFILES: Dict[str, Profile] = {
         exclude_single=False,
         max_word_units=64,
         min_freq=0,
-        windows_importable=False,
     ),
 }
 

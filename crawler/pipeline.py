@@ -191,17 +191,59 @@ def load_existing_words(filepath: str) -> Set[str]:
         return set()
 
 
-def save_words(words: List[str], filepath: str) -> None:
+def save_words(words: List[str], filepath: str,
+               sources: Dict[str, List[str]] = None) -> Path:
     """
-    保存词条到文件
+    保存词条到文件，并在同目录写出溯源元数据 `<输出名>.meta.json`。
+
+    元数据包含：来源名称与各自条目数、抓取/生成时间、输出文件大小与 SHA-256，
+    保证采集结果可追溯（任务要求：上游动态数据必须有来源、时间、哈希）。
 
     Args:
         words: 词条列表
         filepath: 输出文件路径
+        sources: 各数据源取到的原始词条（用于记录来源与条目数）
+
+    Returns:
+        元数据文件路径
     """
-    with open(filepath, 'w', encoding='utf-8') as f:
+    import hashlib
+    import json
+    from datetime import datetime, timezone
+
+    out_path = Path(filepath)
+    with open(out_path, 'w', encoding='utf-8') as f:
         for word in words:
             f.write(f"{word}\n")
+
+    digest = hashlib.sha256()
+    with open(out_path, 'rb') as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b''):
+            digest.update(chunk)
+
+    payload = {
+        'format': 'msp-dict-crawler-metadata/1',
+        'generated_at': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+        'output': {
+            'file': out_path.name,
+            'entry_count': len(words),
+            'size_bytes': out_path.stat().st_size,
+            'sha256': digest.hexdigest(),
+        },
+        'sources': [
+            {
+                'name': name,
+                'entry_count': len(items),
+                'sha256': hashlib.sha256(
+                    '\n'.join(items).encode('utf-8')).hexdigest(),
+            }
+            for name, items in sorted((sources or {}).items())
+        ],
+    }
+    meta_path = out_path.with_suffix(out_path.suffix + '.meta.json')
+    meta_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2),
+                         encoding='utf-8')
+    return meta_path
 
 
 def main():

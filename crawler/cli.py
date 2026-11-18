@@ -118,8 +118,9 @@ def cmd_fetch(args):
 
     # 保存结果
     output_file = args.output or 'new_words.txt'
-    save_words(result, output_file)
+    meta_path = save_words(result, output_file, sources)
     print(f"\n[CLI] Saved {len(result)} words to {output_file}")
+    print(f"[CLI] 溯源元数据: {meta_path}")
 
     return 0
 

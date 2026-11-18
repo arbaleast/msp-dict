@@ -25,9 +25,13 @@
 """
 
 import argparse
+import hashlib
+import json
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
+from typing import List
 
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
@@ -181,31 +185,136 @@ def parse_scel_file(path: Path):
 
 
 def merge(entries_list):
-    """合并基础源，返回 [(词, 拼音, 词频, 'base')]，按词频降序。"""
-    word_data = {}
+    """合并基础源，返回 [(词, 拼音, 词频, 'base')]，按词频降序。
+
+    去重键是 **(词, 拼音)** 而不是单独的词：同一个词的不同合法读音都要保留
+    （例如「银行」yin'hang 与 yin'xing），否则多音词会被暴力折叠成一个读音。
+
+    词频仍按「词」聚合取各源最大值，与旧实现完全一致——因此只有一个读音的
+    词条，其拼音、词频与排序位置都不受影响，档位截断结果保持稳定。
+    """
+    word_freq = {}       # 词 -> 各源最大词频（含无拼音的纯词频表）
+    word_pinyins = {}    # 词 -> {归一化拼音: (原始拼音, 该组合的最大词频)}
     for entries in entries_list:
         for word, pinyin, freq in entries:
-            if word in word_data:
-                old_pinyin, old_freq = word_data[word]
-                word_data[word] = (old_pinyin if old_pinyin else pinyin,
-                                   max(old_freq, freq))
-            else:
-                word_data[word] = (pinyin, freq)
-    ordered = sorted(word_data.items(), key=lambda x: x[1][1], reverse=True)
-    return [(word, pinyin, freq, 'base') for word, (pinyin, freq) in ordered]
+            if word not in word_freq or freq > word_freq[word]:
+                word_freq[word] = freq
+            if pinyin:
+                # 去重键用归一化拼音（与 builder 的 normalize_pinyin 同一套规则），
+                # 否则「yinhang」与「yin hang」会被当成两个读音，最后在 builder
+                # 里归一化成同一个 code 而被判成重复词条。
+                key = normalize_pinyin(pinyin)
+                if not key:
+                    continue
+                bucket = word_pinyins.setdefault(word, {})
+                if key not in bucket or freq > bucket[key][1]:
+                    bucket[key] = (pinyin, freq)
+
+    rows = []
+    for word, freq in word_freq.items():
+        pinyins = word_pinyins.get(word)
+        if not pinyins:
+            # 所有源都没有拼音（纯词频表），后续 write_full 会剔除
+            rows.append((word, '', freq))
+        else:
+            for original, _ in pinyins.values():
+                rows.append((word, original, freq))
+    # 稳定排序：同词频保持首次出现顺序，与旧实现一致
+    rows.sort(key=lambda x: x[2], reverse=True)
+    return [(word, pinyin, freq, 'base') for word, pinyin, freq in rows]
 
 
 def merge_extended(base_merged, ext_entries):
-    """把扩展源并入基础结果：同词以基础源为准，扩展源按词长/字典序稳定排序。"""
-    existing = {item[0] for item in base_merged}
+    """把扩展源并入基础结果。
+
+    去重键同样是 (词, 拼音)：基础源已有的读音不再重复引入，但扩展源提供的
+    **另一个**合法读音会被保留（例如基础源只有 yin'hang，扩展源补充 yin'xing）。
+    扩展源内部按词长/字典序稳定排序。
+    """
+    # 同样用归一化拼音做键：基础源的「yinhang」与扩展源的「yin hang」是同一个读音
+    existing = {(item[0], normalize_pinyin(item[1])) for item in base_merged}
     ext_words = {}
     for word, pinyin, freq, source in ext_entries:
-        if word in existing or word in ext_words:
+        key = (word, normalize_pinyin(pinyin))
+        if not key[1] or key in existing or key in ext_words:
             continue
-        ext_words[word] = (pinyin, freq, source)
-    ordered = sorted(ext_words.items(), key=lambda x: (utf16_units(x[0]), x[0]))
+        ext_words[key] = (pinyin, freq, source)
+    ordered = sorted(ext_words.items(),
+                     key=lambda x: (utf16_units(x[0][0]), x[0][0], x[0][1]))
     return base_merged + [(word, pinyin, freq, source)
-                          for word, (pinyin, freq, source) in ordered]
+                          for (word, _), (pinyin, freq, source) in ordered]
+
+
+def sha256_of_file(path: Path) -> str:
+    """计算文件 SHA-256（分块读取，支持大文件）。"""
+    digest = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b''):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def utc_now_iso() -> str:
+    """当前 UTC 时间（秒级 ISO-8601）。"""
+    return datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+def write_merge_metadata(output_dir: Path, cache_dir: Path,
+                          source_files: List[str], merged_count: int,
+                          usable_count: int,
+                          extended_files: List[str] = None) -> Path:
+    """写出 msp_full.txt 的溯源元数据。
+
+    记录每个上游源文件的 SHA-256 与大小，以及合并产物本身的 SHA-256，
+    保证「这份词库是由哪些上游文件、在什么时间、经过什么处理得到的」可追溯。
+    """
+    sources = []
+    for name in source_files:
+        path = cache_dir / name
+        if not path.exists() or path.stat().st_size == 0:
+            continue
+        stat = path.stat()
+        sources.append({
+            'file': name,
+            'size_bytes': stat.st_size,
+            'sha256': sha256_of_file(path),
+            'modified_at': datetime.fromtimestamp(
+                stat.st_mtime, timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+        })
+
+    # 扩展源（萌娘/维基/SCEL）同样登记，保证上游动态数据可追溯
+    for name in (extended_files or []):
+        path = cache_dir / name
+        if not path.exists() or path.stat().st_size == 0:
+            continue
+        stat = path.stat()
+        sources.append({
+            'file': name,
+            'size_bytes': stat.st_size,
+            'sha256': sha256_of_file(path),
+            'modified_at': datetime.fromtimestamp(
+                stat.st_mtime, timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+            'kind': 'extended',
+        })
+
+    output = output_dir / 'msp_full.txt'
+    payload = {
+        'format': 'msp-dict-merge-metadata/1',
+        'generated_at': utc_now_iso(),
+        'cache_dir': str(cache_dir),
+        'merged_entries': merged_count,
+        'writable_entries': usable_count,
+        'sources': sources,
+        'output': {
+            'file': output.name,
+            'size_bytes': output.stat().st_size if output.exists() else 0,
+            'sha256': sha256_of_file(output) if output.exists() else '',
+        },
+    }
+    path = output_dir / 'msp_full.meta.json'
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2),
+                    encoding='utf-8')
+    return path
 
 
 def write_full(merged, output_dir: Path) -> int:
@@ -383,6 +492,8 @@ def main() -> int:
         return 1
 
     merged = merge(all_entries)
+    used_source_files = [fn for fn in FILES
+                         if fn in source_counts and source_counts[fn] > 0]
 
     ext_stats = {}
     ext_counts = {}
@@ -421,6 +532,12 @@ def main() -> int:
     write_changelog(merged, usable_count, no_pinyin, source_counts, output_dir,
                     ext_stats, ext_counts)
     print('CHANGELOG.md 已生成')
+
+    used_extended = [name for name, _, _ in EXTENDED_FILES]
+    used_extended += [p.name for p in sorted(cache_dir.glob(SCEL_GLOB))]
+    meta_path = write_merge_metadata(output_dir, cache_dir, used_source_files,
+                                     len(merged), usable_count, used_extended)
+    print(f'溯源元数据已写入: {meta_path}')
     return 0
 
 

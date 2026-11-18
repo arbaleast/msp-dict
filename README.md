@@ -145,9 +145,24 @@ python -m src.cli build msp_full.txt -o probe.dat --profile lite --with-canary \
 如果已经导入了超大词库，设置页一直转圈，连「清除」都点不了，按下面顺序恢复。
 **这只重置微软拼音的用户词条，不影响系统其他设置。**
 
-1. **先备份**（可选）：打开 `%LocalAppData%\Microsoft\InputMethod\Chs`，
-   把 `ChsPinyin*.dat` / `ChsPinyin*.lex` 复制到桌面。
-2. **结束进程**（任务管理器 → 详细信息）：
+### ⚠️ 第 0 步：必须先备份（不可跳过）
+
+下面第 2 步会**删除**微软拼音的用户自定义短语与自学习词汇——这两份数据**只存在于本机**，
+删掉后没有任何办法找回。请在动手前完成备份：
+
+```bat
+:: 在「命令提示符」里执行：先把两个目录整体复制到桌面备份文件夹
+mkdir "%USERPROFILE%\Desktop\msp-backup"
+xcopy "%LOCALAPPDATA%\Microsoft\InputMethod\Chs" "%USERPROFILE%\Desktop\msp-backup\Chs" /E /I /H
+xcopy "%APPDATA%\Microsoft\InputMethod\Chs" "%USERPROFILE%\Desktop\msp-backup\Chs-roaming" /E /I /H
+```
+
+备份完成后确认桌面出现 `msp-backup\Chs` 目录，**再**继续下面的步骤。
+恢复时把文件原样拷回对应目录即可。
+
+### 恢复步骤
+
+1. **结束进程**（任务管理器 → 详细信息）：
    - `SystemSettings.exe`（设置页）
    - `Windows 输入体验`（`TextInputHost.exe`）
    - `ctfmon.exe`（输入法服务，系统会自动重启它）
@@ -158,18 +173,21 @@ python -m src.cli build msp_full.txt -o probe.dat --profile lite --with-canary \
    taskkill /f /im TextInputHost.exe
    taskkill /f /im ctfmon.exe
    ```
-3. **清理词库数据**：删除或改名下面目录里的词库文件
+2. **清理词库数据**：删除或改名下面目录里的词库文件
    - `%LocalAppData%\Microsoft\InputMethod\Chs`
      - `ChsPinyinUDP.lex`（用户自定义短语）
      - `ChsPinyinEUDL.dat` / `ChsPinyinUDL.dat`（自学习词汇）
      - `ChsPinyinIH.dat`（用户词条）、`ChsPinyinDeletedCands.dat`（删除候选）
    - `%AppData%\Microsoft\InputMethod\Chs`（若存在同名文件）
-4. **注销并重新登录**（或重启），让输入法服务重新加载空词库。
-5. 重新打开设置页，列表应为空、可以正常操作；确认后再导入 `msp_lite.dat`。
+3. **注销并重新登录**（或重启），让输入法服务重新加载空词库。
+4. 重新打开设置页，列表应为空、可以正常操作；确认后再导入 `msp_lite.dat`。
 
-> [!WARNING]
-> 若提示文件被占用，先注销再删。只处理 `Chs` 目录下的词库文件，
-> 不要删除整个 `InputMethod` 目录；自学习词汇会一起清空。
+> [!CAUTION]
+> - **只删 `Chs` 目录下的词库文件**，不要删除整个 `InputMethod` 目录；
+> - 自学习词汇（`ChsPinyinUDL.dat` / `ChsPinyinEUDL.dat`）会**一起被清空**，
+>   这是微软拼音自学习的历史，只能靠第 0 步的备份找回；
+> - 若提示文件被占用，说明输入法服务还在运行——先注销再删，或先执行上面的 `taskkill`；
+> - 恢复后建议先导入 `msp_lite.dat`（约 2 万条），不要直接导 `msp_full.dat`。
 
 ---
 

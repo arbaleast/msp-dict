@@ -13,11 +13,14 @@ cache/ 不入库（见 .gitignore），新克隆的仓库必须先跑一次本�
 """
 
 import argparse
+import hashlib
 import json
 import os
 import time
 import urllib.request
+from datetime import datetime, timezone
 from pathlib import Path
+from typing import List
 
 ROOT = Path(__file__).parent.parent
 
@@ -132,13 +135,68 @@ def is_usable_cache(path: Path) -> bool:
         return False
 
 
-def download_extended(cache_dir: Path, force: bool, retries: int) -> list:
+def sha256_of_file(path: Path) -> str:
+    """计算文件 SHA-256（大文件按块读取）。"""
+    digest = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b''):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def utc_now_iso() -> str:
+    """当前 UTC 时间（秒级 ISO-8601）。"""
+    return datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+def file_mtime_iso(path: Path) -> str:
+    """文件最后修改时间（UTC ISO-8601），用于标注「沿用旧缓存」的溯源时间。"""
+    return datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).strftime(
+        '%Y-%m-%dT%H:%M:%SZ')
+
+
+def describe_source(path: Path, url: str, status: str) -> dict:
+    """生成单个词源的溯源记录。"""
+    stat = path.stat()
+    return {
+        'file': path.name,
+        'url': url,
+        'status': status,
+        'fetched_at': file_mtime_iso(path),
+        'size_bytes': stat.st_size,
+        'sha256': sha256_of_file(path),
+    }
+
+
+def write_source_metadata(cache_dir: Path, entries: List[dict]) -> Path:
+    """把词源溯源信息写入 cache/sources_metadata.json。
+
+    每次下载都会刷新该文件，字段包含来源 URL、拉取时间、原始文件大小与
+    SHA-256，保证上游动态数据可追溯。
+    """
+    path = cache_dir / 'sources_metadata.json'
+    payload = {
+        'format': 'msp-dict-source-metadata/1',
+        'generated_at': utc_now_iso(),
+        'description': '上游词源溯源信息（URL / 拉取时间 / 大小 / SHA-256）',
+        'sources': entries,
+    }
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2),
+                    encoding='utf-8')
+    return path
+
+
+def download_extended(cache_dir: Path, force: bool, retries: int,
+                      meta: List[dict] = None) -> list:
     """下载扩展源；返回失败的文件名列表（默认只告警）。"""
     failed = []
+    if meta is None:
+        meta = []
     for fname, repo, matcher, fallback in EXTENDED:
         out_path = cache_dir / fname
         if not force and is_usable_cache(out_path):
             print(f'SKIP {fname} ({out_path.stat().st_size // 1024}KB)')
+            meta.append(describe_source(out_path, fallback, 'cached'))
             continue
         print(f'DOWN {fname}...', flush=True)
         url = fallback
@@ -149,6 +207,8 @@ def download_extended(cache_dir: Path, force: bool, retries: int) -> list:
             print(f'  查询 latest release 失败（{e}），回退固定版本')
         if not download_one(url, out_path, retries):
             failed.append(fname)
+        elif meta is not None:
+            meta.append(describe_source(out_path, url, 'downloaded'))
     return failed
 
 
@@ -169,10 +229,12 @@ def main() -> int:
     cache_dir.mkdir(parents=True, exist_ok=True)
 
     failed = []
+    meta: List[dict] = []
     for fname, url in ([] if args.extended_only else FILES):
         out_path = cache_dir / fname
         if not args.force and is_usable_cache(out_path):
             print(f'SKIP {fname} ({out_path.stat().st_size // 1024}KB)')
+            meta.append(describe_source(out_path, url, 'cached'))
             continue
         if out_path.exists() and not is_usable_cache(out_path):
             # 0 字节的残片不算有效缓存，先删掉再重下
@@ -184,6 +246,8 @@ def main() -> int:
         print(f'DOWN {fname}...', flush=True)
         if not download_one(url, out_path, args.retries):
             failed.append(fname)
+        else:
+            meta.append(describe_source(out_path, url, 'downloaded'))
 
     base_total = 0 if args.extended_only else len(FILES)
     print(f'\n基础源完成：{base_total - len(failed)}/{base_total} 个文件')
@@ -191,7 +255,10 @@ def main() -> int:
     ext_failed = []
     if not args.no_extended:
         print('\n=== 扩展源（萌娘百科 / 中文维基） ===')
-        ext_failed = download_extended(cache_dir, args.force, args.retries)
+        ext_failed = download_extended(cache_dir, args.force, args.retries, meta)
+
+    meta_path = write_source_metadata(cache_dir, meta)
+    print(f'词源溯源信息已写入: {meta_path}')
 
     if failed:
         print('失败文件: ' + ', '.join(failed))

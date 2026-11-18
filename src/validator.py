@@ -245,9 +245,16 @@ class DatValidator:
             report.add_issue('format', 'warning', 'zero_timestamp',
                              '文件头时间戳为 0（部分旧版本可能忽略该字段）')
 
+        # 保留区必须是全 0：参考实现的测试明确写了「微软拼音会校验这些字段」
         if any(data[0x28:0x40]):
-            report.add_issue('format', 'warning', 'dirty_reserved',
-                             '保留区 0x28~0x3F 必须全 0，当前含非零字节')
+            report.add_issue('format', 'error', 'dirty_reserved',
+                             '保留区 0x28~0x3F 必须全 0，当前含非零字节'
+                             '（微软拼音会校验固定字段，非零会导致导入被拒）')
+        # 文件头时间戳是 u64，但格式里只定义了 32 位有效位（高位 0x24~0x27）
+        if any(data[0x24:0x28]):
+            report.add_issue('format', 'error', 'dirty_timestamp_high',
+                             '文件头时间戳高位 0x24~0x27 非零（格式只定义 32 位时间戳，'
+                             '高位应为 0）')
 
         fatal = False
         if phrase_count > (len(data) - HEADER_SIZE) // 4:
@@ -364,6 +371,11 @@ class DatValidator:
                 report.add_issue('content', 'error', 'bad_entry_flag',
                                  f'记录 +0x07 固定字节为 0x{flag:02x}，期望 0x06',
                                  sample=sample_prefix)
+            if any(data[start + 8:start + 12]):
+                report.add_issue('corruption', 'error', 'dirty_entry_reserved',
+                                 f'记录 +0x08~+0x0B 保留字节非零: '
+                                 f'{data[start + 8:start + 12].hex(" ")}（必须全 0）',
+                                 sample=sample_prefix)
             if hanzi_offset < ENTRY_HANZI_OFFSET_BASE or hanzi_offset % 2 != 0:
                 report.add_issue('corruption', 'error', 'bad_hanzi_offset',
                                  f'hanzi_offset={hanzi_offset} 非法（应为 18 + 偶数）',
@@ -460,6 +472,10 @@ class DatValidator:
 
             # ---- 记录时间戳（旧版固定 0xE679CD20 是未来的伪时间）----
             record_ts = struct.unpack_from('<I', data, start + 12)[0]
+            if record_ts == 0:
+                report.add_issue('content', 'warning', 'zero_record_timestamp',
+                                 '记录时间戳为 0（应为 2000 纪元起的秒数）',
+                                 sample=sample_prefix)
             if record_ts > now_epoch2000 + 86400 * 365:
                 report.add_issue('content', 'warning', 'stale_timestamp',
                                  f'记录时间戳 {record_ts} 是未来时间（旧版构建器写死 0xE679CD20）',
