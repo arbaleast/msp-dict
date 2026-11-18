@@ -278,11 +278,11 @@ def test_clean_sample_has_no_fixed_field_issues(tmp_path):
 
 
 # --------------------------------------------------------------------------
-# 任务 5：README 高危操作必须有备份指引
+# 任务 5：高危操作必须有备份指引（恢复教程已迁到 docs/RECOVERY.md）
 # --------------------------------------------------------------------------
 
-def test_readme_recovery_section_requires_backup_before_deletion():
-    text = (ROOT / 'README.md').read_text(encoding='utf-8')
+def test_recovery_doc_requires_backup_before_deletion():
+    text = (ROOT / 'docs' / 'RECOVERY.md').read_text(encoding='utf-8')
     assert '第 0 步：必须先备份' in text
     assert 'msp-backup' in text
     assert 'xcopy' in text
@@ -301,7 +301,28 @@ def test_readme_recovery_section_requires_backup_before_deletion():
     assert '绝对不要删除整个 `InputMethod` 目录' in text
 
 
-@pytest.mark.parametrize('relative', ['README.md', 'docs/CANARY_TESTING.md',
+def test_readme_links_to_recovery_instead_of_inlining_it():
+    """README 保持极简：只留一句警告 + 一个链接，不内联恢复步骤。"""
+    readme = (ROOT / 'README.md').read_text(encoding='utf-8')
+    assert 'docs/RECOVERY.md' in readme
+    # 备份命令与逐文件删除表必须待在 RECOVERY.md，不能回到 README
+    for inlined in ('xcopy', 'msp-backup', '第 2 步：清理异常词库文件'):
+        assert inlined not in readme, f'README 又内联了恢复细节: {inlined}'
+    # 但仍要保留「先备份、再动手」的提醒
+    assert '备份' in readme
+
+
+def test_readme_links_to_development_instead_of_inlining_it():
+    """开发者内容（安装/脚本参数/格式）必须外链到 docs/DEVELOPMENT.md。"""
+    readme = (ROOT / 'README.md').read_text(encoding='utf-8')
+    assert 'docs/DEVELOPMENT.md' in readme
+    for inlined in ('pip install', '--with-canary', 'download_frost.py'):
+        assert inlined not in readme, f'README 又内联了开发者内容: {inlined}'
+
+
+@pytest.mark.parametrize('relative', ['README.md', 'docs/DEVELOPMENT.md',
+                                      'docs/RECOVERY.md',
+                                      'docs/CANARY_TESTING.md',
                                       'docs/ISSUE3_DIAGNOSIS.md'])
 def test_docs_relative_links_resolve(relative):
     import re
