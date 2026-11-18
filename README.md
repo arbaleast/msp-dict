@@ -1,6 +1,6 @@
 # 🎯 微软拼音增强词库
 
-> 让你的输入法更懂你——223万+ 条有效词条，三档可选，半月自动更新
+> 让你的输入法更懂你——223万+ 条有效词条，三档可选，每月自动更新
 
 [![Biweekly Build](https://github.com/arbaleast/msp-dict/actions/workflows/biweekly-build.yml/badge.svg)](https://github.com/arbaleast/msp-dict/actions)
 [![Release](https://img.shields.io/github/v/release/arbaleast/msp-dict?color=blue)](https://github.com/arbaleast/msp-dict/releases/latest)
@@ -330,7 +330,7 @@ taskkill /f /im ctfmon.exe
 
 ### 自动更新流程
 
-GitHub Actions 每月 **1 日、15 日**运行，各安排两个低峰时段：
+GitHub Actions **每月 1 日**运行，安排两个低峰时段：
 
 - 主：`04:17 UTC`（北京时间 12:17）
 - 备：`12:17 UTC`（北京时间 20:17）——主任务被平台延迟时的兜底
@@ -476,7 +476,7 @@ CI 在每次构建后自动执行；本地也可以手动跑，脚本是幂等�
 ```
 msp-dict/
 ├── .github/workflows/
-│   ├── biweekly-build.yml     # 半月构建、校验、发布（含 Canary 检查与滚动清理）
+│   ├── biweekly-build.yml     # 每月构建、校验、发布（含 Canary 检查与滚动清理）
 │   └── test.yml               # ubuntu + windows 测试矩阵
 ├── src/                       # 核心库（只有库代码，无测试）
 │   ├── format_spec.py         # mschxudp 规范常量与字段校验（唯一事实来源）

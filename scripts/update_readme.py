@@ -110,7 +110,7 @@ def update_readme(readme_path: Path, stats: dict) -> bool:
         wan = full_count // 10000
         content = re.sub(
             r'> 让你的输入法更懂你——[^\n]*',
-            f'> 让你的输入法更懂你——{wan}万+ 条有效词条，三档可选，半月自动更新',
+            f'> 让你的输入法更懂你——{wan}万+ 条有效词条，三档可选，每月自动更新',
             content,
         )
         content = re.sub(
