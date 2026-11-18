@@ -1,10 +1,10 @@
 # 🎯 微软拼音增强词库
 
-> 让你的输入法更懂你——217万+ 条有效词条，三档可选，半月自动更新
+> 让你的输入法更懂你——223万+ 条有效词条，三档可选，半月自动更新
 
 [![Biweekly Build](https://github.com/arbaleast/msp-dict/actions/workflows/biweekly-build.yml/badge.svg)](https://github.com/arbaleast/msp-dict/actions)
 [![Release](https://img.shields.io/github/v/release/arbaleast/msp-dict?color=blue)](https://github.com/arbaleast/msp-dict/releases/latest)
-[![词条数](https://img.shields.io/badge/词条-217万+-blue)](https://github.com/arbaleast/msp-dict/releases)
+[![词条数](https://img.shields.io/badge/词条-223万+-blue)](https://github.com/arbaleast/msp-dict/releases)
 
 ---
 
@@ -28,10 +28,10 @@ Release 统一按日期命名（`vYYYY.MM.DD — 微软拼音增强词库`），
 <!-- STATS:START -->
 | 文件 | 词条数 | 大小 | 适用场景 |
 |:---|---:|---:|:---|
-| **msp_lite.dat** | 19,988 | 856 KB | Windows 10/11 直接导入（推荐） |
-| msp_standard.dat | 49,175 | ~2 MB | 进阶用户；管理页会明显卡顿 |
-| msp_full.dat | 2,173,074 | ~114 MB | 存档 / 转 Rime 等，Windows 无法完整导入 |
-| msp_win10.dat | 19,988 | 856 KB | 兼容旧链接（= msp_lite.dat） |
+| **msp_lite.dat** | 19,988 | 855 KB | Windows 10/11 直接导入（推荐） |
+| msp_standard.dat | 48,986 | ~2 MB | 进阶用户；管理页会明显卡顿 |
+| msp_full.dat | 2,238,515 | ~118 MB | 存档 / 转 Rime 等，Windows 无法完整导入 |
+| msp_win10.dat | 19,988 | 855 KB | 兼容旧链接（= msp_lite.dat） |
 <!-- STATS:END -->
 
 > [!IMPORTANT]
@@ -357,6 +357,6 @@ Header: 64 字节（mschxudp + 版本 + 偏移表位置 + 词条数 + 时间戳�
 
 ---
 
-<!-- BUILD_DATE: 2026-11-17 -->
+<!-- BUILD_DATE: 2026-11-18 -->
 
 ⭐ **喜欢这个项目？给个 Star 吧！**
