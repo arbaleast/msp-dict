@@ -1,26 +1,16 @@
-"""三档词库发布策略（Issue #3）。
+"""三档词库发布策略。
 
-微软拼音的「用户自定义短语」在导入时由 Windows 一次性构建 UI 列表：
-词条越多，设置页越卡；超过约 2 万条即无法完整导入。因此不再发布单一
-"越大越全" 的 msp_win10.dat，而是按用途分三档：
+三档按**覆盖规模**划分，而不是按 Windows 设置页的加载表现划分：
 
-  lite     精简版（默认推荐 Windows）  ≤ 20,000 条，剔除单字/长句
-  standard 标准版（进阶用户）          ≤ 50,000 条
-  full     完整版（存档 / 转其他输入法）全量，不保证 Windows 可导入
+  lite     核心主力档  ≤ 200,000 条，剔除单字/长句，扩展源 ≤15%
+  standard 全能进阶档  ≤ 800,000 条，含单字，扩展源 ≤35%
+  full     全量档       不截断（220 万条以上），仅供存档或转其他输入法
 
 每档只做「格式合法性清洗 + 去重」，选词策略由这里集中定义，CLI 与 CI 共用。
 """
 
 from dataclasses import dataclass
 from typing import Dict, Optional
-
-# 参考实现（深蓝词库转换器）在导出 mschxudp 时的硬性上限。
-#
-# 注意：这是**参考阈值**，不是 Windows 实机验证结论——微软拼音并没有公开
-# 文档化的导入条数上限，本项目也没有在多台真机上逐一验证过这个数字。
-# 任何「可直接导入 Windows」的表述都必须附着实机验证记录，否则一律以
-# 「低于参考阈值」这种弱表述为准。
-REFERENCE_IMPORT_LIMIT = 20000
 
 
 @dataclass(frozen=True)
@@ -35,11 +25,6 @@ class Profile:
     extended_max_word_units: int = 6         # 扩展源词条最大字数
     extended_min_word_units: int = 2         # 扩展源词条最小字数
 
-    @property
-    def within_reference_import_limit(self) -> bool:
-        """该档位条数是否低于参考实现阈值（**非** Windows 实机验证结论）。"""
-        return self.limit is not None and self.limit <= REFERENCE_IMPORT_LIMIT
-
     def describe(self) -> str:
         limit = f"≤{self.limit:,} 条" if self.limit else "全量"
         return f"{self.label}（{limit}，{'剔除单字' if self.exclude_single else '含单字'}，词条≤{self.max_word_units} 字）"
@@ -48,27 +33,27 @@ class Profile:
 PROFILES: Dict[str, Profile] = {
     'lite': Profile(
         name='lite',
-        label='精简版',
-        limit=20000,
+        label='核心主力档',
+        limit=200000,
         exclude_single=True,
         max_word_units=8,
         min_freq=0,
-        extended_ratio=0.12,          # Lite：扩展源 ≤12%（约 2,400 条），其余留给 Frost/Ice
+        extended_ratio=0.15,          # 扩展源 ≤15%（约 30,000 条），其余留给 Frost/Ice
         extended_max_word_units=5,
     ),
     'standard': Profile(
         name='standard',
-        label='标准版',
-        limit=50000,
+        label='全能进阶档',
+        limit=800000,
         exclude_single=False,
         max_word_units=16,
         min_freq=0,
-        extended_ratio=0.22,          # Standard：扩展源 ≤22%（约 11,000 条）
+        extended_ratio=0.35,          # 扩展源 ≤35%（约 280,000 条）
         extended_max_word_units=5,
     ),
     'full': Profile(
         name='full',
-        label='完整版',
+        label='全量档',
         limit=None,
         exclude_single=False,
         max_word_units=64,

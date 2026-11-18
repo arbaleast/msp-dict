@@ -52,10 +52,9 @@ def test_three_tiers_and_compat_copy(tmp_path):
     assert by_name['lite']['entries'] == 2
     assert by_name['standard']['entries'] == 3
     assert by_name['full']['entries'] == 3
-    # 「可直接导入 Windows」不是实机结论，只用参考阈值表达
-    assert by_name['lite']['within_reference_import_limit'] is True
-    assert by_name['full']['within_reference_import_limit'] is False
-    assert by_name['lite']['reference_import_limit'] == 20000
+    # 摘要只描述覆盖规模，不再带「可直接导入 Windows」这类没有实机依据的字段
+    assert 'within_reference_import_limit' not in by_name['lite']
+    assert 'reference_import_limit' not in by_name['lite']
     assert all(p['validation']['exit_code'] == 0 for p in summary['profiles'])
 
 

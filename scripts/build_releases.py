@@ -4,9 +4,9 @@
 
 从合并后的全量文本（默认 msp_full.txt，按词频降序）生成：
 
-    msp_lite.dat      精简版，≤ 20,000 条，剔除单字/长句 —— Windows 10/11 默认推荐
-    msp_standard.dat  标准版，≤ 50,000 条
-    msp_full.dat      完整版，全量合法词条（仅存档/转其他输入法）
+    msp_lite.dat      核心主力档，≤ 200,000 条，剔除单字/长句
+    msp_standard.dat  全能进阶档，≤ 800,000 条
+    msp_full.dat      全量档，不截断（仅存档/转其他输入法）
 
 并复制一份 msp_win10.dat 指向精简版，兼容旧下载链接。
 
@@ -33,7 +33,7 @@ from src.canary import (  # noqa: E402
     resolve_probes,
     write_manifest,
 )
-from src.profiles import PROFILES, REFERENCE_IMPORT_LIMIT, get_profile  # noqa: E402
+from src.profiles import PROFILES, get_profile  # noqa: E402
 from src.validator import DatValidator  # noqa: E402
 
 
@@ -65,9 +65,6 @@ def build_one(profile_name: str, source: Path, output_dir: Path,
         'size_bytes': output.stat().st_size,
         'size_mb': round(output.stat().st_size / 1024 / 1024, 2),
         'build': builder.stats.to_dict(),
-        # 仅为「参考实现阈值」，不是 Windows 实机验证结论
-        'reference_import_limit': REFERENCE_IMPORT_LIMIT,
-        'within_reference_import_limit': profile.within_reference_import_limit,
     }
 
     print(f"[{profile.name}] {profile.describe()}")

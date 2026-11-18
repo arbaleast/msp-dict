@@ -122,9 +122,9 @@ jobs:
 
           tag = os.environ['TAG']
           labels = {
-              'msp_lite.dat': '**推荐**：Windows 10/11 直接导入',
-              'msp_standard.dat': '进阶：覆盖更广，管理页会明显卡顿',
-              'msp_full.dat': '存档 / 转 Rime 等，**不要直接导入微软拼音**',
+              'msp_lite.dat': '**核心主力档**：日常使用首选',
+              'msp_standard.dat': '全能进阶档：覆盖更广',
+              'msp_full.dat': '全量档：仅供存档 / 转 Rime 等其他输入法',
               'msp_win10.dat': '兼容旧链接，与 `msp_lite.dat` 完全一致',
           }
           summary = json.loads(pathlib.Path('build_summary.json').read_text(encoding='utf-8'))

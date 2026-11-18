@@ -1,12 +1,14 @@
 """
 mschxudp 词库校验器
 
-把「Windows 导入失败」拆成四类可行动的问题，而不是笼统的「格式错误」：
+把「Windows 导入失败」拆成三类可行动的问题，而不是笼统的「格式错误」：
 
   1. 文件格式错误（format）      —— 签名/协议头/版本不对，文件根本不是 mschxudp
   2. 文件已损坏（corruption）    —— 截断、偏移表越界/非递增、UTF-16LE 未对齐、分隔符缺失
   3. 候选位置/内容违规（content）—— 候选序号不在 1~9、拼音非法、词条超长、重复
-  4. Windows UI 容量警告（ui）   —— 词条数超过微软拼音导入/设置页可承受规模
+
+词条数量本身不作为问题上报：规模是发布策略（见 src/profiles.py）的职责，
+格式校验只回答「这个文件是不是一个合法且可导入的 mschxudp」。
 
 用法::
 
@@ -40,7 +42,6 @@ from .format_spec import (
     HEADER_VERSION,
     MAX_CANDIDATE_POSITION,
     MAX_CODE_UNITS,
-    MAX_IMPORT_ENTRIES,
     MAX_WORD_UNITS,
     OFF_FLAG,
     OFF_PHRASE_COUNT,
@@ -50,7 +51,6 @@ from .format_spec import (
     OFF_TIMESTAMP,
     OFF_VERSION,
     PHRASE_OFFSET_START,
-    UI_FREEZE_ENTRIES,
     is_valid_pinyin,
     utf16_units,
 )
@@ -59,15 +59,14 @@ CATEGORY_LABELS = {
     'format': '文件格式错误',
     'corruption': '文件已损坏',
     'content': '候选位置/内容违规',
-    'ui': 'Windows 容量警告',
 }
 
-CATEGORY_ORDER = ['format', 'corruption', 'content', 'ui']
+CATEGORY_ORDER = ['format', 'corruption', 'content']
 
 
 @dataclass
 class Issue:
-    category: str          # format | corruption | content | ui
+    category: str          # format | corruption | content
     severity: str          # error | warning
     code: str
     message: str
@@ -129,8 +128,6 @@ class ValidationReport:
             return '文件结构已损坏（截断/偏移越界/UTF-16LE 未对齐），Windows 会提示「文件已损坏」'
         if code == 4:
             return '文件结构可解析，但含 Windows 不接受的候选位置或内容，导入会失败或行为异常'
-        if any(i.category == 'ui' for i in self.issues):
-            return '格式合法，但词条数超过 Windows 设置页舒适区，导入后管理界面可能卡顿/假死'
         return '格式合法，未发现阻断导入的问题'
 
     def format_text(self, max_samples: int = 5) -> str:
@@ -490,21 +487,9 @@ class DatValidator:
         })
 
     def _scan_scale(self, report: ValidationReport) -> None:
-        count = report.phrase_count
-        if count > UI_FREEZE_ENTRIES:
-            report.add_issue(
-                'ui', 'warning', 'ui_freeze_risk',
-                f'词条数 {count:,} 超过 {UI_FREEZE_ENTRIES:,}，'
-                f'设置页「用户自定义短语」极可能转圈/假死且无法清除',
-            )
-        elif count > MAX_IMPORT_ENTRIES:
-            report.add_issue(
-                'ui', 'warning', 'over_import_limit',
-                f'词条数 {count:,} 超过参考实现 ({MAX_IMPORT_ENTRIES:,} 条) 与设置页舒适区，'
-                f'导入可能被截断，且管理界面会明显卡顿',
-            )
-        if 0 < count <= MAX_IMPORT_ENTRIES:
-            report.stats['within_windows_limit'] = True
+        # 词条数量本身不构成格式问题：只要二进制结构、字段与候选位合法，
+        # 就是一个可用的 mschxudp 文件。规模策略由 src/profiles.py 负责。
+        report.stats['entry_count'] = report.phrase_count
 
 
 # ======================================================================

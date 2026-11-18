@@ -31,9 +31,9 @@ STATS_START = '<!-- STATS:START -->'
 STATS_END = '<!-- STATS:END -->'
 
 SCENES = {
-    'msp_lite.dat': 'Windows 10/11 直接导入（推荐）',
-    'msp_standard.dat': '进阶用户；管理页会明显卡顿',
-    'msp_full.dat': '存档 / 转 Rime 等，Windows 无法完整导入',
+    'msp_lite.dat': '核心主力档，日常使用首选',
+    'msp_standard.dat': '全能进阶档，覆盖更广',
+    'msp_full.dat': '全量档，仅供存档 / 转其他输入法',
     'msp_win10.dat': '兼容旧链接（= msp_lite.dat）',
 }
 

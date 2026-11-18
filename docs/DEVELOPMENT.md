@@ -37,7 +37,7 @@ python scripts/build_releases.py --input msp_full.txt
 # 3) 校验
 python -m src.cli validate msp_lite.dat
 
-# 可选：梯度测试包（1w / 3w / 5w / 10w，用于对比管理页卡顿）
+# 可选：梯度测试包（1w / 3w / 5w / 10w，用于压测构建/解析/校验，观察耗时与内存）
 python scripts/make_scale_samples.py --input msp_full.txt
 
 # 测试（CI 使用同一命令，ubuntu + windows 矩阵）

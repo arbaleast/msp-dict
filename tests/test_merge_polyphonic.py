@@ -1,6 +1,7 @@
 """Phase C：多音字去重、词源溯源元数据、profile 语义与跨平台路径的回归测试。"""
 
 import importlib.util
+import math
 import json
 import os
 import sys
@@ -169,17 +170,29 @@ def test_crawler_save_words_writes_metadata(tmp_path):
 # 任务 3：profile 语义 + 跨平台路径
 # --------------------------------------------------------------------------
 
-def test_profile_exposes_reference_limit_not_windows_importable():
-    from src.profiles import PROFILES, REFERENCE_IMPORT_LIMIT, get_profile
+def test_profile_exposes_coverage_scale_not_windows_importable():
+    from src.profiles import PROFILES, get_profile
 
     lite = get_profile('lite')
-    assert lite.within_reference_import_limit is True
-    assert get_profile('standard').within_reference_import_limit is False
-    assert get_profile('full').within_reference_import_limit is False
-    assert REFERENCE_IMPORT_LIMIT == 20000
-    # 旧字段已移除，避免「可直接导入 Windows」这种没有实机依据的表述
+    standard = get_profile('standard')
+    full = get_profile('full')
+
+    # 档位按覆盖规模划分
+    assert lite.limit == 200000
+    assert standard.limit == 800000
+    assert full.limit is None
+    assert lite.exclude_single is True
+    assert standard.exclude_single is False
+    assert lite.extended_ratio == 0.15
+    assert standard.extended_ratio == 0.35
+
+    # 旧的「可直接导入 Windows」表述与参考阈值都不得复活：
+    # 它们既没有实机依据，也已经和当前档位策略不符
     assert not hasattr(lite, 'windows_importable')
     assert 'windows_importable' not in PROFILES['lite'].__dict__
+    assert not hasattr(lite, 'within_reference_import_limit')
+    import src.profiles as profiles_mod
+    assert not hasattr(profiles_mod, 'REFERENCE_IMPORT_LIMIT')
 
 
 def test_default_mspinyin_dict_is_platform_aware():
@@ -334,3 +347,187 @@ def test_docs_relative_links_resolve(relative):
         path = target.split('#')[0]
         if path:
             assert (doc.parent / path).exists(), f'{relative} -> {target}'
+
+
+# --------------------------------------------------------------------------
+# 任务 1：扩展源按「基础源单字热度」排序
+# --------------------------------------------------------------------------
+
+def test_build_char_weight_accumulates_log_frequency():
+    entries = [('中国', 'zhong guo', 1000, 'base'), ('中', 'zhong', 10, 'base')]
+    weight = merge_mod.build_char_weight([entries])
+
+    import math
+    assert weight['中'] == pytest.approx(math.log1p(1000) + math.log1p(10))
+    assert weight['国'] == pytest.approx(math.log1p(1000))
+    assert 'x' not in weight
+
+
+def test_build_char_weight_ignores_non_basic_cjk():
+    entries = [('㐵作', 'a zuo', 500, 'base')]   # CJK 扩展 A 区
+    weight = merge_mod.build_char_weight([entries])
+
+    assert '㐵' not in weight
+    assert weight['作'] == pytest.approx(math.log1p(500))
+
+
+def test_extended_score_puts_rare_char_words_last():
+    """含生僻字（基础源里从没出现过的字）的词条必须垫底，但不删除。"""
+    char_weight = {'明': 100.0, '日': 100.0, '方': 100.0, '舟': 100.0, '菇': 0.0}
+
+    good = merge_mod.extended_score('明日方舟', char_weight)
+    bad = merge_mod.extended_score('香菇', char_weight)
+
+    assert good[0] > merge_mod.INVALID_SCORE
+    assert bad[0] == merge_mod.INVALID_SCORE
+
+
+def test_extended_score_zeroes_outside_basic_cjk():
+    """CJK 扩展区的字（U+4E00 之外）直接垫底。"""
+    char_weight = {'作': 50.0}
+    assert merge_mod.extended_score('㐵作', char_weight)[0] == merge_mod.INVALID_SCORE
+
+
+def test_extended_score_uses_min_char_weight_as_tiebreaker():
+    """木桶效应：最小字权重作为次分，罕见字会把整词拉到后面。"""
+    char_weight = {'明': 100.0, '日': 100.0, '天': 1.0}
+    score = merge_mod.extended_score('明天', char_weight)
+
+    assert score[1] == pytest.approx(1.0)     # min(100, 1)
+    assert score[0] > merge_mod.INVALID_SCORE
+
+
+def test_extended_score_prefers_two_to_four_char_words():
+    """词长系数让 2~3 字优先于 4 字，4 字优先于更长。"""
+    char_weight = {c: 100.0 for c in '一二三四五六'}
+    two = merge_mod.extended_score('一二', char_weight)
+    four = merge_mod.extended_score('一二三四', char_weight)
+    six = merge_mod.extended_score('一二三四五六', char_weight)
+
+    assert two[0] >= four[0] > six[0]
+
+
+def test_merge_extended_orders_by_score_not_unicode():
+    """扩展源排序必须按质量打分，而不是 Unicode 码点升序。"""
+    char_weight = {'明': 500.0, '日': 500.0, '方': 500.0, '舟': 500.0,
+                   '㐵': 0.0, '作': 0.0}
+    base = [('基础', 'ji chu', 10, 'base')]
+    ext = [
+        ('㐵作', 'a zuo', 1, 'wiki'),      # 码点最靠前，但含生僻字 → 应垫底
+        ('明日方舟', 'ming ri fang zhou', 1, 'wiki'),
+    ]
+
+    merged = merge_mod.merge_extended(base, ext, char_weight)
+
+    assert [w for w, _, _, _ in merged] == ['基础', '明日方舟', '㐵作']
+
+
+def test_bigram_model_prefers_real_words_over_fragments():
+    """二元语法模型要能区分「成词」与「不成词」。
+
+    「中国」在基础源里高频且共现，「人一」只是两个高频字的拼接、不成词。
+    只看单字权重时两者分数一样（都是最热的字），必须靠二元语法拉开差距。
+    """
+    base_entries = [[
+        ('中国', 'zhong guo', 100000, 'base'),
+        ('国人', 'guo ren', 50000, 'base'),
+        ('人民', 'ren min', 50000, 'base'),
+        ('一生', 'yi sheng', 20000, 'base'),
+    ]]
+    model = merge_mod.build_bigram_model(base_entries)
+    char_weight = merge_mod.build_char_weight(base_entries)
+
+    real = merge_mod.extended_score('中国', char_weight, model)
+    fragment = merge_mod.extended_score('人一', char_weight, model)
+
+    assert real[0] > fragment[0]
+    assert fragment[0] > merge_mod.INVALID_SCORE
+
+
+def test_bigram_model_is_length_normalised():
+    """主分是「平均每字的 log 概率」，长词不会因为字多而系统性吃亏。"""
+    base_entries = [[('中国', 'zhong guo', 1000, 'base'),
+                     ('国人', 'guo ren', 1000, 'base'),
+                     ('人民', 'ren min', 1000, 'base')]]
+    model = merge_mod.build_bigram_model(base_entries)
+    char_weight = merge_mod.build_char_weight(base_entries)
+
+    two = merge_mod.extended_score('中国', char_weight, model)
+    four = merge_mod.extended_score('中国人民', char_weight, model)
+
+    assert four[0] > merge_mod.INVALID_SCORE
+    assert abs(two[0] - four[0]) < 1.0     # 同一批字符，均值应当接近
+
+
+def test_merge_extended_uses_bigram_model_when_provided():
+    """传入 bigram 时排序应按二元语法分数，而不是单字权重。"""
+    base_entries = [[
+        ('中国', 'zhong guo', 100000, 'base'),
+        ('国人', 'guo ren', 50000, 'base'),
+    ]]
+    char_weight = merge_mod.build_char_weight(base_entries)
+    model = merge_mod.build_bigram_model(base_entries)
+    base = [('基础', 'ji chu', 10, 'base'),
+            ('中国', 'zhong guo', 100000, 'base')]
+    ext = [
+        ('中国', 'zhong guo', 1, 'wiki'),            # 与基础源同读音 → 会被去重
+        ('一人', 'yi ren', 1, 'wiki'),
+        ('中国国', 'zhong guo guo', 1, 'wiki'),
+    ]
+
+    merged = merge_mod.merge_extended(base, ext, char_weight, model)
+    # '中国' 只应保留基础源那一条，扩展源的同读音被去重
+    assert [row for row in merged if row[0] == '中国'] == [
+        ('中国', 'zhong guo', 100000, 'base')]
+    assert '中国国' in [w for w, _, _, _ in merged]
+    # 成词的「中国国」应排在不成词的「一人」前面
+    words = [w for w, _, _, _ in merged]
+    assert words.index('中国国') < words.index('一人')
+
+
+def test_merge_extended_is_deterministic_for_equal_scores():
+    base = [('基础', 'ji chu', 10, 'base')]
+    ext = [('长城', 'chang cheng', 5, 'wiki'), ('国内', 'gui nei', 5, 'wiki')]
+
+    first = merge_mod.merge_extended(base, ext, {})
+    second = merge_mod.merge_extended(base, list(reversed(ext)), {})
+
+    assert first == second
+
+
+def test_merge_extended_penalises_pinyin_already_covered_by_base():
+    """同拼音的基础词条已经把候选位占满时，扩展词应排到后面。
+
+    候选位上限是 9，基础源同拼音词条先占位，这类扩展词在输入法里根本
+    轮不到显示，留着只是浪费 lite/standard 的配额。
+
+    两条扩展词用同一个词（因此基础分完全相同），只有拼音不同：
+    'jia yi' 已被基础源占用，'jia yi er' 没有，惩罚项应该只影响前者。
+    """
+    base = [('甲乙风', 'jia yi feng', 100, 'base'), ('丙丁', 'bing ding', 50, 'base')]
+    base += [(f'加意{i}', 'jia yi', 90 - i, 'base') for i in range(5)]
+    ext = [('甲乙', 'jia yi', 1, 'wiki'), ('甲乙', 'jia yi er', 1, 'wiki')]
+    char_weight = merge_mod.build_char_weight([base])
+    model = merge_mod.build_bigram_model([base])
+
+    merged = merge_mod.merge_extended(base, ext, char_weight, model)
+    rows = [(row[0], row[1]) for row in merged if row[0] == '甲乙']
+
+    assert rows == [('甲乙', 'jia yi er'), ('甲乙', 'jia yi')]
+
+
+def test_merge_extended_penalty_is_zero_without_base_competition():
+    """基础源没有同拼音词条时，不产生竞争惩罚，排序仍由基础分决定。"""
+    base = [('甲乙风', 'jia yi feng', 100, 'base')]
+    ext = [('甲乙', 'jia yi', 1, 'wiki')]
+    char_weight = merge_mod.build_char_weight([base])
+    model = merge_mod.build_bigram_model([base])
+
+    merged = merge_mod.merge_extended(base, ext, char_weight, model)
+
+    assert ('甲乙', 'jia yi', 1, 'wiki') in merged
+
+
+def test_merge_extended_penalty_factor_is_positive():
+    """惩罚系数必须为正，否则等于没做竞争抑制。"""
+    assert merge_mod.PY_SATURATION_PENALTY > 0

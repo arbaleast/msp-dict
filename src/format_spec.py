@@ -65,14 +65,7 @@ ENTRY_SPLIT = 0x0000
 # ---- 字段上限（来源: imewlconverter MsChxUdpExporterBase）----
 MAX_CODE_UNITS = 32           # 拼音编码最多 32 个 UTF-16 单元
 MAX_WORD_UNITS = 64           # 词条最多 64 个 UTF-16 单元
-MAX_IMPORT_ENTRIES = 20000    # 微软拼音单次导入/用户词库上限，超出 Windows 侧无法容纳
 MAX_CANDIDATE_POSITION = 9    # UI 候选框只有 9 个位置
-
-# 词库规模分级（用于三档发布与 UI 卡死预警）
-LITE_MAX_ENTRIES = 20000      # 精简版软上限
-STANDARD_MAX_ENTRIES = 50000  # 标准版软上限
-UI_WARN_ENTRIES = 20000       # 超过此值，UWP 设置页开始明显卡顿，且参考实现会截断
-UI_FREEZE_ENTRIES = 50000     # 超过此值，设置页「用户自定义短语」可能假死
 
 # 拼音：只允许小写字母与音节分隔符 '
 PINYIN_PATTERN = re.compile(r"^[a-z']+$")

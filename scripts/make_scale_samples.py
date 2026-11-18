@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """
-生成梯度规模测试包（1w / 3w / 5w / 10w），用于复现和验证 Windows 设置页卡顿。
+生成梯度规模测试包（1w / 3w / 5w / 10w），用于压测构建/解析链路。
 
 不含任何清洗之外的选词策略：直接取全量词库中词频最高的前 N 条，
-保留单字与长词的真实占比，因此可以拿来对比「导入 1 万 / 3 万 / 5 万 / 10 万条」
-时微软拼音「用户自定义短语」管理界面的响应情况。
+保留单字与长词的真实占比，用来观察不同规模下构建、解析、校验的耗时与内存。
 
 输出（默认 scale_samples/）:
     msp_scale_10000.dat ...
@@ -44,7 +43,7 @@ def build_sample(source: Path, size: int, output_dir: Path, timestamp: int) -> d
     builder = Win10MSPinyinBuilder(timestamp=timestamp)
     selected = builder.add_from_text_file(str(source), limit=size)
 
-    # 输入侧分布（用于解释 UI 卡顿与词条构成）
+    # 输入侧分布（用于解释词条构成）
     freqs = []
     lengths = []
     with open(source, encoding='utf-8') as f:

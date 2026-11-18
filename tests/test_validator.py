@@ -193,7 +193,8 @@ class TestScaleWarnings:
             letters.append(chr(ord('a') + rem))
         return ''.join(reversed(letters))
 
-    def test_over_import_limit_warning(self, tmp_path):
+    def test_entry_count_alone_is_not_a_issue(self, tmp_path):
+        """词条数量本身不构成格式问题：规模是发布策略的职责。"""
         entries = [(f"词{i}", self._unique_code(i), 1) for i in range(20001)]
         path = _valid_dat(tmp_path, name="big.dat", entries=entries)
 
@@ -201,16 +202,16 @@ class TestScaleWarnings:
 
         assert report.phrase_count == 20001
         assert report.exit_code == 0
-        assert [i.code for i in report.issues] == ['over_import_limit']
+        assert report.issues == []
 
-    def test_freeze_risk_above_fifty_thousand(self, tmp_path):
+    def test_large_dictionary_has_no_capacity_warning(self, tmp_path):
         entries = [(f"词{i}", self._unique_code(i), 1) for i in range(50001)]
         path = _valid_dat(tmp_path, name="huge.dat", entries=entries)
 
         report = DatValidator(now=NOW).validate(str(path))
 
         assert report.exit_code == 0
-        assert [i.code for i in report.issues] == ['ui_freeze_risk']
+        assert report.issues == []
 
 
 class TestRealWorldSample:

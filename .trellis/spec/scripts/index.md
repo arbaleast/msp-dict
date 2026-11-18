@@ -24,7 +24,7 @@ README.md 的 <!-- STATS:START --> 区块 + BUILD_DATE
 | `download_frost.py` | rime-ice / rime-frost + 扩展源 release | `cache/rime-*.txt`、`cache/ext-*.dict.yaml` | 基础源缺失即失败；扩展源失败只告警（`--strict-ext` 可收紧）；`cache/` 不入库 |
 | `merge.py` | `cache/rime-*.txt` + `cache/ext-*` | `msp_full.txt`、`CHANGELOG.md` | 基础源缺失直接失败；扩展源强过滤（纯中文、2~6 字、拼音合法）；同词基础源优先；无拼音/词频<1 剔除并计数 |
 | `build_releases.py` | `msp_full.txt` | 4 个 DAT + `build_summary.json` | 逐档 validate，非 0 退出阻断；`msp_win10.dat` 必须是 lite 的字节副本 |
-| `make_scale_samples.py` | `msp_full.txt` | `scale_samples/` | 仅用于复现规模卡顿，不随 Release 发布 |
+| `make_scale_samples.py` | `msp_full.txt` | `scale_samples/` | 仅用于压测不同规模的构建/解析/校验，不随 Release 发布 |
 | `update_readme.py` | `build_summary.json` | README 统计块 | 无数据时不得瞎改；统计块标记必须保留 |
 | `build_releases.py --with-canary` | `msp_full.txt` | `msp_<profile>_canary.dat` + `.json` | 独立产物，绝不覆盖正式 DAT；需有词条上限的档位 |
 

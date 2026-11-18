@@ -31,7 +31,6 @@ from .format_spec import (
     HEADER_VERSION,
     MAX_CANDIDATE_POSITION,
     MAX_CODE_UNITS,
-    MAX_IMPORT_ENTRIES,
     MAX_WORD_UNITS,
     OFF_FLAG,
     OFF_PHRASE_COUNT,
@@ -383,11 +382,6 @@ class Win10MSPinyinBuilder:
 
         size = os.path.getsize(filepath)
         logger.info("已保存: %s (%d 词条, %.1f MB)", filepath, self.stats.accepted, size / 1024 / 1024)
-        if self.stats.accepted > MAX_IMPORT_ENTRIES:
-            logger.warning(
-                "词条数 %d 超过微软拼音 %d 条上限，Windows 无法完整导入（可作为存档或转其他输入法）",
-                self.stats.accepted, MAX_IMPORT_ENTRIES,
-            )
 
 
 class Win10MSPinyinParser:

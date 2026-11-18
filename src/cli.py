@@ -37,7 +37,6 @@ from .canary import (
     resolve_probes,
     write_manifest,
 )
-from .format_spec import MAX_IMPORT_ENTRIES
 from .profiles import PROFILES, get_profile
 from .validator import CanaryChecker, DatValidator
 
@@ -274,9 +273,6 @@ def cmd_build(args):
     print(f"  读取词条: {selected:,}")
     print(f"  写入词条: {stats.accepted:,}")
     print(f"  清洗统计: {stats.summary()}")
-    if stats.accepted > MAX_IMPORT_ENTRIES:
-        print(f"  ⚠️  词条数超过微软拼音约 {MAX_IMPORT_ENTRIES:,} 条上限："
-              f"Windows 无法完整导入，请改用 lite 档（--profile lite）或转其他输入法")
 
     if probes:
         manifest_path = args.manifest or (os.path.splitext(output)[0] + '.json')

@@ -15,7 +15,7 @@
   * 只有词频、没有拼音的行（rime-ice tencent 等）无法写入 mschxudp，直接剔除
   * 扩展源强过滤：纯中文、2~6 字、拼音可规范化为小写 a-z + '
   * 输出 `词条\\t拼音\\t词频\\t来源`，基础源在前（按词频降序），扩展源在后
-    （按词长、词典序），三档构建据此做配额截断
+    （按「基础源单字热度」打分降序），三档构建据此做配额截断
 
 用法:
     python scripts/merge.py                       # 读 cache/，写 msp_full.txt + CHANGELOG.md
@@ -27,6 +27,7 @@
 import argparse
 import hashlib
 import json
+import math
 import os
 import sys
 from datetime import datetime, timezone
@@ -42,6 +43,11 @@ from crawler.scel_parser import ScelParseError  # noqa: E402
 CJK_RE = None  # 延迟编译，避免顶层 import re 之外的副作用
 EXT_MIN_UNITS = 2
 EXT_MAX_UNITS = 6
+
+# 基本汉字区（CJK Unified Ideographs）。扩展区（A 区 U+3400-U+4DBF、B 区
+# U+20000 起）里的生僻字在日常输入里几乎不会被用到，热度打分时按 0 处理。
+BASIC_CJK_MIN = 0x4E00
+BASIC_CJK_MAX = 0x9FFF
 
 FILES = [
     'rime-ice_base.txt', 'rime-ice_ext.txt', 'rime-ice_tencent.txt',
@@ -224,25 +230,176 @@ def merge(entries_list):
     return [(word, pinyin, freq, 'base') for word, pinyin, freq in rows]
 
 
-def merge_extended(base_merged, ext_entries):
+def build_char_weight(entries_list) -> dict:
+    """统计基础源里每个汉字的「热度权重」。
+
+    扩展源（维基/萌娘/SCEL）没有可比词频（上游一律给 1），没法直接按质量
+    排序。这里用「这个字在基础源里出现得多频繁」当作质量代理：常用字组成的
+    专有名词（蘑菇云、明日方舟）应该排在生僻字组成的词条（㐵作、㑎姓）前面。
+
+    权重取词频的对数（log1p）后按出现次数累加——高频词贡献大，但不会让单个
+    超高频词把某个字彻底垄断。只统计基本汉字区（U+4E00-U+9FFF），
+    其它区段的字权重恒为 0，视为生僻字。
+    """
+    weight = {}
+    for entries in entries_list:
+        for entry in entries:
+            # 兼容 (词, 拼音, 词频) 与 (词, 拼音, 词频, 来源) 两种形状
+            word, freq = entry[0], entry[2]
+            if freq <= 0:
+                continue
+            gain = math.log1p(freq)
+            for ch in word:
+                if BASIC_CJK_MIN <= ord(ch) <= BASIC_CJK_MAX:
+                    weight[ch] = weight.get(ch, 0.0) + gain
+    return weight
+
+
+class BigramModel:
+    """用基础源词频训练出来的二元语法模型。
+
+    只靠「单字有多常见」判断不了质量：「人一」「了一」「子一」这类碎片用的全
+    是最高频的字，单字权重反而最高，必须靠「这些字能不能组成词」来区分。
+    基础源本身就是 260 万条中文词，用它统计相邻字共现就是一个现成的语言模型。
+
+    打分 = 平均每个字的 log 概率（越接近 0 越像正常词），并按词长微调：
+    2~3 字最优，4 字次之，更长的轻微扣分。
+    """
+
+    # 二元切分的插值系数：0.7 * 一元 + 0.3 * 二元。
+    # 一元保证没见过的搭配也有合理下限，二元负责区分「成词」与「不成词」。
+    LAMBDA = 0.7
+
+    def __init__(self):
+        self.total = 0
+        self.char_count = {}
+        self.bigram_count = {}
+
+    @staticmethod
+    def _key(a: str, b: str) -> int:
+        # 用 int 当 key 比 tuple 省一半内存（约 90 万条二元组时差别很明显）
+        return (ord(a) << 16) | ord(b)
+
+    def add_word(self, word: str) -> None:
+        if len(word) < 1:
+            return
+        self.total += 1
+        for ch in set(word):
+            self.char_count[ch] = self.char_count.get(ch, 0) + 1
+        for pair in set(zip(word, word[1:])):
+            key = self._key(pair[0], pair[1])
+            self.bigram_count[key] = self.bigram_count.get(key, 0) + 1
+
+    def mean_log_prob(self, word: str) -> float:
+        """返回平均每个字的 log 概率；越接近 0 越像正常词。"""
+        if not self.total or len(word) < 2:
+            return -99.0
+        total = float(self.total)
+        p_first = self.char_count.get(word[0], 0) / total
+        acc = math.log(max(p_first, 1e-12))
+        for i in range(len(word) - 1):
+            a, b = word[i], word[i + 1]
+            p_uni = self.char_count.get(b, 0) / total
+            denom = max(self.char_count.get(a, 0), 1)
+            p_bi = self.bigram_count.get(self._key(a, b), 0) / denom
+            p = self.LAMBDA * p_uni + (1.0 - self.LAMBDA) * p_bi
+            acc += math.log(max(p, 1e-12))
+        return acc / len(word)
+
+
+def build_bigram_model(entries_list) -> BigramModel:
+    """用基础源词条训练二元语法模型。"""
+    model = BigramModel()
+    for entries in entries_list:
+        for entry in entries:
+            word = entry[0]
+            freq = entry[2]
+            if freq <= 0 or not word:
+                continue
+            model.add_word(word)
+    return model
+
+
+# 词长偏好：2~3 字最优，4 字次之，更长轻微扣分
+LENGTH_FACTOR = {2: 1.0, 3: 1.0, 4: 0.95, 5: 0.85}
+
+# 判定为「生僻/无效」的兜底分，必须小于任何正常词条
+INVALID_SCORE = -1e9
+
+# 同拼音竞争惩罚系数：如果基础源里同拼音的词条已经很多，扩展词即使分高也
+# 挤不进候选前 9 位（候选位上限 9），属于浪费配额，因此要扣分。
+PY_SATURATION_PENALTY = 0.5
+
+
+def extended_score(word: str, char_weight: dict, bigram: BigramModel = None) -> tuple:
+    """给扩展源词条打分（越大越优先），返回 (主分, 次分)。
+
+    * 含非基本汉字区字符，或含在基础源里从未出现过的字 → 垫底
+      （不删除，full 档仍会收录，lite/standard 优先取高分词）。
+    * 主分 = 二元语法的平均 log 概率 + 词长系数；没有 bigram 时退化为
+      最小单字权重 × 词长系数。
+    * 次分 = 最小单字权重（木桶效应：只要有一个字罕见，整词就靠后）。
+    """
+    if not word:
+        return (INVALID_SCORE, 0.0)
+    weights = []
+    for ch in word:
+        if not (BASIC_CJK_MIN <= ord(ch) <= BASIC_CJK_MAX):
+            return (INVALID_SCORE, 0.0)
+        weights.append(char_weight.get(ch, 0.0))
+    if not weights or min(weights) <= 0.0:
+        return (INVALID_SCORE, 0.0)
+    n = len(weights)
+    length_factor = LENGTH_FACTOR.get(n, 0.7)
+    min_weight = min(weights)
+    if bigram is not None:
+        primary = bigram.mean_log_prob(word) + math.log(length_factor)
+    else:
+        primary = min_weight * length_factor
+    return (primary, min_weight)
+
+
+def merge_extended(base_merged, ext_entries, char_weight=None, bigram=None):
     """把扩展源并入基础结果。
 
     去重键同样是 (词, 拼音)：基础源已有的读音不再重复引入，但扩展源提供的
     **另一个**合法读音会被保留（例如基础源只有 yin'hang，扩展源补充 yin'xing）。
-    扩展源内部按词长/字典序稳定排序。
+
+    排序按「基础源训练出的质量打分」降序（见 extended_score），不再按 Unicode
+    码点升序——后者会让 CJK 扩展区的生僻字、以及「一X」「丁X」这类排在
+    码点最前面的词霸占配额。
+
+    另外对「同拼音已经有大量基础词条」的扩展词扣分：候选位上限是 9，
+    基础词会先占满前 9 位，这类扩展词在输入法里根本轮不到显示，
+    留着只是浪费配额。
     """
+    char_weight = char_weight or {}
     # 同样用归一化拼音做键：基础源的「yinhang」与扩展源的「yin hang」是同一个读音
     existing = {(item[0], normalize_pinyin(item[1])) for item in base_merged}
+    pinyin_count = {}
+    for item in base_merged:
+        code = normalize_pinyin(item[1])
+        if code:
+            pinyin_count[code] = pinyin_count.get(code, 0) + 1
     ext_words = {}
     for word, pinyin, freq, source in ext_entries:
         key = (word, normalize_pinyin(pinyin))
         if not key[1] or key in existing or key in ext_words:
             continue
         ext_words[key] = (pinyin, freq, source)
-    ordered = sorted(ext_words.items(),
-                     key=lambda x: (utf16_units(x[0][0]), x[0][0], x[0][1]))
+
+    scored = []
+    for (word, _norm), (pinyin, freq, source) in ext_words.items():
+        primary, secondary = extended_score(word, char_weight, bigram)
+        if primary > INVALID_SCORE / 2:
+            saturation = math.log(1 + pinyin_count.get(normalize_pinyin(pinyin), 0))
+            primary -= PY_SATURATION_PENALTY * saturation
+        scored.append(((primary, secondary), word, pinyin, freq, source))
+    # 得分降序；同分再按词长、词、拼音稳定排序，保证每次构建结果可复现
+    scored.sort(key=lambda item: (-item[0][0], -item[0][1],
+                                  len(item[1]), item[1], item[2]))
     return base_merged + [(word, pinyin, freq, source)
-                          for (word, _), (pinyin, freq, source) in ordered]
+                          for _score, word, pinyin, freq, source in scored]
 
 
 def sha256_of_file(path: Path) -> str:
@@ -382,10 +539,9 @@ def write_changelog(merged, usable_count, no_pinyin_count, source_counts,
                 f.write(f'  - {item["label"]}：原始 {item["raw"]:,} 条，'
                         f'清洗后 {item["clean"]:,} 条，去重后入选 {ext_counts.get(source, 0):,} 条\n')
         f.write('\n## 下载文件\n\n')
-        f.write('- `msp_lite.dat` — 精简版（推荐 Windows 10/11 直接导入，≤ 2 万条；'
-                '扩展源 ≤12%）\n')
-        f.write('- `msp_standard.dat` — 标准版（约 5 万条，管理界面会卡顿；扩展源 ≤22%）\n')
-        f.write('- `msp_full.dat` — 完整版（约百万条，仅供存档/转其他输入法）\n')
+        f.write('- `msp_lite.dat` — 核心主力档（≤ 20 万条，剔除单字；扩展源 ≤15%）\n')
+        f.write('- `msp_standard.dat` — 全能进阶档（≤ 80 万条，含单字；扩展源 ≤35%）\n')
+        f.write('- `msp_full.dat` — 全量档（不截断，仅供存档/转其他输入法）\n')
         f.write('- `msp_win10.dat` — 兼容旧链接，等同 `msp_lite.dat`\n')
 
 
@@ -495,6 +651,10 @@ def main() -> int:
     used_source_files = [fn for fn in FILES
                          if fn in source_counts and source_counts[fn] > 0]
 
+    # 基础源单字热度：用于给没有可比词频的扩展源排序
+    char_weight = build_char_weight(all_entries)
+    bigram = build_bigram_model(all_entries)
+
     ext_stats = {}
     ext_counts = {}
     if not args.no_extended:
@@ -507,7 +667,7 @@ def main() -> int:
                       file=sys.stderr)
                 return 1
             print(f'ℹ️  扩展源缺失 {len(ext_missing)} 个，已降级为仅基础源')
-        merged = merge_extended(merged, ext_entries)
+        merged = merge_extended(merged, ext_entries, char_weight, bigram)
         for _, _, _, source in merged:
             ext_counts[source] = ext_counts.get(source, 0) + 1
 

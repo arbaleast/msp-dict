@@ -29,9 +29,9 @@ def test_render_stats_block_is_fixed_table():
     block = update_readme.render_stats_block(STATS)
 
     assert '| 文件 | 词条数 | 大小 | 适用场景 |' in block
-    assert '| **msp_lite.dat** | 19,992 | 869 KB | Windows 10/11 直接导入（推荐） |' in block
-    assert '| msp_standard.dat | 49,202 | ~2 MB | 进阶用户；管理页会明显卡顿 |' in block
-    assert '| msp_full.dat | 1,015,471 | ~52 MB | 存档 / 转 Rime 等，Windows 无法完整导入 |' in block
+    assert '| **msp_lite.dat** | 19,992 | 869 KB | 核心主力档，日常使用首选 |' in block
+    assert '| msp_standard.dat | 49,202 | ~2 MB | 全能进阶档，覆盖更广 |' in block
+    assert '| msp_full.dat | 1,015,471 | ~52 MB | 全量档，仅供存档 / 转其他输入法 |' in block
     assert '| msp_win10.dat | 19,992 | 869 KB | 兼容旧链接（= msp_lite.dat） |' in block
     assert block.startswith(update_readme.STATS_START)
     assert block.endswith(update_readme.STATS_END)
@@ -50,7 +50,7 @@ def test_update_readme_rewrites_stats_and_is_idempotent(tmp_path):
     assert update_readme.update_readme(readme, changed) is True
     first = readme.read_text(encoding='utf-8')
 
-    assert '| **msp_lite.dat** | 12,345 | 500 KB | Windows 10/11 直接导入（推荐） |' in first
+    assert '| **msp_lite.dat** | 12,345 | 500 KB | 核心主力档，日常使用首选 |' in first
     assert '| msp_standard.dat | 45,678 | ~3 MB |' in first
     assert '| msp_full.dat | 999,999 | ~38 MB |' in first
     assert first.count(update_readme.STATS_START) == 1
