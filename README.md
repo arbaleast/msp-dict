@@ -137,12 +137,15 @@ head -c 8 msp_lite.dat                    # 应输出 mschxudp
 ### 命令行清理与重置
 
 「用户定义的短语」页面打不开、一直转圈时，可以绕过界面直接用命令行清理。
+这不是词库文件坏了：设置页会把全部短语一次性做成 UI 列表，「清除」按钮又在这个页面里，
+所以进得去才发现点不动。打字本身不受影响，删掉短语库文件即可恢复。
 下面的命令会**删除你导入的词库文件**，其中包含你自己添加的自定义短语与输入法自学习数据，
 **先备份再执行**。
 
 ```bat
 REM 1) 先备份（管理员 CMD / PowerShell）
 mkdir "%USERPROFILE%\Desktop\msp-backup"
+xcopy "%APPDATA%\Microsoft\InputMethod\Chs" "%USERPROFILE%\Desktop\msp-backup\Chs-roaming" /E /I /H
 xcopy "%LOCALAPPDATA%\Microsoft\InputMethod\Chs" "%USERPROFILE%\Desktop\msp-backup\Chs" /E /I /H
 
 REM 2) 关掉占用文件的进程
@@ -150,8 +153,8 @@ taskkill /F /IM SystemSettings.exe
 taskkill /F /IM TextInputHost.exe
 taskkill /F /IM ctfmon.exe
 
-REM 3) 删除词库文件
-del "%LOCALAPPDATA%\Microsoft\InputMethod\Chs\ChsPinyinUDP.lex"
+REM 3) 删除自定义短语库（在 Roaming 下，不是 Local）
+del "%APPDATA%\Microsoft\InputMethod\Chs\ChsPinyinEUDPv1.lex"
 
 REM 4) 注销重登后再导入 msp_lite.dat
 ```

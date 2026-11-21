@@ -307,11 +307,45 @@ def test_recovery_doc_requires_backup_before_deletion():
     warning_at = text.index('严重警告')
     assert warning_at < backup_at
     # 必须写明哪些文件会被删掉、删掉的后果，以及回滚方式
-    for token in ('ChsPinyinUDP.lex', 'ChsPinyinEUDL.dat', 'ChsPinyinUDL.dat',
+    for token in ('ChsPinyinEUDPv1.lex', 'ChsPinyinEUDL.dat', 'ChsPinyinUDL.dat',
                   '自学习', '回滚'):
         assert token in text, f'恢复指引缺少 {token}'
+    # 自定义短语库在 Roaming（%APPDATA%）下，不是 %LOCALAPPDATA%
+    assert 'ChsPinyinUDP.lex' not in text, '自定义短语文件名写错：应为 ChsPinyinEUDPv1.lex'
+    assert '%APPDATA%\\Microsoft\\InputMethod\\Chs' in text
     # 禁止建议删掉整个 InputMethod 目录
     assert '绝对不要删除整个 `InputMethod` 目录' in text
+
+
+def test_docs_do_not_repeat_the_fake_phrase_limit():
+    """转圈的归因必须是「设置页缺陷」，不能再写成「词库规模超过某个上限」。
+
+    旧文档（2026-11-21 前）在 README/RECOVERY 里写 `ChsPinyinUDP.lex`、
+    在诊断报告里把 §3.3 写成「词库规模（P0，卡死）」，本测试对这三处都要变红。
+    """
+    readme = (ROOT / 'README.md').read_text(encoding='utf-8')
+    recovery = (ROOT / 'docs' / 'RECOVERY.md').read_text(encoding='utf-8')
+    diagnosis = (ROOT / 'docs' / 'ISSUE3_DIAGNOSIS.md').read_text(encoding='utf-8')
+
+    # 1) 真实文件名是 ChsPinyinEUDPv1.lex（Roaming 下），旧文档写的 ChsPinyinUDP.lex 不存在
+    for name, text in (('README', readme), ('RECOVERY', recovery)):
+        assert 'ChsPinyinEUDPv1.lex' in text, f'{name} 缺少真实文件名 ChsPinyinEUDPv1.lex'
+        assert 'ChsPinyinUDP.lex' not in text, f'{name} 仍写错文件名 ChsPinyinUDP.lex'
+
+    # 2) 必须给出 Roaming 路径（%APPDATA%），不能只写 %LOCALAPPDATA%
+    for name, text in (('README', readme), ('RECOVERY', recovery)):
+        assert '%APPDATA%\\Microsoft\\InputMethod\\Chs' in text, f'{name} 缺少 %APPDATA% 路径'
+
+    # 3) 诊断报告的归因已改为设置页缺陷，并明确「输入引擎正常」
+    assert '3.3 设置页转圈' in diagnosis
+    assert '词库规模（P0' not in diagnosis, '诊断报告仍把 §3.3 写成词库规模问题'
+    assert '更正' in diagnosis
+    assert '输入引擎' in diagnosis and '设置页' in diagnosis
+
+    # 4) 用户可见文档不再出现「规模/上限」这类误导性框架
+    for name, text in (('README', readme), ('RECOVERY', recovery)):
+        assert '上限' not in text or '没有' in text or '从未' in text, \
+            f'{name} 把「上限」当成既定事实'
 
 
 def test_readme_keeps_compact_cli_cleanup_and_links_full_recovery():
@@ -320,11 +354,11 @@ def test_readme_keeps_compact_cli_cleanup_and_links_full_recovery():
     assert 'docs/RECOVERY.md' in readme
 
     # 命令行快速清理必须有：备份、结束进程、删除词库文件
-    for token in ('xcopy', 'msp-backup', 'taskkill', 'ChsPinyinUDP.lex'):
+    for token in ('xcopy', 'msp-backup', 'taskkill', 'ChsPinyinEUDPv1.lex'):
         assert token in readme, f'README 缺少命令行清理要素: {token}'
 
     # 备份必须排在删除之前
-    assert readme.index('xcopy') < readme.index('ChsPinyinUDP.lex')
+    assert readme.index('xcopy') < readme.index('ChsPinyinEUDPv1.lex')
 
     # 完整教程（逐文件后果表、分步标题）仍须待在 RECOVERY.md
     for inlined in ('第 2 步：清理异常词库文件', '第 0 步：必须先备份',

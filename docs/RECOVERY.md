@@ -9,13 +9,31 @@
 > **请先做完第 0 步的备份，再往下操作。**
 >
 > 同时请注意：
-> - 只操作 `%LocalAppData%\Microsoft\InputMethod\Chs` 与 `%AppData%\Microsoft\InputMethod\Chs`
->   **这两个目录内的词库文件**；
+> - 只操作 `%APPDATA%\Microsoft\InputMethod\Chs`（Roaming，**自定义短语
+>   `ChsPinyinEUDPv1.lex` 就在这里**）与 `%LOCALAPPDATA%\Microsoft\InputMethod\Chs`
+>   （Local，自学习等文件）**这两个目录内的词库文件**；
 > - **绝对不要删除整个 `InputMethod` 目录**，那会破坏输入法注册信息，可能导致系统
 >   找不到微软拼音（表现为输入法无法唤起、需要重新安装语言包）；
 > - 清理 `ChsPinyinUDL.dat` / `ChsPinyinEUDL.dat` 会**一并清空自学习词汇**，
 >   这部分数据只能靠重新使用输入法慢慢积累；
-> - 恢复完成后请重新导入 `msp_lite.dat`，**不要导入 `msp_full.dat`**——那会让问题复发。
+> - 恢复完成后请重新导入 `msp_lite.dat`（20 万条），**不建议直接导入 `msp_full.dat`**
+>   （223 万条）——不是文件有问题，而是设置页要把每条都做成列表项，
+>   按 1.5 KB/条算会吃掉几 GB 内存，等于把刚恢复的页面重新拖死。
+
+## 为什么进这个页面会卡死
+
+不是词库文件坏了，也不是「超过某个条数上限」——微软从未公布自定义短语的数量上限。
+
+真实原因是设置页的实现：
+
+- 一进入「用户定义的短语」，页面就把 `ChsPinyinEUDPv1.lex` 里的**全部短语**
+  一次性做成 UI 列表（无分页、无虚拟化、无上限），条数越多，加载越慢、内存越大；
+  实测 600 万条约占 9 GB，十几分钟仍加载不出；
+- 「清除」按钮就在这个页面里，必须先进来才能点，而一进来就开始全量加载 →
+  于是**永远点不到清除**（逻辑死锁）。这就是「点了清除也卡死」的原因；
+- **输入引擎不受影响**：导入后打字能正常出候选，只有设置页打不开。
+
+所以恢复手段只有一条：**绕过界面，直接删 lex 文件**。
 
 ## 什么时候需要这套流程
 
@@ -39,9 +57,10 @@ xcopy "%APPDATA%\Microsoft\InputMethod\Chs" "%USERPROFILE%\Desktop\msp-backup\Ch
 
 备份完成后，确认桌面上出现 `msp-backup\Chs\` 目录且里面能看到 `ChsPinyin*.dat` / `ChsPinyin*.lex` 文件，再继续。
 
-> **回滚方法**：如果清理后想找回原来的自定义词条，把备份里的 `ChsPinyinUDP.lex`
+> **回滚方法**：如果清理后想找回原来的自定义词条，把备份里的 `ChsPinyinEUDPv1.lex`
 > （自定义短语）与 `ChsPinyinEUDL.dat` / `ChsPinyinUDL.dat`（自学习）**原样拷回**
-> `%LocalAppData%\Microsoft\InputMethod\Chs\`，然后注销重登即可。
+> `%APPDATA%\Microsoft\InputMethod\Chs\`（自定义短语）与
+> `%LOCALAPPDATA%\Microsoft\InputMethod\Chs\`（自学习），然后注销重登即可。
 
 ## 第 1 步：结束占用进程
 
@@ -61,11 +80,12 @@ taskkill /f /im ctfmon.exe
 
 ## 第 2 步：清理异常词库文件
 
-在 `%LocalAppData%\Microsoft\InputMethod\Chs\` 中删除（或改名成 `.bak`）这些文件：
+在 `%APPDATA%\Microsoft\InputMethod\Chs\` 与 `%LOCALAPPDATA%\Microsoft\InputMethod\Chs\`
+中删除（或改名成 `.bak`）这些文件（**两处都要看**，以实际存在的为准）：
 
 | 文件 | 内容 | 删掉的后果 |
 |---|---|---|
-| `ChsPinyinUDP.lex` | **用户自定义短语**（你导入的词库） | 导入的词库消失，需重新导入 |
+| `ChsPinyinEUDPv1.lex` | **用户自定义短语**（你导入的词库，位于 `%APPDATA%`） | 导入的词库消失，需重新导入 |
 | `ChsPinyinEUDL.dat` | 用户扩展自学习数据 | 自学习记录清空 |
 | `ChsPinyinUDL.dat` | 自学习词汇库 | 自学习记录清空 |
 | `ChsPinyinIH.dat` | 内部用户词条存储 | 清空 |
@@ -81,7 +101,7 @@ taskkill /f /im ctfmon.exe
 ## 附：只清理「某个词库」而不清空全部
 
 如果你只想移除本项目导入的词库、保留自己手动添加的短语，可以只删除
-`ChsPinyinUDP.lex`——但注意这个文件里既有导入的词库也有你手动加的短语，
+`ChsPinyinEUDPv1.lex`——但注意这个文件里既有导入的词库也有你手动加的短语，
 **无法按来源区分**。想保留手动词条时务必先做第 0 步备份。
 
 ## 相关文档
